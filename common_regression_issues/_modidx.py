@@ -5,4 +5,12 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://redam94.github.io',
                 'git_url': 'https://github.com/redam94/common_regression_issues',
                 'lib_path': 'common_regression_issues'},
-  'syms': {'common_regression_issues.core': {'common_regression_issues.core.foo': ('core.html#foo', 'common_regression_issues/core.py')}}}
+  'syms': { 'common_regression_issues.core': {'common_regression_issues.core.foo': ('core.html#foo', 'common_regression_issues/core.py')},
+            'common_regression_issues.measurement_error': { 'common_regression_issues.measurement_error.plot_survey_sim_data': ( 'measurement_error.html#plot_survey_sim_data',
+                                                                                                                                 'common_regression_issues/measurement_error.py'),
+                                                            'common_regression_issues.measurement_error.random_walk_awareness_model': ( 'measurement_error.html#random_walk_awareness_model',
+                                                                                                                                        'common_regression_issues/measurement_error.py'),
+                                                            'common_regression_issues.measurement_error.simulate_awareness_survey_data': ( 'measurement_error.html#simulate_awareness_survey_data',
+                                                                                                                                           'common_regression_issues/measurement_error.py'),
+                                                            'common_regression_issues.measurement_error.survey_obs_model': ( 'measurement_error.html#survey_obs_model',
+                                                                                                                             'common_regression_issues/measurement_error.py')}}}

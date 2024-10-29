@@ -4,6 +4,6 @@ project:
 website:
   title: "common_regression_issues"
   site-url: "https://redam94.github.io/common_regression_issues"
-  description: "A Repo to Store information about and simulations of common regression issues"
+  description: "A repo to store information about and simulations of common regression issues"
   repo-branch: main
   repo-url: "https://github.com/redam94/common_regression_issues"
