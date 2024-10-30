@@ -13,8 +13,10 @@ import pymc as pm
 from sklearn.metrics import mean_squared_error, r2_score
 import statsmodels.api as sm
 import xarray as xr
+from tueplots import bundles
+from tueplots.constants.color import rgb
 
-# %% ../nbs/00_measurement_error.ipynb 5
+# %% ../nbs/00_measurement_error.ipynb 6
 def random_walk_awareness_model(
   periods: list | pd.DatetimeIndex | np.ndarray, # Time periods to simulate
   ) -> pm.Model: # PyMC model for the random walk awareness model
@@ -36,7 +38,12 @@ def random_walk_awareness_model(
         awareness = pm.Deterministic('awareness', pm.math.invlogit(logit_awareness + weekly_shock*_noise), dims="Period")
     return model
 
-# %% ../nbs/00_measurement_error.ipynb 7
+# %% ../nbs/00_measurement_error.ipynb 8
+def _rgb_to_hex(color):
+    """Converts an RGB color array to a hex color string."""
+    return "#{:02X}{:02X}{:02X}".format(*color.astype(int))
+
+# %% ../nbs/00_measurement_error.ipynb 10
 def survey_obs_model(
   population_awareness: xr.DataArray | pm.pytensorf.TensorVariable, # Population awareness
   avg_weekly_participants: float = 500.0, # Average number of participants per week
@@ -58,7 +65,7 @@ def survey_obs_model(
         N_positive = pm.Binomial('n_positive', N_survey_participant, population_awareness, dims="Period")
     return model
 
-# %% ../nbs/00_measurement_error.ipynb 9
+# %% ../nbs/00_measurement_error.ipynb 11
 def simulate_awareness_survey_data(
   start_date: str = '2020-01-01', # Start date of the survey data
   n_weeks: int = 156, # Number of weeks to simulate
@@ -87,12 +94,12 @@ def simulate_awareness_survey_data(
   return trace.assign(estimated_awareness = trace['n_positive']/trace['n_survey_participants'])
 
 
-# %% ../nbs/00_measurement_error.ipynb 10
+# %% ../nbs/00_measurement_error.ipynb 12
 def plot_survey_sim_data(
   data: xr.Dataset, # Simulated survey data must contain 'awareness' and 'estimated_awareness' variables
 ) -> None: # Plot of the simulated survey data
-    plt.figure(figsize=(10, 5))
-    data.estimated_awareness.plot.scatter(x='Period', c='lightblue', label='Simulated Survey Data')
-    data.awareness.plot(c='k', lw=2, ls='--', label="Population Awareness")
+    #plt.figure(figsize=(10, 5))
+    data.estimated_awareness.plot.scatter(x='Period', color=_rgb_to_hex(rgb.tue_gray*256), label='Simulated Survey Data')
+    data.awareness.plot(color=_rgb_to_hex(rgb.tue_darkgreen*256), ls='--', label="Population Awareness")
     plt.legend()
     plt.title('Simulated Awareness Survey Data');

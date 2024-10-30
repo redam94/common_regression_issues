@@ -3,6 +3,3 @@ website:
     contents:
       - index.ipynb
       - 00_measurement_error.ipynb
-      - nbdev.yml
-      - sidebar.yml
-      - styles.css
