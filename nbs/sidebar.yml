@@ -3,3 +3,10 @@ website:
     contents:
       - index.ipynb
       - 00_measurement_error.ipynb
+      - section: synthetic_data
+        contents:
+          - synthetic_data/00_simple_regression_data.ipynb
+          - synthetic_data/01_grouped_data.ipynb
+      - section: utils
+        contents:
+          - utils/00_plotting.ipynb
