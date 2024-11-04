@@ -2,7 +2,7 @@ project:
   output-dir: _docs
 
 website:
-  title: "common_regression_issues"
+  title: "Common Regression Issues"
   site-url: "https://redam94.github.io/common_regression_issues"
   description: "A repo to store information about and simulations of common regression issues"
   repo-branch: main
