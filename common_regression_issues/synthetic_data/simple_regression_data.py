@@ -37,7 +37,7 @@ def generate_ols_data(
     betas = np.round(rng.normal(0, 2, size=n_exogenous_vars), 3)
     betas_confounds = np.round(rng.normal(0, .4, size=n_confounder), 3)
     alpha = np.round(rng.normal(0, 3), 3)
-    dep_var = data @ betas + df[con_names].values @ betas_confounds + alpha + noise_sigma*rng.normal(0, 1, size=sample_size)
+    dep_var = df[var_names].values @ betas + df[con_names].values @ betas_confounds + alpha + noise_sigma*rng.normal(0, 1, size=sample_size)
     df['depvar'] = dep_var
     dataset = xr.Dataset.from_dataframe(df)
     dataset = dataset.assign_attrs(
