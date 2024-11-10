@@ -5,7 +5,7 @@
 # %% auto 0
 __all__ = ['generate_grouped_data']
 
-# %% ../../nbs/synthetic_data/01_grouped_data.ipynb 4
+# %% ../../nbs/synthetic_data/01_grouped_data.ipynb 5
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
@@ -13,7 +13,7 @@ import statsmodels.formula.api as smf
 import xarray as xr
 from typing import Optional
 
-# %% ../../nbs/synthetic_data/01_grouped_data.ipynb 5
+# %% ../../nbs/synthetic_data/01_grouped_data.ipynb 6
 def generate_grouped_data(
     sample_size: int, # Number of samples per group
     n_exogenous_vars: int, # Number of exogenous variables
@@ -88,6 +88,4 @@ def generate_grouped_data(
     dataset = dataset.assign_attrs(
         true_alpha=group_var_offset[..., None] + group_confound[..., None],
         true_betas={var_name: np.round(exog_betas[i], 4) for i, var_name in enumerate(exog_var_names)})
-    return dataset
-
-    
+    return dataset    
