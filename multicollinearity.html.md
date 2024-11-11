@@ -32,12 +32,18 @@ Nodes with a dashed outline are difficult if not impossible to directly
 observe. Nodes that are not filled and have a solid outline are
 variables for which we have data (or for which data can be aqcuired).
 
+<div class="panel-tabset">
+
+## Causal Model
+
 <div>
 
 <img src="01_multicollinearity_files/figure-commonmark/dot-figure-1.png"
 style="width:7in;height:5in" />
 
 </div>
+
+## Un-Adjusted Model
 
 <div>
 
@@ -46,10 +52,14 @@ style="width:7in;height:5in" />
 
 </div>
 
+## Adjusted
+
 <div>
 
 <img src="01_multicollinearity_files/figure-commonmark/dot-figure-2.png"
 style="width:7in;height:5in" />
+
+</div>
 
 </div>
 

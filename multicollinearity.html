@@ -250,6 +250,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I will be using <a href="#fig-causal-graph" class="quarto-xref">Figure&nbsp;1</a> for the rest of the examples on this page.</p>
 <p>Edges will be colored to highlight if they represent causal paths (green <button disabled="" style="background-color: #326E1E; height: 13px; width: 11px;"></button>), biasing paths (red <button disabled="" style="background-color: #8D2D39; height: 13px; width: 11px;"></button>), or non-causal paths (black <button disabled="" style="background-color: #000000; height: 13px; width: 11px;"></button>). See <a href="#fig-causal-graph-paid-search" class="quarto-xref">Figure&nbsp;2</a> and <a href="#fig-causal-graph-paid-search-adjusted" class="quarto-xref">Figure&nbsp;3</a></p>
 <p>Nodes that represent exposures (things for which we would like to know the effect of) will be filled with a green (<button disabled="" style="background-color: #82B9A0; height: 13px; width: 11px;"></button>) background. The outcome variable of interest will be filled with a blue background (<button disabled="" style="background-color: #0069AA; height: 13px; width: 11px;"></button>). Variables that are adjusted for are filled with a light gray color (<button disabled="" style="background-color: #AFB3B7; height: 13px; width: 11px;"></button>) Nodes with a dashed outline are difficult if not impossible to directly observe. Nodes that are not filled and have a solid outline are variables for which we have data (or for which data can be aqcuired).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Causal Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Un-Adjusted Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Adjusted</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell fig-cap-location-bottom" data-layout-align="default">
 <div class="cell-output-display">
 <div id="fig-causal-graph" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -451,6 +455,8 @@ Figure&nbsp;1: The causal graph incoding our assumptions of the data generating 
 </div>
 </div>
 </div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell fig-cap-location-bottom" data-layout-align="default">
 <div class="cell-output-display">
 <div id="fig-causal-graph-paid-search" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -652,6 +658,8 @@ Figure&nbsp;2: Example causal graph for paid search on sales, with no variables 
 </div>
 </div>
 </div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="cell fig-cap-location-bottom" data-layout-align="default">
 <div class="cell-output-display">
 <div id="fig-causal-graph-paid-search-adjusted" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -859,6 +867,9 @@ Figure&nbsp;3: By adjusting for <strong>Search Query</strong> all biased paths a
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
 <hr>
 <p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/multicollinearity.py#L14" target="_blank" style="float:right; font-size:smaller">source</a></p>
 </section>
@@ -910,7 +921,7 @@ Figure&nbsp;3: By adjusting for <strong>Search Query</strong> all biased paths a
 </tr>
 </tbody>
 </table>
-<div id="cell-7" class="cell">
+<div id="cell-5" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sample_random_data(<span class="dv">156</span>, random_seed<span class="op">=</span><span class="dv">42</span>).plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>

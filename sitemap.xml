@@ -2,30 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://redam94.github.io/common_regression_issues/index.html</loc>
-    <lastmod>2024-11-11T23:43:05.522Z</lastmod>
-  </url>
-  <url>
-    <loc>https://redam94.github.io/common_regression_issues/utils/plotting.html</loc>
-    <lastmod>2024-11-11T19:38:23.148Z</lastmod>
-  </url>
-  <url>
-    <loc>https://redam94.github.io/common_regression_issues/synthetic_data/simple_regression_data.html</loc>
-    <lastmod>2024-11-11T19:12:57.063Z</lastmod>
-  </url>
-  <url>
-    <loc>https://redam94.github.io/common_regression_issues/measurement_error.html</loc>
-    <lastmod>2024-11-11T19:12:56.972Z</lastmod>
-  </url>
-  <url>
-    <loc>https://redam94.github.io/common_regression_issues/synthetic_data/grouped_data.html</loc>
-    <lastmod>2024-11-11T19:12:57.143Z</lastmod>
+    <lastmod>2024-11-11T23:48:23.536Z</lastmod>
   </url>
   <url>
     <loc>https://redam94.github.io/common_regression_issues/multicollinearity.html</loc>
-    <lastmod>2024-11-11T23:43:05.919Z</lastmod>
+    <lastmod>2024-11-11T23:48:23.937Z</lastmod>
   </url>
   <url>
-    <loc>https://redam94.github.io/common_regression_issues/vifs.html</loc>
-    <lastmod>2024-11-11T19:38:24.783Z</lastmod>
+    <loc>https://redam94.github.io/common_regression_issues/synthetic_data/grouped_data.html</loc>
+    <lastmod>2024-11-11T23:48:25.515Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/common_regression_issues/measurement_error.html</loc>
+    <lastmod>2024-11-11T23:48:25.321Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/common_regression_issues/synthetic_data/simple_regression_data.html</loc>
+    <lastmod>2024-11-11T23:48:25.422Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/common_regression_issues/utils/plotting.html</loc>
+    <lastmod>2024-11-11T23:48:23.590Z</lastmod>
   </url>
 </urlset>
