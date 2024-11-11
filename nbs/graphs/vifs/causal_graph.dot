@@ -1,0 +1,36 @@
+digraph "Paid Media on Sales" {
+  //layout=sfdp;
+  splines=spline;
+  overlap=false;
+  start=1;
+  //Exposure
+  "Paid Search Impression";
+  //Outcome
+  Sales;
+  //Adjusted
+  Price, "Search Query";
+  //Un-Observed
+  "OLV Impression", "Social Impression"; 
+  "Paid Search Click", "Organic Search";
+  //Un-Observable
+  Seasonality, Demand, Auction;
+  Seasonality -> "OLV Impression";
+  "OLV Impression" -> Demand;
+  Seasonality -> Demand;
+  Seasonality -> "Social Impression";
+  "Social Impression" -> Demand;
+  "Search Query" -> Auction;
+  "Search Query" -> "Paid Search Impression";
+  Auction -> "Paid Search Impression";
+  Demand -> "Search Query";
+  Seasonality -> "Search Query";
+  "Paid Search Impression" -> "Paid Search Click";
+  Demand -> "Paid Search Click";
+  "Search Query" -> "Paid Search Click";
+  "Search Query" -> "Organic Search";
+  "Organic Search" -> Sales;
+  Demand -> Sales;
+  "Paid Search Click" -> Sales;
+  Price -> Demand;
+  Price -> Sales;
+}

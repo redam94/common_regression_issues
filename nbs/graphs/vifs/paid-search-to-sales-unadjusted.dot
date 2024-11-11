@@ -1,0 +1,35 @@
+digraph "Paid Media on Sales" {
+  splines=spline;
+  overlap=false;
+  start=1;
+  //Exposure
+  "Paid Search Impression" [color="#7DA54B" fillcolor="#82B9A0" style=filled];
+  //Outcome
+  Sales [fillcolor="#0069AA" fontcolor=white style=filled];
+  //Adjusted
+  //Price [fillcolor="#AFB3B7" style=filled]
+  //Un-Observed
+  "OLV Impression", "Social Impression" [color="#AFB3B7"]; 
+  "Search Query", "Paid Search Click", Price, "Organic Search" [color="#AFB3B7"];
+  //Un-Observable
+  Seasonality, Demand, Auction [color="#AFB3B7" style=dashed];
+  Seasonality -> "OLV Impression" [color="#8D2D39"];
+  "OLV Impression" -> Demand [color="#8D2D39"];
+  Seasonality -> Demand [color="#8D2D39"];
+  Seasonality -> "Social Impression" [color="#8D2D39"];
+  "Social Impression" -> Demand [color="#8D2D39"];
+  "Search Query" -> Auction [color="#8D2D39"];
+  "Search Query" -> "Paid Search Impression" [color="#8D2D39"];
+  Auction -> "Paid Search Impression" [color="#8D2D39"];
+  Demand -> "Search Query" [color="#8D2D39"];
+  Seasonality -> "Search Query" [color="#8D2D39"];
+  "Paid Search Impression" -> "Paid Search Click" [color="#8D2D39" style=bold];
+  Demand -> "Paid Search Click" [color="#8D2D39"];
+  "Search Query" -> "Paid Search Click" [color="#8D2D39"];
+  "Search Query" -> "Organic Search" [color="#8D2D39"];
+  "Organic Search" -> Sales [color="#8D2D39"];
+  Demand -> Sales [color="#8D2D39"];
+  "Paid Search Click" -> Sales [color="#8D2D39" style=bold];
+  Price -> Demand [color="#8D2D39"];
+  Price -> Sales [color="#8D2D39"];
+}
