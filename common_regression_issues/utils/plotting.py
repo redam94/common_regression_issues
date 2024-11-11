@@ -5,10 +5,10 @@
 # %% auto 0
 __all__ = ['rgb_to_hex']
 
-# %% ../../nbs/utils/00_plotting.ipynb 3
+# %% ../../nbs/utils/00_plotting.ipynb 4
 import numpy as np
 
-# %% ../../nbs/utils/00_plotting.ipynb 4
+# %% ../../nbs/utils/00_plotting.ipynb 5
 def rgb_to_hex(
     color: np.ndarray # Nd array of color values
     ) -> str: # hex string of color data
