@@ -10,7 +10,7 @@ import xarray as xr
 import pandas as pd
 import numpy as np
 
-# %% ../nbs/01_multicollinearity.ipynb 8
+# %% ../nbs/01_multicollinearity.ipynb 10
 def sample_random_data(
     N_weeks: int, # Number of weeks to generate
     include_hidden_confounds:bool=False, # Should hidden confounds be included in the dataset
