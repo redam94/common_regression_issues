@@ -3,7 +3,6 @@ website:
     contents:
       - index.ipynb
       - 00_measurement_error.ipynb
-      - 01_VIFs.ipynb
       - section: synthetic_data
         contents:
           - synthetic_data/00_simple_regression_data.ipynb
