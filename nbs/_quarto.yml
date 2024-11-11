@@ -3,7 +3,7 @@ project:
 
 format:
   html:
-    theme: cosmo
+    theme: pulse
     css: styles.css
     toc: true
     keep-md: true
