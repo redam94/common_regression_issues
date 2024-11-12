@@ -5,7 +5,7 @@
 # %% auto 0
 __all__ = ['sample_random_data']
 
-# %% ../nbs/01_multicollinearity.ipynb 3
+# %% ../nbs/01_multicollinearity.ipynb 4
 import xarray as xr
 import pandas as pd
 import numpy as np
@@ -27,7 +27,131 @@ def sample_random_data(
         np.stack([np.sin(i*2*np.pi*t) for i in range(1, 4)]).T @ seasonal_coeffs_sin
         + np.stack([np.cos(i*2*np.pi*t) for i in range(1, 4)]).T @ seasonal_coeffs_cos
     )
-    season = xr.DataArray(season, coords={"Period": dates}, dims="Period")
+    season = xr.DataArray((season-min(season))/(max(season)-min(season))*2-1, coords={"Period": dates}, dims="Period")
 
     ## Define Price Movements
-    return season
+    base_price = 3.50
+    change_points = np.unique(np.clip(rng.exponential(4.0, size=int(N_weeks/4.0)).cumsum().astype(int), 0, N_weeks-1))
+    changes = rng.normal(0, .1, size=len(change_points))
+    price = np.zeros(N_weeks)
+    price[change_points] = changes
+    price = np.exp(price.cumsum())*base_price
+    price = xr.DataArray(price, coords={"Period": dates}, dims="Period")
+
+    ## Define Impressions
+    social_impressions = rng.gamma(20, np.exp(6+season.values + rng.normal(0, .5, N_weeks)))
+    social_impressions = xr.DataArray(social_impressions, coords={"Period": dates}, dims="Period")
+
+    olv_impressions = rng.gamma(40, np.exp(6+.3*season.values + rng.normal(0, .7, N_weeks)))
+    olv_impressions = xr.DataArray(olv_impressions, coords={"Period": dates}, dims="Period")
+
+    ## Define Demand
+    social_hill_params = {
+        "K": rng.lognormal(0, .2),
+        "n": rng.exponential(1) + 1
+    }
+    olv_hill_params = {
+        "K": rng.lognormal(0, .2),
+        "n": rng.exponential(1) + 1
+    }
+
+    def _hill(x, K=1, n=1.2):
+        return x**n/(K**n + x**n)
+    
+    olv_effect =  _hill(olv_impressions/olv_impressions.where(olv_impressions>0).median(), **olv_hill_params)
+    social_effect = _hill(social_impressions/social_impressions.where(social_impressions>0).median(), **social_hill_params)
+
+    social_beta = rng.lognormal(-2, .3)
+    olv_beta = rng.lognormal(-2, .3)
+
+    season_effect = rng.normal(0, .2)
+    slope = rng.normal(0, .2)
+    base_demand = np.log(1e2)
+    price_elasticity = -rng.lognormal(0, .3)
+    log_demand = (
+        slope*np.linspace(0, 1, N_weeks) 
+        + social_beta*social_effect 
+        + olv_beta*olv_effect 
+        + season_effect*season 
+        + price_elasticity*np.log(price)
+        + base_demand 
+        + rng.normal(0, .05, size=N_weeks))
+    demand = xr.DataArray(
+        np.exp(log_demand),
+        coords={"Period": dates},
+        dims="Period"
+    )
+
+    # Search Query Data
+    search_query = rng.gamma(10, np.exp(np.log(demand)*2 + 0.1*season + 6 + rng.normal(0, .2, size=N_weeks)))
+    search_query = xr.DataArray(
+        search_query,
+        coords={"Period": dates},
+        dims="Period"
+    )
+
+    # Auction
+    auction = rng.beta(10, 100, size=N_weeks)
+    auction = xr.DataArray(
+        auction,
+        coords={"Period": dates},
+        dims="Period"
+    )
+
+    # Search Impressions
+    paid_search_impressions = search_query*auction
+
+    # Search Clicks
+    ctr_logodds = (
+        -8
+        + rng.normal(0, .1, size=N_weeks) 
+        + 2 * demand/demand.mean()
+        + 1.0/((search_query/search_query.where(search_query>0).median())**1.5 + .8**1.5)
+        )
+
+    ctr = 1/(1+np.exp(-ctr_logodds))
+    paid_search_clicks = ctr * paid_search_impressions
+
+    # Organic Search
+    organic_search = rng.beta(90, 10, size=N_weeks) * search_query
+    
+    
+    #Sales
+    sales = np.exp(
+        .1*np.log(organic_search) 
+        + .4 * np.log(paid_search_clicks)
+        + 1 * np.log(demand)
+        + np.log(price)
+        + rng.normal(0, .05, size=N_weeks)
+        )
+
+    if include_hidden_confounds:
+        dataset = xr.Dataset({
+            "price": price, 
+            "season":season,
+            'social_impressions': social_impressions,
+            "olv_impressions": olv_impressions,
+            "demand": demand,
+            "search_query": search_query,
+            "auction": auction,
+            "paid_search_impressions": paid_search_impressions,
+            "paid_search_clicks": paid_search_clicks,
+            "organic_search": organic_search,
+            'sales': sales
+        })
+        return dataset
+
+    dataset = xr.Dataset({
+            "price": price, 
+            #"season":season,
+            'social_impressions': social_impressions,
+            "olv_impressions": olv_impressions,
+            #"demand": demand,
+            "search_query": search_query,
+            #"auction": auction,
+            "paid_search_impressions": paid_search_impressions,
+            "paid_search_clicks": paid_search_clicks,
+            "organic_search": organic_search,
+            'sales': sales
+        })
+    return dataset
