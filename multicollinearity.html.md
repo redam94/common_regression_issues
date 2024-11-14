@@ -65,12 +65,13 @@ Search’s effectiveness.
 Additionally, the DAG highlights a complex correlation structure within
 the data, which suggests that variables may be highly interrelated. This
 correlation can lead to high Variance Inflation Factors (VIFs) in a
-regression model. Elevated VIFs inflate standard errors and reduce the
-precision of our estimates, but excluding the wrong variables could
-result in biased estimates. Balancing these considerations—minimizing
-multicollinearity without overlooking key variables—is essential for
-creating a model that yields accurate and precise estimates of paid
-search’s impact on sales.
+regression model.
+
+Elevated VIFs inflate standard errors and reduce the precision of our
+estimates, but excluding the wrong variables could result in biased
+estimates. Balancing these considerations—minimizing multicollinearity
+without overlooking key variables—is essential for creating a model that
+yields accurate and precise estimates of paid search’s impact on sales.
 
 #### Solution
 
@@ -137,82 +138,82 @@ style="width:7in;height:5in" />
 ## Correlation Matrix
 
 <style type="text/css">
-#T_c0a1a_row0_col0, #T_c0a1a_row1_col1, #T_c0a1a_row2_col2, #T_c0a1a_row3_col3 {
+#T_43dbe_row0_col0, #T_43dbe_row1_col1, #T_43dbe_row2_col2, #T_43dbe_row3_col3 {
   background-color: #006837;
   color: #f1f1f1;
 }
-#T_c0a1a_row0_col1, #T_c0a1a_row1_col0 {
+#T_43dbe_row0_col1, #T_43dbe_row1_col0 {
   background-color: #118848;
   color: #f1f1f1;
 }
-#T_c0a1a_row0_col2, #T_c0a1a_row2_col0 {
+#T_43dbe_row0_col2, #T_43dbe_row2_col0 {
   background-color: #feda86;
   color: #000000;
 }
-#T_c0a1a_row0_col3, #T_c0a1a_row3_col0 {
+#T_43dbe_row0_col3, #T_43dbe_row3_col0 {
   background-color: #18954f;
   color: #f1f1f1;
 }
-#T_c0a1a_row1_col2, #T_c0a1a_row2_col1 {
+#T_43dbe_row1_col2, #T_43dbe_row2_col1 {
   background-color: #fec877;
   color: #000000;
 }
-#T_c0a1a_row1_col3, #T_c0a1a_row3_col1 {
+#T_43dbe_row1_col3, #T_43dbe_row3_col1 {
   background-color: #15904c;
   color: #f1f1f1;
 }
-#T_c0a1a_row2_col3, #T_c0a1a_row3_col2 {
+#T_43dbe_row2_col3, #T_43dbe_row3_col2 {
   background-color: #fee28f;
   color: #000000;
 }
 </style>
 
-<table id="T_c0a1a" data-quarto-postprocess="true">
+<table id="T_43dbe" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th"> </th>
-<th id="T_c0a1a_level0_col0" class="col_heading level0 col0"
+<th id="T_43dbe_level0_col0" class="col_heading level0 col0"
 data-quarto-table-cell-role="th">paid_search_impressions</th>
-<th id="T_c0a1a_level0_col1" class="col_heading level0 col1"
+<th id="T_43dbe_level0_col1" class="col_heading level0 col1"
 data-quarto-table-cell-role="th">search_query</th>
-<th id="T_c0a1a_level0_col2" class="col_heading level0 col2"
+<th id="T_43dbe_level0_col2" class="col_heading level0 col2"
 data-quarto-table-cell-role="th">price</th>
-<th id="T_c0a1a_level0_col3" class="col_heading level0 col3"
+<th id="T_43dbe_level0_col3" class="col_heading level0 col3"
 data-quarto-table-cell-role="th">sales</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_c0a1a_level0_row0" class="row_heading level0 row0"
+<td id="T_43dbe_level0_row0" class="row_heading level0 row0"
 data-quarto-table-cell-role="th">paid_search_impressions</td>
-<td id="T_c0a1a_row0_col0" class="data row0 col0">1.00</td>
-<td id="T_c0a1a_row0_col1" class="data row0 col1">0.86</td>
-<td id="T_c0a1a_row0_col2" class="data row0 col2">-0.23</td>
-<td id="T_c0a1a_row0_col3" class="data row0 col3">0.81</td>
+<td id="T_43dbe_row0_col0" class="data row0 col0">1.00</td>
+<td id="T_43dbe_row0_col1" class="data row0 col1">0.86</td>
+<td id="T_43dbe_row0_col2" class="data row0 col2">-0.23</td>
+<td id="T_43dbe_row0_col3" class="data row0 col3">0.81</td>
 </tr>
 <tr class="even">
-<td id="T_c0a1a_level0_row1" class="row_heading level0 row1"
+<td id="T_43dbe_level0_row1" class="row_heading level0 row1"
 data-quarto-table-cell-role="th">search_query</td>
-<td id="T_c0a1a_row1_col0" class="data row1 col0">0.86</td>
-<td id="T_c0a1a_row1_col1" class="data row1 col1">1.00</td>
-<td id="T_c0a1a_row1_col2" class="data row1 col2">-0.30</td>
-<td id="T_c0a1a_row1_col3" class="data row1 col3">0.83</td>
+<td id="T_43dbe_row1_col0" class="data row1 col0">0.86</td>
+<td id="T_43dbe_row1_col1" class="data row1 col1">1.00</td>
+<td id="T_43dbe_row1_col2" class="data row1 col2">-0.30</td>
+<td id="T_43dbe_row1_col3" class="data row1 col3">0.83</td>
 </tr>
 <tr class="odd">
-<td id="T_c0a1a_level0_row2" class="row_heading level0 row2"
+<td id="T_43dbe_level0_row2" class="row_heading level0 row2"
 data-quarto-table-cell-role="th">price</td>
-<td id="T_c0a1a_row2_col0" class="data row2 col0">-0.23</td>
-<td id="T_c0a1a_row2_col1" class="data row2 col1">-0.30</td>
-<td id="T_c0a1a_row2_col2" class="data row2 col2">1.00</td>
-<td id="T_c0a1a_row2_col3" class="data row2 col3">-0.18</td>
+<td id="T_43dbe_row2_col0" class="data row2 col0">-0.23</td>
+<td id="T_43dbe_row2_col1" class="data row2 col1">-0.30</td>
+<td id="T_43dbe_row2_col2" class="data row2 col2">1.00</td>
+<td id="T_43dbe_row2_col3" class="data row2 col3">-0.18</td>
 </tr>
 <tr class="even">
-<td id="T_c0a1a_level0_row3" class="row_heading level0 row3"
+<td id="T_43dbe_level0_row3" class="row_heading level0 row3"
 data-quarto-table-cell-role="th">sales</td>
-<td id="T_c0a1a_row3_col0" class="data row3 col0">0.81</td>
-<td id="T_c0a1a_row3_col1" class="data row3 col1">0.83</td>
-<td id="T_c0a1a_row3_col2" class="data row3 col2">-0.18</td>
-<td id="T_c0a1a_row3_col3" class="data row3 col3">1.00</td>
+<td id="T_43dbe_row3_col0" class="data row3 col0">0.81</td>
+<td id="T_43dbe_row3_col1" class="data row3 col1">0.83</td>
+<td id="T_43dbe_row3_col2" class="data row3 col2">-0.18</td>
+<td id="T_43dbe_row3_col3" class="data row3 col3">1.00</td>
 </tr>
 </tbody>
 </table>
@@ -289,13 +290,13 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 13 Nov 2024</td>
+<td>Thu, 14 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>5.17e-42</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>20:53:29</td>
+<td>00:18:00</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>8.7320</td>
 </tr>
@@ -432,13 +433,13 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 13 Nov 2024</td>
+<td>Thu, 14 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>1.50e-45</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>20:53:29</td>
+<td>00:18:01</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>19.936</td>
 </tr>
