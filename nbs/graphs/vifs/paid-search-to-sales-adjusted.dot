@@ -1,7 +1,4 @@
 digraph "Paid Media on Sales" {
-  splines=spline;
-  overlap=false;
-  start=1;
   //Exposure
   "Paid Search Impression" [color="#7DA54B" fillcolor="#82B9A0" style=filled];
   //Outcome
@@ -9,11 +6,12 @@ digraph "Paid Media on Sales" {
   //Adjusted
   Price, "Search Query" [fillcolor="#AFB3B7" style=filled]
   //Un-Observed
-  "OLV Impression", "Social Impression" [color="#AFB3B7"]; 
+  "OLV Impression", "Social Impression", "Video Platform Sentiment"[color="#AFB3B7"]; 
   "Paid Search Click", "Organic Search" [color="#AFB3B7"];
   //Un-Observable
   Seasonality, Demand, Auction [color="#AFB3B7" style=dashed];
   Seasonality -> "OLV Impression";
+  "Video Platform Sentiment" -> "OLV Impression";
   "OLV Impression" -> Demand;
   Seasonality -> Demand;
   Seasonality -> "Social Impression";
