@@ -18,8 +18,9 @@ def hill(
     x, # input array
     K=1, # Half saturation point
     n=1.2 # Shape parameter
-    ):
-        return x**n/(K**n + x**n)
+    ): # Returns same type as input
+    """Hill tranformation"""
+    return x**n/(K**n + x**n)
 
 # %% ../../nbs/synthetic_data/02_multicollinearity_example_data.ipynb 8
 def sample_random_data(
@@ -49,11 +50,17 @@ def sample_random_data(
     price = np.exp(price.cumsum())*base_price
     price = xr.DataArray(price, coords={"Period": dates}, dims="Period")
 
+    ## Define OLV Sentiment
+    olv_sentiment = xr.DataArray(
+        rng.binomial(1, .1, N_weeks),
+        coords={"Period": dates},
+        dims="Period")
+    
     ## Define Impressions
     social_impressions = rng.gamma(20, np.exp(6+season.values + rng.normal(0, .5, N_weeks)))
     social_impressions = xr.DataArray(social_impressions, coords={"Period": dates}, dims="Period")
 
-    olv_impressions = rng.gamma(40, np.exp(6+.3*season.values + rng.normal(0, .7, N_weeks)))
+    olv_impressions = rng.gamma(40, np.exp(6+.3*season.values + 2*olv_sentiment + rng.normal(0, .1, N_weeks)))
     olv_impressions = xr.DataArray(olv_impressions, coords={"Period": dates}, dims="Period")
 
     ## Define Demand
@@ -139,6 +146,7 @@ def sample_random_data(
         dataset = xr.Dataset({
             "price": price, 
             "season":season,
+            "olv_sentiment": olv_sentiment,
             'social_impressions': social_impressions,
             "olv_impressions": olv_impressions,
             "demand": demand,
@@ -148,11 +156,15 @@ def sample_random_data(
             "paid_search_clicks": paid_search_clicks,
             "organic_search": organic_search,
             'sales': sales
-        }).assign_attrs(olv_params=olv_hill_params, social_params=social_hill_params)
+        }).assign_attrs(
+            olv_params=olv_hill_params, 
+            social_params=social_hill_params, 
+            olv_beta=olv_beta, social_beta=social_beta)
         return dataset
 
     dataset = xr.Dataset({
-            "price": price, 
+            "price": price,
+            "olv_sentiment": olv_sentiment,
             #"season":season,
             'social_impressions': social_impressions,
             "olv_impressions": olv_impressions,
@@ -163,5 +175,8 @@ def sample_random_data(
             "paid_search_clicks": paid_search_clicks,
             "organic_search": organic_search,
             'sales': sales
-        }).assign_attrs(olv_params=olv_hill_params, social_params=social_hill_params)
+        }).assign_attrs(
+            olv_params=olv_hill_params, 
+            social_params=social_hill_params,
+            olv_beta=olv_beta, social_beta=social_beta)
     return dataset
