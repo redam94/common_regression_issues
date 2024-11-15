@@ -1,10 +1,30 @@
 [
   {
-    "objectID": "index.html#usage",
-    "href": "index.html#usage",
+    "objectID": "index.html",
+    "href": "index.html",
     "title": "Common Regression Issues",
-    "section": "Usage",
-    "text": "Usage\n\nUsing the repo\nCheckout the latest examples here repository:\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "section": "",
+    "text": "CI\nPlease hop on over to the site, there I cover several topics that I’ve encountered while modelling. Please feel free to raise an issue if there is a topic that you think should be discussed, or if there are any changes/clarifications/errors you find on the site.",
+    "crumbs": [
+      "Common Regression Issues"
+    ]
+  },
+  {
+    "objectID": "index.html#measurement-errormeasurement_error",
+    "href": "index.html#measurement-errormeasurement_error",
+    "title": "Common Regression Issues",
+    "section": "Measurement Error",
+    "text": "Measurement Error",
+    "crumbs": [
+      "Common Regression Issues"
+    ]
+  },
+  {
+    "objectID": "index.html#multicollinearitymulticollinearity",
+    "href": "index.html#multicollinearitymulticollinearity",
+    "title": "Common Regression Issues",
+    "section": "Multicollinearity",
+    "text": "Multicollinearity",
     "crumbs": [
       "Common Regression Issues"
     ]
