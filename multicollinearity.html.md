@@ -94,9 +94,9 @@ on the DAG structure:
     - By adjusting for search query, we aim to block the path from
       demand that leads through **search query** to both **paid search
       impressions** and **paid search clicks**. This adjustment helps
-      remove the confounding influence of demand on sales via search
-      query, allowing for a more accurate estimate of paid search
-      impressions’ effect on sales. See
+      remove the confounding influence of **demand** on **sales** via
+      **search query**, allowing for a more accurate estimate of **paid
+      search impressions’** effect on **sales**. See
       <a href="#fig-causal-graph-paid-search-adjusted"
       class="quarto-xref">Figure 3</a>
 3.  Outcome:
@@ -117,7 +117,7 @@ also increase the precision of this estimate by controlling for
 
 <div>
 
-<img src="01_multicollinearity_files/figure-commonmark/dot-figure-4.png"
+<img src="01_multicollinearity_files/figure-commonmark/dot-figure-5.png"
 style="width:7in;height:5in" />
 
 </div>
@@ -126,7 +126,7 @@ style="width:7in;height:5in" />
 
 <div>
 
-<img src="01_multicollinearity_files/figure-commonmark/dot-figure-3.png"
+<img src="01_multicollinearity_files/figure-commonmark/dot-figure-4.png"
 style="width:7in;height:5in" />
 
 </div>
@@ -138,82 +138,78 @@ style="width:7in;height:5in" />
 ## Correlation Matrix
 
 <style type="text/css">
-#T_43dbe_row0_col0, #T_43dbe_row1_col1, #T_43dbe_row2_col2, #T_43dbe_row3_col3 {
+#T_b085f_row0_col0, #T_b085f_row1_col1, #T_b085f_row2_col2, #T_b085f_row3_col3 {
   background-color: #006837;
   color: #f1f1f1;
 }
-#T_43dbe_row0_col1, #T_43dbe_row1_col0 {
-  background-color: #118848;
+#T_b085f_row0_col1, #T_b085f_row1_col0 {
+  background-color: #097940;
   color: #f1f1f1;
 }
-#T_43dbe_row0_col2, #T_43dbe_row2_col0 {
-  background-color: #feda86;
+#T_b085f_row0_col2, #T_b085f_row2_col0 {
+  background-color: #fdbd6d;
   color: #000000;
 }
-#T_43dbe_row0_col3, #T_43dbe_row3_col0 {
-  background-color: #18954f;
+#T_b085f_row0_col3, #T_b085f_row1_col3, #T_b085f_row3_col0, #T_b085f_row3_col1 {
+  background-color: #0c7f43;
   color: #f1f1f1;
 }
-#T_43dbe_row1_col2, #T_43dbe_row2_col1 {
-  background-color: #fec877;
+#T_b085f_row1_col2, #T_b085f_row2_col1 {
+  background-color: #fdbf6f;
   color: #000000;
 }
-#T_43dbe_row1_col3, #T_43dbe_row3_col1 {
-  background-color: #15904c;
-  color: #f1f1f1;
-}
-#T_43dbe_row2_col3, #T_43dbe_row3_col2 {
+#T_b085f_row2_col3, #T_b085f_row3_col2 {
   background-color: #fee28f;
   color: #000000;
 }
 </style>
 
-<table id="T_43dbe" data-quarto-postprocess="true">
+<table id="T_b085f" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th"> </th>
-<th id="T_43dbe_level0_col0" class="col_heading level0 col0"
+<th id="T_b085f_level0_col0" class="col_heading level0 col0"
 data-quarto-table-cell-role="th">paid_search_impressions</th>
-<th id="T_43dbe_level0_col1" class="col_heading level0 col1"
+<th id="T_b085f_level0_col1" class="col_heading level0 col1"
 data-quarto-table-cell-role="th">search_query</th>
-<th id="T_43dbe_level0_col2" class="col_heading level0 col2"
+<th id="T_b085f_level0_col2" class="col_heading level0 col2"
 data-quarto-table-cell-role="th">price</th>
-<th id="T_43dbe_level0_col3" class="col_heading level0 col3"
+<th id="T_b085f_level0_col3" class="col_heading level0 col3"
 data-quarto-table-cell-role="th">sales</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_43dbe_level0_row0" class="row_heading level0 row0"
+<td id="T_b085f_level0_row0" class="row_heading level0 row0"
 data-quarto-table-cell-role="th">paid_search_impressions</td>
-<td id="T_43dbe_row0_col0" class="data row0 col0">1.00</td>
-<td id="T_43dbe_row0_col1" class="data row0 col1">0.86</td>
-<td id="T_43dbe_row0_col2" class="data row0 col2">-0.23</td>
-<td id="T_43dbe_row0_col3" class="data row0 col3">0.81</td>
+<td id="T_b085f_row0_col0" class="data row0 col0">1.00</td>
+<td id="T_b085f_row0_col1" class="data row0 col1">0.93</td>
+<td id="T_b085f_row0_col2" class="data row0 col2">-0.34</td>
+<td id="T_b085f_row0_col3" class="data row0 col3">0.90</td>
 </tr>
 <tr class="even">
-<td id="T_43dbe_level0_row1" class="row_heading level0 row1"
+<td id="T_b085f_level0_row1" class="row_heading level0 row1"
 data-quarto-table-cell-role="th">search_query</td>
-<td id="T_43dbe_row1_col0" class="data row1 col0">0.86</td>
-<td id="T_43dbe_row1_col1" class="data row1 col1">1.00</td>
-<td id="T_43dbe_row1_col2" class="data row1 col2">-0.30</td>
-<td id="T_43dbe_row1_col3" class="data row1 col3">0.83</td>
+<td id="T_b085f_row1_col0" class="data row1 col0">0.93</td>
+<td id="T_b085f_row1_col1" class="data row1 col1">1.00</td>
+<td id="T_b085f_row1_col2" class="data row1 col2">-0.33</td>
+<td id="T_b085f_row1_col3" class="data row1 col3">0.91</td>
 </tr>
 <tr class="odd">
-<td id="T_43dbe_level0_row2" class="row_heading level0 row2"
+<td id="T_b085f_level0_row2" class="row_heading level0 row2"
 data-quarto-table-cell-role="th">price</td>
-<td id="T_43dbe_row2_col0" class="data row2 col0">-0.23</td>
-<td id="T_43dbe_row2_col1" class="data row2 col1">-0.30</td>
-<td id="T_43dbe_row2_col2" class="data row2 col2">1.00</td>
-<td id="T_43dbe_row2_col3" class="data row2 col3">-0.18</td>
+<td id="T_b085f_row2_col0" class="data row2 col0">-0.34</td>
+<td id="T_b085f_row2_col1" class="data row2 col1">-0.33</td>
+<td id="T_b085f_row2_col2" class="data row2 col2">1.00</td>
+<td id="T_b085f_row2_col3" class="data row2 col3">-0.19</td>
 </tr>
 <tr class="even">
-<td id="T_43dbe_level0_row3" class="row_heading level0 row3"
+<td id="T_b085f_level0_row3" class="row_heading level0 row3"
 data-quarto-table-cell-role="th">sales</td>
-<td id="T_43dbe_row3_col0" class="data row3 col0">0.81</td>
-<td id="T_43dbe_row3_col1" class="data row3 col1">0.83</td>
-<td id="T_43dbe_row3_col2" class="data row3 col2">-0.18</td>
-<td id="T_43dbe_row3_col3" class="data row3 col3">1.00</td>
+<td id="T_b085f_row3_col0" class="data row3 col0">0.90</td>
+<td id="T_b085f_row3_col1" class="data row3 col1">0.91</td>
+<td id="T_b085f_row3_col2" class="data row3 col2">-0.19</td>
+<td id="T_b085f_row3_col3" class="data row3 col3">1.00</td>
 </tr>
 </tbody>
 </table>
@@ -223,25 +219,25 @@ data-quarto-table-cell-role="th">sales</td>
 <div class="cell-output cell-output-stdout">
 
                                VIF
-    paid_search_impressions  : 13.59
-    search_query             : 16.06
-    price                    : 3.48
+    paid_search_impressions  : 1667.63
+    search_query             : 1952.48
+    price                    : 72.44
 
 </div>
 
 </div>
 
 With our adjustment set established, let’s examine the correlation
-structure among the key variables (paid search impressions, search
-query, price, and sales). As shown in
-<a href="#fig-corr-matrix" class="quarto-xref">Figure 4</a>, search
-query and paid search impressions exhibit a high correlation.
+structure among the key variables (**paid search impressions**, **search
+query**, **price**, and **sales**). As shown in
+<a href="#fig-corr-matrix" class="quarto-xref">Figure 4</a>, **search
+query** and **paid search impressions** exhibit a high correlation.
 Additionally, the VIF values presented in
 <a href="#tbl-vifs" class="quarto-xref">Table 1</a> reveal some extreme
 figures.
 
 Rather than being immediately concerned about the high VIFs (even those
-exceeding 10), let’s proceed by running the regression to assess the
+exceeding 1000), let’s proceed by running the regression to assess the
 actual impact.
 
 In <a href="#tbl-adjusted" class="quarto-xref">Table 3</a>, the standard
@@ -254,7 +250,8 @@ In <a href="#tbl-unadjusted" class="quarto-xref">Table 2</a>, where
 **search query** is excluded from the model, we observe a reduction in
 standard errors. However, this reduction comes at the expense of
 introducing bias into the estimate of **paid search impressions’**
-effect on sales.
+effect on **sales**. In fact it produces an estimate that is much larger
+than the true value.
 
 Given that the correctly adjusted model provides an estimate with
 reasonable precision, it should be preferred, even in light of the high
@@ -274,43 +271,43 @@ data-quarto-postprocess="true">
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>sales</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.711</td>
+<td>0.832</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.708</td>
+<td>0.830</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>188.6</td>
+<td>379.1</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
 <td>Thu, 14 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>5.17e-42</td>
+<td>5.21e-60</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:18:00</td>
+<td>22:29:24</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>8.7320</td>
+<td>-27.949</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>156</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-11.46</td>
+<td>61.90</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>153</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-2.314</td>
+<td>71.05</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -343,30 +340,30 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>2.0859</td>
-<td>0.476</td>
-<td>4.386</td>
+<td>-2.0391</td>
+<td>0.532</td>
+<td>-3.835</td>
 <td>0.000</td>
-<td>1.146</td>
-<td>3.025</td>
+<td>-3.090</td>
+<td>-0.989</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">paid_search_impressions</td>
-<td>0.5680</td>
-<td>0.030</td>
-<td>19.097</td>
+<td>0.8323</td>
+<td>0.031</td>
+<td>26.950</td>
 <td>0.000</td>
-<td>0.509</td>
-<td>0.627</td>
+<td>0.771</td>
+<td>0.893</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">price</td>
-<td>0.1980</td>
-<td>0.123</td>
-<td>1.609</td>
-<td>0.110</td>
-<td>-0.045</td>
-<td>0.441</td>
+<td>0.6034</td>
+<td>0.160</td>
+<td>3.779</td>
+<td>0.000</td>
+<td>0.288</td>
+<td>0.919</td>
 </tr>
 </tbody>
 </table>
@@ -376,27 +373,27 @@ data-quarto-postprocess="true">
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>14.522</td>
+<td>1.250</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>1.012</td>
+<td>1.504</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.001</td>
+<td>0.535</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>6.628</td>
+<td>0.862</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.278</td>
+<td>0.042</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.0364</td>
+<td>0.650</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>2.157</td>
+<td>3.354</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
-<td>343.</td>
+<td>299.</td>
 </tr>
 </tbody>
 </table>
@@ -417,43 +414,43 @@ data-quarto-postprocess="true">
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>sales</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.750</td>
+<td>0.867</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.745</td>
+<td>0.865</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>152.0</td>
+<td>331.6</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
 <td>Thu, 14 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>1.50e-45</td>
+<td>1.82e-66</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:18:01</td>
+<td>22:29:24</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>19.936</td>
+<td>-9.4959</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>156</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-31.87</td>
+<td>26.99</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>152</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-19.67</td>
+<td>39.19</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -486,39 +483,39 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>-0.0161</td>
-<td>0.621</td>
-<td>-0.026</td>
-<td>0.979</td>
-<td>-1.243</td>
-<td>1.210</td>
+<td>-4.1601</td>
+<td>0.579</td>
+<td>-7.182</td>
+<td>0.000</td>
+<td>-5.305</td>
+<td>-3.016</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">paid_search_impressions</td>
-<td>0.3240</td>
-<td>0.058</td>
-<td>5.634</td>
+<td>0.4287</td>
+<td>0.069</td>
+<td>6.205</td>
 <td>0.000</td>
-<td>0.210</td>
-<td>0.438</td>
+<td>0.292</td>
+<td>0.565</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">search_query</td>
-<td>0.3319</td>
-<td>0.069</td>
-<td>4.846</td>
+<td>0.4739</td>
+<td>0.074</td>
+<td>6.369</td>
 <td>0.000</td>
-<td>0.197</td>
-<td>0.467</td>
+<td>0.327</td>
+<td>0.621</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">price</td>
-<td>0.2894</td>
-<td>0.116</td>
-<td>2.485</td>
-<td>0.014</td>
-<td>0.059</td>
-<td>0.520</td>
+<td>0.6448</td>
+<td>0.142</td>
+<td>4.526</td>
+<td>0.000</td>
+<td>0.363</td>
+<td>0.926</td>
 </tr>
 </tbody>
 </table>
@@ -528,27 +525,27 @@ data-quarto-postprocess="true">
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>11.120</td>
+<td>0.507</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>1.209</td>
+<td>1.777</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.004</td>
+<td>0.776</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>5.251</td>
+<td>0.214</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.212</td>
+<td>-0.035</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.0724</td>
+<td>0.899</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>2.208</td>
+<td>3.167</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
-<td>735.</td>
+<td>559.</td>
 </tr>
 </tbody>
 </table>
@@ -571,7 +568,26 @@ From the causal model, we can see that **seasonality** is part of the
 necessary adjustment set to accurately estimate the effect of **OLV
 impressions** on **sales**. Although seasonality is unobserved, we can
 reasonably approximate it using a periodic function (e.g., sine or
-cosine terms) to capture seasonal fluctuations over time.
+cosine terms) to capture seasonal fluctuations over time. Let’s consider
+the following model were we adjust for **seasonality** (using fourier
+terms), **price**, **olv impressions**, and **Video Platform Sentiment**
+(`olv_sentiment` in the models). Note that **Video Platform Sentiment**
+is not a confounder, typically we would not adjust for it, but we
+include it here to illustrate the point that adjusting for variables
+that are not confounders can needlessly increase VIFs.
+
+<div class="panel-tabset" group="OLV">
+
+## Over Adjusted Model
+
+<div>
+
+<img src="01_multicollinearity_files/figure-commonmark/dot-figure-3.png"
+style="width:7in;height:5in" />
+
+</div>
+
+## Correctly Adjusted Model
 
 <div>
 
@@ -580,24 +596,676 @@ style="width:7in;height:5in" />
 
 </div>
 
-## Appendix (A view of the data)
+</div>
+
+<div id="note-fourier-components">
+
+> **Fourier Seasonality**
+>
+> To capture the seasonal fluctuations in the data, we can use Fourier
+> terms to approximate the unobserved **seasonality** variable. These
+> terms are periodic functions that can model the cyclical patterns in
+> the data, allowing us to adjust for the influence of **seasonality**
+> on **sales** and **OLV impressions**. By including these terms in the
+> regression model, we can effectively control for the confounding
+> effect of **seasonality** and obtain an unbiased estimate of the
+> effect of **OLV impressions** on **sales**.
+>
+> ------------------------------------------------------------------------
+>
+> <a
+> href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/multicollinearity.py#L9"
+> target="_blank" style="float:right; font-size:smaller">source</a>
+>
+> ### generate_fourier_components
+>
+> >      generate_fourier_components (N_samples:int, N_components:int=3,
+> >                                   period:int=52)
+>
+> *Generate Fourier components for a given number of samples and
+> components.*
+>
+> <table>
+> <colgroup>
+> <col style="width: 6%" />
+> <col style="width: 25%" />
+> <col style="width: 34%" />
+> <col style="width: 34%" />
+> </colgroup>
+> <thead>
+> <tr class="header">
+> <th></th>
+> <th><strong>Type</strong></th>
+> <th><strong>Default</strong></th>
+> <th><strong>Details</strong></th>
+> </tr>
+> </thead>
+> <tbody>
+> <tr class="odd">
+> <td>N_samples</td>
+> <td>int</td>
+> <td></td>
+> <td>Number of samples</td>
+> </tr>
+> <tr class="even">
+> <td>N_components</td>
+> <td>int</td>
+> <td>3</td>
+> <td>Half the number of Fourier components</td>
+> </tr>
+> <tr class="odd">
+> <td>period</td>
+> <td>int</td>
+> <td>52</td>
+> <td>Yearly period of weekly data</td>
+> </tr>
+> <tr class="even">
+> <td><strong>Returns</strong></td>
+> <td><strong>DataFrame</strong></td>
+> <td></td>
+> <td><strong>Dataframe with fourier components</strong></td>
+> </tr>
+> </tbody>
+> </table>
+>
+> ``` python
+> fourier_components = generate_fourier_components(dataset.Period.shape[0], 3, 52)
+> fourier_components.head()
+> ```
+>
+> <div>
+> <style scoped>
+>     .dataframe tbody tr th:only-of-type {
+>         vertical-align: middle;
+>     }
+> &#10;    .dataframe tbody tr th {
+>         vertical-align: top;
+>     }
+> &#10;    .dataframe thead th {
+>         text-align: right;
+>     }
+> </style>
+>
+> <table class="dataframe" data-quarto-postprocess="true" data-border="1">
+> <thead>
+> <tr class="header" style="text-align: right;">
+> <th data-quarto-table-cell-role="th"></th>
+> <th data-quarto-table-cell-role="th">fourier_sin_0</th>
+> <th data-quarto-table-cell-role="th">fourier_sin_1</th>
+> <th data-quarto-table-cell-role="th">fourier_sin_2</th>
+> <th data-quarto-table-cell-role="th">fourier_cos_0</th>
+> <th data-quarto-table-cell-role="th">fourier_cos_1</th>
+> <th data-quarto-table-cell-role="th">fourier_cos_2</th>
+> </tr>
+> </thead>
+> <tbody>
+> <tr class="odd">
+> <td data-quarto-table-cell-role="th">0</td>
+> <td>0.000000</td>
+> <td>0.000000</td>
+> <td>0.000000</td>
+> <td>1.000000</td>
+> <td>1.000000</td>
+> <td>1.000000</td>
+> </tr>
+> <tr class="even">
+> <td data-quarto-table-cell-role="th">1</td>
+> <td>0.121311</td>
+> <td>0.240829</td>
+> <td>0.356791</td>
+> <td>0.992615</td>
+> <td>0.970568</td>
+> <td>0.934184</td>
+> </tr>
+> <tr class="odd">
+> <td data-quarto-table-cell-role="th">2</td>
+> <td>0.240829</td>
+> <td>0.467482</td>
+> <td>0.666616</td>
+> <td>0.970568</td>
+> <td>0.884003</td>
+> <td>0.745401</td>
+> </tr>
+> <tr class="even">
+> <td data-quarto-table-cell-role="th">3</td>
+> <td>0.356791</td>
+> <td>0.666616</td>
+> <td>0.888695</td>
+> <td>0.934184</td>
+> <td>0.745401</td>
+> <td>0.458499</td>
+> </tr>
+> <tr class="odd">
+> <td data-quarto-table-cell-role="th">4</td>
+> <td>0.467482</td>
+> <td>0.826511</td>
+> <td>0.993793</td>
+> <td>0.884003</td>
+> <td>0.562921</td>
+> <td>0.111245</td>
+> </tr>
+> </tbody>
+> </table>
+>
+> </div>
+> ![](01_multicollinearity_files/figure-commonmark/fig-fourier-season-samples-output-1.png)
+
+</div>
+
+<div class="panel-tabset" group="OLV">
+
+## Over Adjusted Model
+
+<div class="cell-output cell-output-stdout">
+
+                   VIF
+    hill_olv     : 70.91
+    log_price    : 57.59
+    olv_sentiment: 4.43
+    fourier_sin_0: 1.01
+    fourier_sin_1: 1.01
+    fourier_sin_2: 1.0
+    fourier_cos_0: 1.42
+    fourier_cos_1: 1.01
+    fourier_cos_2: 1.01
+
+</div>
+
+## Correctly Adjusted Model
+
+<div class="cell-output cell-output-stdout">
+
+                   VIF
+    hill_olv     : 18.98
+    log_price    : 18.84
+    fourier_sin_0: 1.01
+    fourier_sin_1: 1.0
+    fourier_sin_2: 1.0
+    fourier_cos_0: 1.14
+    fourier_cos_1: 1.0
+    fourier_cos_2: 1.0
+
+</div>
+
+</div>
+
+<div>
+
+> **Vectors Spaces and Basis Vectors**
+>
+> Fourier components provide an orthogonal basis for the space of
+> periodic functions with a given period *L* . This orthogonality helps
+> to address multicollinearity, which is why the VIFs in
+> <a href="#tbl-vifs-fourier-correct" class="quarto-xref">Table 5</a>
+> and <a href="#tbl-vifs-fourier" class="quarto-xref">Table 4</a> are
+> all near 1 for the fourier components!
+
+</div>
+
+<div class="panel-tabset" group="OLV">
+
+## Over Adjusted Model
+
+<div class="cell-output cell-output-display">
+
+<table class="simpletable do-not-create-environment cell"
+data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.888</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.881</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>128.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Thu, 14 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>9.51e-65</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>22:41:07</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>3.4816</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>13.04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>146</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>43.54</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>9</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+OLS Regression Results
+
+<table class="simpletable do-not-create-environment cell"
+data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>10.7020</td>
+<td>0.324</td>
+<td>32.982</td>
+<td>0.000</td>
+<td>10.061</td>
+<td>11.343</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">hill_olv</td>
+<td>0.7217</td>
+<td>0.433</td>
+<td>1.665</td>
+<td>0.098</td>
+<td>-0.135</td>
+<td>1.578</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">log_price</td>
+<td>-1.0720</td>
+<td>0.127</td>
+<td>-8.433</td>
+<td>0.000</td>
+<td>-1.323</td>
+<td>-0.821</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">olv_sentiment</td>
+<td>0.0183</td>
+<td>0.161</td>
+<td>0.114</td>
+<td>0.909</td>
+<td>-0.299</td>
+<td>0.336</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_sin_0</td>
+<td>0.0449</td>
+<td>0.028</td>
+<td>1.591</td>
+<td>0.114</td>
+<td>-0.011</td>
+<td>0.101</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_sin_1</td>
+<td>0.0214</td>
+<td>0.028</td>
+<td>0.768</td>
+<td>0.444</td>
+<td>-0.034</td>
+<td>0.077</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_sin_2</td>
+<td>0.0166</td>
+<td>0.028</td>
+<td>0.596</td>
+<td>0.552</td>
+<td>-0.038</td>
+<td>0.072</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_cos_0</td>
+<td>-0.8321</td>
+<td>0.041</td>
+<td>-20.141</td>
+<td>0.000</td>
+<td>-0.914</td>
+<td>-0.750</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_1</td>
+<td>0.1959</td>
+<td>0.028</td>
+<td>6.963</td>
+<td>0.000</td>
+<td>0.140</td>
+<td>0.251</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_cos_2</td>
+<td>0.0084</td>
+<td>0.028</td>
+<td>0.303</td>
+<td>0.763</td>
+<td>-0.046</td>
+<td>0.063</td>
+</tr>
+</tbody>
+</table>
+
+<table class="simpletable do-not-create-environment cell"
+data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>0.997</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.689</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.607</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>0.912</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.186</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.634</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>2.964</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>53.9</td>
+</tr>
+</tbody>
+</table>
+
+<br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+</div>
+
+## Correctly Adjusted Model
+
+<div class="cell-output cell-output-display">
+
+<table class="simpletable do-not-create-environment cell"
+data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.888</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.882</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>145.4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Thu, 14 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>7.68e-66</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>22:39:52</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>3.4747</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>11.05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>147</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>38.50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>8</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+OLS Regression Results
+
+<table class="simpletable do-not-create-environment cell"
+data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>10.6756</td>
+<td>0.226</td>
+<td>47.201</td>
+<td>0.000</td>
+<td>10.229</td>
+<td>11.123</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">hill_olv</td>
+<td>0.7678</td>
+<td>0.157</td>
+<td>4.898</td>
+<td>0.000</td>
+<td>0.458</td>
+<td>1.078</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">log_price</td>
+<td>-1.0712</td>
+<td>0.126</td>
+<td>-8.468</td>
+<td>0.000</td>
+<td>-1.321</td>
+<td>-0.821</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_sin_0</td>
+<td>0.0444</td>
+<td>0.028</td>
+<td>1.597</td>
+<td>0.112</td>
+<td>-0.011</td>
+<td>0.099</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_sin_1</td>
+<td>0.0215</td>
+<td>0.028</td>
+<td>0.773</td>
+<td>0.441</td>
+<td>-0.033</td>
+<td>0.076</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_sin_2</td>
+<td>0.0167</td>
+<td>0.028</td>
+<td>0.603</td>
+<td>0.548</td>
+<td>-0.038</td>
+<td>0.071</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_0</td>
+<td>-0.8289</td>
+<td>0.030</td>
+<td>-27.407</td>
+<td>0.000</td>
+<td>-0.889</td>
+<td>-0.769</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_cos_1</td>
+<td>0.1953</td>
+<td>0.028</td>
+<td>7.081</td>
+<td>0.000</td>
+<td>0.141</td>
+<td>0.250</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_2</td>
+<td>0.0086</td>
+<td>0.028</td>
+<td>0.313</td>
+<td>0.755</td>
+<td>-0.046</td>
+<td>0.063</td>
+</tr>
+</tbody>
+</table>
+
+<table class="simpletable do-not-create-environment cell"
+data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>1.098</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.688</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.577</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>0.987</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.195</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.610</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>2.979</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>26.6</td>
+</tr>
+</tbody>
+</table>
+
+<br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+</div>
+
+</div>
+
+Here, we observe that although the VIF values are considerably lower
+than those reported in
+<a href="#tbl-vifs" class="quarto-xref">Table 1</a> in the previous
+example
+(<a href="#sec-paid-search-solution" class="quarto-xref">1.1.1</a>), the
+impact on our ability to accurately measure the effect of **OLV
+impressions** on **sales** is significantly more detrimental.
+
+Comparing <a href="#tbl-vifs-fourier-olv-no-sentiment"
+class="quarto-xref">Table 7</a> to
+<a href="#tbl-vifs-fourier-olv" class="quarto-xref">Table 6</a> we see
+that the inclusion of **Video Platform Sentiment** (represented as
+`olv_sentement` in the model), did not bias the estimate of the total
+effect of **OLV impressions** on **sales**. However, it did lead to an
+increase in p-values, pushing them above our significance threshold of
+0.05.
+
+## Appendix A - Paid Search Data
 
 <div class="panel-tabset">
 
 ## Sales
 
-![](01_multicollinearity_files/figure-commonmark/cell-7-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-14-output-1.png)
 
 ## Paid Search Impressions
 
-![](01_multicollinearity_files/figure-commonmark/cell-8-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-15-output-1.png)
 
 ## Search Query Volume
 
-![](01_multicollinearity_files/figure-commonmark/cell-9-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-16-output-1.png)
 
 ## Price
 
-![](01_multicollinearity_files/figure-commonmark/cell-10-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-17-output-1.png)
+
+</div>
+
+## Appendix B - OLV Data
+
+<div class="panel-tabset">
+
+## Sales
+
+![](01_multicollinearity_files/figure-commonmark/cell-18-output-1.png)
+
+## OLV Impressions
+
+![](01_multicollinearity_files/figure-commonmark/cell-19-output-1.png)
+
+## Video Platform Sentiment
+
+![](01_multicollinearity_files/figure-commonmark/cell-20-output-1.png)
+
+## Price
+
+![](01_multicollinearity_files/figure-commonmark/cell-21-output-1.png)
 
 </div>
