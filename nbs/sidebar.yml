@@ -6,6 +6,7 @@ website:
       - 01_multicollinearity.ipynb
       - section: model_helpers
         contents:
+          - model_helpers/00_fourier_components.ipynb
           - model_helpers/01_spline_models.ipynb
       - section: synthetic_data
         contents:
