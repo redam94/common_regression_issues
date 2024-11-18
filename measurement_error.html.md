@@ -305,12 +305,14 @@ plot_survey_sim_data(trace)
 
 The sales data is simulated using the following equation:
 
+<span id="eq-sales">
 $$
 \begin{align\*}
 log(S_t) &= \beta \text{pop\\awareness}\_t + \alpha + \varepsilon_t \\
 \varepsilon_t &\sim \mathcal{N}(0, \sigma^2)
 \end{align\*}
-$$
+ \qquad(1)$$
+</span>
 
 Lets see if the true coeff *β* can be estimated using the simulated
 data.

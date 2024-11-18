@@ -198,12 +198,29 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">synthetic_data</span></a>
+ <span class="menu-text">model_helpers</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_helpers/spline_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Splines</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">synthetic_data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./synthetic_data/simple_regression_data.html" class="sidebar-item-text sidebar-link">
@@ -226,13 +243,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">utils</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./utils/plotting.html" class="sidebar-item-text sidebar-link">
@@ -575,12 +592,12 @@ Figure&nbsp;2: Simulated Awareness Survey Data
 <section id="lets-simulate-some-sales-data" class="level2">
 <h2 class="anchored" data-anchor-id="lets-simulate-some-sales-data">Let’s simulate some sales data</h2>
 <p>The sales data is simulated using the following equation:</p>
-<p><span class="math display">\[
+<p><span id="eq-sales"><span class="math display">\[
 \begin{align*}
 log(S_t) &amp;= \beta \text{pop\_awareness}_t + \alpha + \varepsilon_t \\
 \varepsilon_t &amp;\sim \mathcal{N}(0, \sigma^2)
 \end{align*}
-\]</span></p>
+\tag{1}\]</span></span></p>
 <p>Lets see if the true coeff <span class="math inline">\(\beta\)</span> can be estimated using the simulated data.</p>
 <div id="cell-14" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ACTUAL_AWARENESS_COEFF <span class="op">=</span> <span class="dv">30</span></span>
@@ -595,7 +612,7 @@ log(S_t) &amp;= \beta \text{pop\_awareness}_t + \alpha + \varepsilon_t \\
 <img src="00_measurement_error_files/figure-html/fig-simulated-sales-output-1.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulated-sales-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Simulated sales data. See <strong>?@eq-sales</strong> for data generative process
+Figure&nbsp;3: Simulated sales data. See <a href="#eq-sales" class="quarto-xref">Equation&nbsp;1</a> for data generative process
 </figcaption>
 </figure>
 </div>
