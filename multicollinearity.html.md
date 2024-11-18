@@ -138,78 +138,78 @@ style="width:7in;height:5in" />
 ## Correlation Matrix
 
 <style type="text/css">
-#T_b085f_row0_col0, #T_b085f_row1_col1, #T_b085f_row2_col2, #T_b085f_row3_col3 {
+#T_b75b6_row0_col0, #T_b75b6_row1_col1, #T_b75b6_row2_col2, #T_b75b6_row3_col3 {
   background-color: #006837;
   color: #f1f1f1;
 }
-#T_b085f_row0_col1, #T_b085f_row1_col0 {
+#T_b75b6_row0_col1, #T_b75b6_row1_col0 {
   background-color: #097940;
   color: #f1f1f1;
 }
-#T_b085f_row0_col2, #T_b085f_row2_col0 {
+#T_b75b6_row0_col2, #T_b75b6_row2_col0 {
   background-color: #fdbd6d;
   color: #000000;
 }
-#T_b085f_row0_col3, #T_b085f_row1_col3, #T_b085f_row3_col0, #T_b085f_row3_col1 {
+#T_b75b6_row0_col3, #T_b75b6_row1_col3, #T_b75b6_row3_col0, #T_b75b6_row3_col1 {
   background-color: #0c7f43;
   color: #f1f1f1;
 }
-#T_b085f_row1_col2, #T_b085f_row2_col1 {
+#T_b75b6_row1_col2, #T_b75b6_row2_col1 {
   background-color: #fdbf6f;
   color: #000000;
 }
-#T_b085f_row2_col3, #T_b085f_row3_col2 {
+#T_b75b6_row2_col3, #T_b75b6_row3_col2 {
   background-color: #fee28f;
   color: #000000;
 }
 </style>
 
-<table id="T_b085f" data-quarto-postprocess="true">
+<table id="T_b75b6" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th"> </th>
-<th id="T_b085f_level0_col0" class="col_heading level0 col0"
+<th id="T_b75b6_level0_col0" class="col_heading level0 col0"
 data-quarto-table-cell-role="th">paid_search_impressions</th>
-<th id="T_b085f_level0_col1" class="col_heading level0 col1"
+<th id="T_b75b6_level0_col1" class="col_heading level0 col1"
 data-quarto-table-cell-role="th">search_query</th>
-<th id="T_b085f_level0_col2" class="col_heading level0 col2"
+<th id="T_b75b6_level0_col2" class="col_heading level0 col2"
 data-quarto-table-cell-role="th">price</th>
-<th id="T_b085f_level0_col3" class="col_heading level0 col3"
+<th id="T_b75b6_level0_col3" class="col_heading level0 col3"
 data-quarto-table-cell-role="th">sales</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_b085f_level0_row0" class="row_heading level0 row0"
+<td id="T_b75b6_level0_row0" class="row_heading level0 row0"
 data-quarto-table-cell-role="th">paid_search_impressions</td>
-<td id="T_b085f_row0_col0" class="data row0 col0">1.00</td>
-<td id="T_b085f_row0_col1" class="data row0 col1">0.93</td>
-<td id="T_b085f_row0_col2" class="data row0 col2">-0.34</td>
-<td id="T_b085f_row0_col3" class="data row0 col3">0.90</td>
+<td id="T_b75b6_row0_col0" class="data row0 col0">1.00</td>
+<td id="T_b75b6_row0_col1" class="data row0 col1">0.93</td>
+<td id="T_b75b6_row0_col2" class="data row0 col2">-0.34</td>
+<td id="T_b75b6_row0_col3" class="data row0 col3">0.90</td>
 </tr>
 <tr class="even">
-<td id="T_b085f_level0_row1" class="row_heading level0 row1"
+<td id="T_b75b6_level0_row1" class="row_heading level0 row1"
 data-quarto-table-cell-role="th">search_query</td>
-<td id="T_b085f_row1_col0" class="data row1 col0">0.93</td>
-<td id="T_b085f_row1_col1" class="data row1 col1">1.00</td>
-<td id="T_b085f_row1_col2" class="data row1 col2">-0.33</td>
-<td id="T_b085f_row1_col3" class="data row1 col3">0.91</td>
+<td id="T_b75b6_row1_col0" class="data row1 col0">0.93</td>
+<td id="T_b75b6_row1_col1" class="data row1 col1">1.00</td>
+<td id="T_b75b6_row1_col2" class="data row1 col2">-0.33</td>
+<td id="T_b75b6_row1_col3" class="data row1 col3">0.91</td>
 </tr>
 <tr class="odd">
-<td id="T_b085f_level0_row2" class="row_heading level0 row2"
+<td id="T_b75b6_level0_row2" class="row_heading level0 row2"
 data-quarto-table-cell-role="th">price</td>
-<td id="T_b085f_row2_col0" class="data row2 col0">-0.34</td>
-<td id="T_b085f_row2_col1" class="data row2 col1">-0.33</td>
-<td id="T_b085f_row2_col2" class="data row2 col2">1.00</td>
-<td id="T_b085f_row2_col3" class="data row2 col3">-0.19</td>
+<td id="T_b75b6_row2_col0" class="data row2 col0">-0.34</td>
+<td id="T_b75b6_row2_col1" class="data row2 col1">-0.33</td>
+<td id="T_b75b6_row2_col2" class="data row2 col2">1.00</td>
+<td id="T_b75b6_row2_col3" class="data row2 col3">-0.19</td>
 </tr>
 <tr class="even">
-<td id="T_b085f_level0_row3" class="row_heading level0 row3"
+<td id="T_b75b6_level0_row3" class="row_heading level0 row3"
 data-quarto-table-cell-role="th">sales</td>
-<td id="T_b085f_row3_col0" class="data row3 col0">0.90</td>
-<td id="T_b085f_row3_col1" class="data row3 col1">0.91</td>
-<td id="T_b085f_row3_col2" class="data row3 col2">-0.19</td>
-<td id="T_b085f_row3_col3" class="data row3 col3">1.00</td>
+<td id="T_b75b6_row3_col0" class="data row3 col0">0.90</td>
+<td id="T_b75b6_row3_col1" class="data row3 col1">0.91</td>
+<td id="T_b75b6_row3_col2" class="data row3 col2">-0.19</td>
+<td id="T_b75b6_row3_col3" class="data row3 col3">1.00</td>
 </tr>
 </tbody>
 </table>
@@ -287,13 +287,13 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 14 Nov 2024</td>
+<td>Sun, 17 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>5.21e-60</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:29:24</td>
+<td>20:28:10</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-27.949</td>
 </tr>
@@ -430,13 +430,13 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 14 Nov 2024</td>
+<td>Sun, 17 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>1.82e-66</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:29:24</td>
+<td>20:28:11</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-9.4959</td>
 </tr>
@@ -611,143 +611,9 @@ style="width:7in;height:5in" />
 > effect of **seasonality** and obtain an unbiased estimate of the
 > effect of **OLV impressions** on **sales**.
 >
-> ------------------------------------------------------------------------
+> I will use a [model helper](./model_helpers/fourier_components.html)
+> to generated the fourier
 >
-> <a
-> href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/multicollinearity.py#L9"
-> target="_blank" style="float:right; font-size:smaller">source</a>
->
-> ### generate_fourier_components
->
-> >      generate_fourier_components (N_samples:int, N_components:int=3,
-> >                                   period:int=52)
->
-> *Generate Fourier components for a given number of samples and
-> components.*
->
-> <table>
-> <colgroup>
-> <col style="width: 6%" />
-> <col style="width: 25%" />
-> <col style="width: 34%" />
-> <col style="width: 34%" />
-> </colgroup>
-> <thead>
-> <tr class="header">
-> <th></th>
-> <th><strong>Type</strong></th>
-> <th><strong>Default</strong></th>
-> <th><strong>Details</strong></th>
-> </tr>
-> </thead>
-> <tbody>
-> <tr class="odd">
-> <td>N_samples</td>
-> <td>int</td>
-> <td></td>
-> <td>Number of samples</td>
-> </tr>
-> <tr class="even">
-> <td>N_components</td>
-> <td>int</td>
-> <td>3</td>
-> <td>Half the number of Fourier components</td>
-> </tr>
-> <tr class="odd">
-> <td>period</td>
-> <td>int</td>
-> <td>52</td>
-> <td>Yearly period of weekly data</td>
-> </tr>
-> <tr class="even">
-> <td><strong>Returns</strong></td>
-> <td><strong>DataFrame</strong></td>
-> <td></td>
-> <td><strong>Dataframe with fourier components</strong></td>
-> </tr>
-> </tbody>
-> </table>
->
-> ``` python
-> fourier_components = generate_fourier_components(dataset.Period.shape[0], 3, 52)
-> fourier_components.head()
-> ```
->
-> <div>
-> <style scoped>
->     .dataframe tbody tr th:only-of-type {
->         vertical-align: middle;
->     }
-> &#10;    .dataframe tbody tr th {
->         vertical-align: top;
->     }
-> &#10;    .dataframe thead th {
->         text-align: right;
->     }
-> </style>
->
-> <table class="dataframe" data-quarto-postprocess="true" data-border="1">
-> <thead>
-> <tr class="header" style="text-align: right;">
-> <th data-quarto-table-cell-role="th"></th>
-> <th data-quarto-table-cell-role="th">fourier_sin_0</th>
-> <th data-quarto-table-cell-role="th">fourier_sin_1</th>
-> <th data-quarto-table-cell-role="th">fourier_sin_2</th>
-> <th data-quarto-table-cell-role="th">fourier_cos_0</th>
-> <th data-quarto-table-cell-role="th">fourier_cos_1</th>
-> <th data-quarto-table-cell-role="th">fourier_cos_2</th>
-> </tr>
-> </thead>
-> <tbody>
-> <tr class="odd">
-> <td data-quarto-table-cell-role="th">0</td>
-> <td>0.000000</td>
-> <td>0.000000</td>
-> <td>0.000000</td>
-> <td>1.000000</td>
-> <td>1.000000</td>
-> <td>1.000000</td>
-> </tr>
-> <tr class="even">
-> <td data-quarto-table-cell-role="th">1</td>
-> <td>0.121311</td>
-> <td>0.240829</td>
-> <td>0.356791</td>
-> <td>0.992615</td>
-> <td>0.970568</td>
-> <td>0.934184</td>
-> </tr>
-> <tr class="odd">
-> <td data-quarto-table-cell-role="th">2</td>
-> <td>0.240829</td>
-> <td>0.467482</td>
-> <td>0.666616</td>
-> <td>0.970568</td>
-> <td>0.884003</td>
-> <td>0.745401</td>
-> </tr>
-> <tr class="even">
-> <td data-quarto-table-cell-role="th">3</td>
-> <td>0.356791</td>
-> <td>0.666616</td>
-> <td>0.888695</td>
-> <td>0.934184</td>
-> <td>0.745401</td>
-> <td>0.458499</td>
-> </tr>
-> <tr class="odd">
-> <td data-quarto-table-cell-role="th">4</td>
-> <td>0.467482</td>
-> <td>0.826511</td>
-> <td>0.993793</td>
-> <td>0.884003</td>
-> <td>0.562921</td>
-> <td>0.111245</td>
-> </tr>
-> </tbody>
-> </table>
->
-> </div>
 > ![](01_multicollinearity_files/figure-commonmark/fig-fourier-season-samples-output-1.png)
 
 </div>
@@ -822,41 +688,41 @@ data-quarto-postprocess="true">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.881</td>
+<td>0.882</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>128.3</td>
+<td>145.4</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 14 Nov 2024</td>
+<td>Sun, 17 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>9.51e-65</td>
+<td>7.68e-66</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:41:07</td>
+<td>20:32:33</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>3.4816</td>
+<td>3.4747</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>156</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>13.04</td>
+<td>11.05</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
-<td>146</td>
+<td>147</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>43.54</td>
+<td>38.50</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
-<td>9</td>
+<td>8</td>
 <td data-quarto-table-cell-role="th"></td>
 <td></td>
 </tr>
@@ -885,91 +751,82 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>10.7020</td>
-<td>0.324</td>
-<td>32.982</td>
+<td>10.6756</td>
+<td>0.226</td>
+<td>47.201</td>
 <td>0.000</td>
-<td>10.061</td>
-<td>11.343</td>
+<td>10.229</td>
+<td>11.123</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">hill_olv</td>
-<td>0.7217</td>
-<td>0.433</td>
-<td>1.665</td>
-<td>0.098</td>
-<td>-0.135</td>
-<td>1.578</td>
+<td>0.7678</td>
+<td>0.157</td>
+<td>4.898</td>
+<td>0.000</td>
+<td>0.458</td>
+<td>1.078</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">log_price</td>
-<td>-1.0720</td>
-<td>0.127</td>
-<td>-8.433</td>
+<td>-1.0712</td>
+<td>0.126</td>
+<td>-8.468</td>
 <td>0.000</td>
-<td>-1.323</td>
+<td>-1.321</td>
 <td>-0.821</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">olv_sentiment</td>
-<td>0.0183</td>
-<td>0.161</td>
-<td>0.114</td>
-<td>0.909</td>
-<td>-0.299</td>
-<td>0.336</td>
-</tr>
-<tr class="even">
 <td data-quarto-table-cell-role="th">fourier_sin_0</td>
-<td>0.0449</td>
+<td>0.0444</td>
 <td>0.028</td>
-<td>1.591</td>
-<td>0.114</td>
+<td>1.597</td>
+<td>0.112</td>
 <td>-0.011</td>
-<td>0.101</td>
+<td>0.099</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td data-quarto-table-cell-role="th">fourier_sin_1</td>
-<td>0.0214</td>
+<td>0.0215</td>
 <td>0.028</td>
-<td>0.768</td>
-<td>0.444</td>
-<td>-0.034</td>
-<td>0.077</td>
+<td>0.773</td>
+<td>0.441</td>
+<td>-0.033</td>
+<td>0.076</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td data-quarto-table-cell-role="th">fourier_sin_2</td>
-<td>0.0166</td>
+<td>0.0167</td>
 <td>0.028</td>
-<td>0.596</td>
-<td>0.552</td>
+<td>0.603</td>
+<td>0.548</td>
 <td>-0.038</td>
-<td>0.072</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">fourier_cos_0</td>
-<td>-0.8321</td>
-<td>0.041</td>
-<td>-20.141</td>
-<td>0.000</td>
-<td>-0.914</td>
-<td>-0.750</td>
+<td>0.071</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">fourier_cos_1</td>
-<td>0.1959</td>
-<td>0.028</td>
-<td>6.963</td>
+<td data-quarto-table-cell-role="th">fourier_cos_0</td>
+<td>-0.8289</td>
+<td>0.030</td>
+<td>-27.407</td>
 <td>0.000</td>
-<td>0.140</td>
-<td>0.251</td>
+<td>-0.889</td>
+<td>-0.769</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">fourier_cos_2</td>
-<td>0.0084</td>
+<td data-quarto-table-cell-role="th">fourier_cos_1</td>
+<td>0.1953</td>
 <td>0.028</td>
-<td>0.303</td>
-<td>0.763</td>
+<td>7.081</td>
+<td>0.000</td>
+<td>0.141</td>
+<td>0.250</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_2</td>
+<td>0.0086</td>
+<td>0.028</td>
+<td>0.313</td>
+<td>0.755</td>
 <td>-0.046</td>
 <td>0.063</td>
 </tr>
@@ -981,27 +838,27 @@ data-quarto-postprocess="true">
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>0.997</td>
+<td>1.098</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>1.689</td>
+<td>1.688</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.607</td>
+<td>0.577</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>0.912</td>
+<td>0.987</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>-0.186</td>
+<td>-0.195</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.634</td>
+<td>0.610</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>2.964</td>
+<td>2.979</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
-<td>53.9</td>
+<td>26.6</td>
 </tr>
 </tbody>
 </table>
@@ -1038,13 +895,13 @@ data-quarto-postprocess="true">
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Thu, 14 Nov 2024</td>
+<td>Sun, 17 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>7.68e-66</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>22:39:52</td>
+<td>20:32:34</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>3.4747</td>
 </tr>
@@ -1232,19 +1089,19 @@ increase in p-values, pushing them above our significance threshold of
 
 ## Sales
 
-![](01_multicollinearity_files/figure-commonmark/cell-14-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-12-output-1.png)
 
 ## Paid Search Impressions
 
-![](01_multicollinearity_files/figure-commonmark/cell-15-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-13-output-1.png)
 
 ## Search Query Volume
 
-![](01_multicollinearity_files/figure-commonmark/cell-16-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-14-output-1.png)
 
 ## Price
 
-![](01_multicollinearity_files/figure-commonmark/cell-17-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-15-output-1.png)
 
 </div>
 
@@ -1254,18 +1111,18 @@ increase in p-values, pushing them above our significance threshold of
 
 ## Sales
 
-![](01_multicollinearity_files/figure-commonmark/cell-18-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-16-output-1.png)
 
 ## OLV Impressions
 
-![](01_multicollinearity_files/figure-commonmark/cell-19-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-17-output-1.png)
 
 ## Video Platform Sentiment
 
-![](01_multicollinearity_files/figure-commonmark/cell-20-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-18-output-1.png)
 
 ## Price
 
-![](01_multicollinearity_files/figure-commonmark/cell-21-output-1.png)
+![](01_multicollinearity_files/figure-commonmark/cell-19-output-1.png)
 
 </div>
