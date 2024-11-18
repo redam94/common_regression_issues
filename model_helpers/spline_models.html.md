@@ -94,13 +94,20 @@ Model)**</span>  
 INDEX = np.linspace(0, 1, 156)
 
 spline_data = spline_component(19, INDEX, degree=3) # 19 Splines
-fun = np.sin(2*np.pi*5*INDEX)/(20*(INDEX-.5)) + (INDEX-.5) * 2# Complex Non-linear function to learn
+fun_ = lambda x: np.sin(2*np.pi*5*x)/(20*(x-.5)) + (x-.5) * 2
+fun = fun_(INDEX)# Complex Non-linear function to learn
+
 y_obs = fun + np.random.normal(0, .1, size=spline_data.shape[0]) # Noisy observation process
 
+tau_scale = 1.0
+c_scale = 0.1
 with pm.Model() as model:
-    global_scale = pm.HalfNormal('scale', .05)
-    tau = pm.HalfCauchy("tau", 1, shape=spline_data.shape[1])
-    betas_ = pm.Normal("betas_", 0, global_scale*tau)
+    tau = pm.HalfCauchy('tau', tau_scale)
+    lambdas = pm.HalfCauchy("lambdas", 1, shape=spline_data.shape[1])
+    c = pm.HalfCauchy("c", beta=c_scale)
+
+    sigma_coeff = pm.Deterministic("sigma_coeff", tau * lambdas / pm.math.sqrt(c**2 + (tau * lambdas)**2))
+    betas_ = pm.Normal("betas_", 0, sigma_coeff)
     betas = pm.Deterministic("betas", pm.math.cumsum(betas_)) # Enforce Random Walk Process
 
     alpha = pm.Normal("alpha", 0, 1)
@@ -146,266 +153,266 @@ data-quarto-postprocess="true" data-border="1">
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[0]</td>
-<td>-0.034</td>
-<td>0.078</td>
-<td>-0.197</td>
-<td>0.110</td>
+<td>0.009</td>
+<td>0.131</td>
+<td>-0.243</td>
+<td>0.262</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.002</td>
-<td>1307.0</td>
-<td>1322.0</td>
+<td>1407.0</td>
+<td>2094.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[1]</td>
-<td>-0.066</td>
-<td>0.092</td>
-<td>-0.250</td>
-<td>0.095</td>
+<td>-0.063</td>
+<td>0.118</td>
+<td>-0.281</td>
+<td>0.159</td>
 <td>0.003</td>
 <td>0.002</td>
-<td>1174.0</td>
-<td>1521.0</td>
+<td>2027.0</td>
+<td>2518.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[2]</td>
-<td>0.040</td>
-<td>0.091</td>
-<td>-0.140</td>
-<td>0.205</td>
+<td>0.378</td>
+<td>0.114</td>
+<td>0.173</td>
+<td>0.598</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.002</td>
-<td>1342.0</td>
-<td>1792.0</td>
+<td>1621.0</td>
+<td>2392.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[3]</td>
-<td>0.389</td>
-<td>0.092</td>
-<td>0.219</td>
-<td>0.561</td>
+<td>0.548</td>
+<td>0.112</td>
+<td>0.324</td>
+<td>0.743</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.002</td>
-<td>1386.0</td>
-<td>2521.0</td>
+<td>1845.0</td>
+<td>2276.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[4]</td>
-<td>0.261</td>
-<td>0.081</td>
-<td>0.106</td>
-<td>0.407</td>
+<td>0.389</td>
+<td>0.109</td>
+<td>0.177</td>
+<td>0.590</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.002</td>
-<td>1298.0</td>
-<td>2278.0</td>
+<td>1625.0</td>
+<td>2538.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[5]</td>
-<td>0.207</td>
-<td>0.085</td>
-<td>0.033</td>
-<td>0.356</td>
+<td>0.197</td>
+<td>0.113</td>
+<td>-0.034</td>
+<td>0.391</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.002</td>
-<td>1288.0</td>
-<td>2140.0</td>
+<td>1607.0</td>
+<td>2097.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[6]</td>
-<td>0.667</td>
-<td>0.097</td>
-<td>0.492</td>
-<td>0.850</td>
+<td>0.977</td>
+<td>0.111</td>
+<td>0.757</td>
+<td>1.175</td>
 <td>0.003</td>
 <td>0.002</td>
-<td>1355.0</td>
-<td>2160.0</td>
+<td>1613.0</td>
+<td>1949.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[7]</td>
-<td>1.181</td>
-<td>0.096</td>
-<td>1.001</td>
-<td>1.355</td>
+<td>1.206</td>
+<td>0.113</td>
+<td>1.009</td>
+<td>1.435</td>
 <td>0.003</td>
 <td>0.002</td>
-<td>1188.0</td>
-<td>2127.0</td>
+<td>1537.0</td>
+<td>2096.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[8]</td>
-<td>0.447</td>
-<td>0.094</td>
-<td>0.277</td>
-<td>0.624</td>
+<td>0.692</td>
+<td>0.109</td>
+<td>0.469</td>
+<td>0.883</td>
 <td>0.002</td>
 <td>0.002</td>
-<td>1452.0</td>
-<td>2148.0</td>
+<td>1924.0</td>
+<td>2232.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[9]</td>
-<td>-0.758</td>
-<td>0.078</td>
-<td>-0.904</td>
-<td>-0.608</td>
+<td>-0.551</td>
+<td>0.107</td>
+<td>-0.756</td>
+<td>-0.350</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.001</td>
-<td>1474.0</td>
-<td>2311.0</td>
+<td>1737.0</td>
+<td>2105.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[10]</td>
-<td>-0.735</td>
-<td>0.080</td>
-<td>-0.883</td>
-<td>-0.579</td>
+<td>-0.544</td>
+<td>0.106</td>
+<td>-0.734</td>
+<td>-0.341</td>
 <td>0.002</td>
-<td>0.001</td>
-<td>1472.0</td>
-<td>2205.0</td>
+<td>0.002</td>
+<td>2018.0</td>
+<td>2124.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[11]</td>
-<td>0.849</td>
-<td>0.090</td>
-<td>0.684</td>
-<td>1.018</td>
+<td>1.054</td>
+<td>0.110</td>
+<td>0.851</td>
+<td>1.265</td>
 <td>0.002</td>
 <td>0.002</td>
-<td>1494.0</td>
-<td>2157.0</td>
+<td>1973.0</td>
+<td>2353.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[12]</td>
-<td>1.672</td>
-<td>0.091</td>
-<td>1.513</td>
-<td>1.855</td>
+<td>1.833</td>
+<td>0.111</td>
+<td>1.622</td>
+<td>2.037</td>
 <td>0.003</td>
 <td>0.002</td>
-<td>1218.0</td>
-<td>1655.0</td>
+<td>1930.0</td>
+<td>2226.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[13]</td>
-<td>1.566</td>
-<td>0.096</td>
-<td>1.369</td>
-<td>1.740</td>
+<td>1.488</td>
+<td>0.111</td>
+<td>1.281</td>
+<td>1.702</td>
 <td>0.003</td>
 <td>0.002</td>
-<td>1031.0</td>
-<td>1157.0</td>
+<td>1957.0</td>
+<td>2474.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[14]</td>
-<td>1.087</td>
-<td>0.109</td>
-<td>0.890</td>
-<td>1.298</td>
-<td>0.004</td>
+<td>1.369</td>
+<td>0.104</td>
+<td>1.173</td>
+<td>1.565</td>
 <td>0.003</td>
-<td>910.0</td>
-<td>863.0</td>
+<td>0.002</td>
+<td>1728.0</td>
+<td>2645.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[15]</td>
-<td>1.388</td>
-<td>0.101</td>
-<td>1.201</td>
-<td>1.581</td>
-<td>0.003</td>
+<td>1.458</td>
+<td>0.109</td>
+<td>1.247</td>
+<td>1.655</td>
 <td>0.002</td>
-<td>1188.0</td>
-<td>2073.0</td>
+<td>0.002</td>
+<td>2259.0</td>
+<td>2227.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[16]</td>
-<td>1.759</td>
-<td>0.083</td>
-<td>1.604</td>
-<td>1.919</td>
+<td>2.077</td>
+<td>0.109</td>
+<td>1.865</td>
+<td>2.279</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.001</td>
-<td>1665.0</td>
-<td>1864.0</td>
+<td>1800.0</td>
+<td>1994.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[17]</td>
-<td>1.699</td>
-<td>0.078</td>
-<td>1.556</td>
-<td>1.843</td>
+<td>1.644</td>
+<td>0.133</td>
+<td>1.367</td>
+<td>1.864</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.001</td>
-<td>1637.0</td>
-<td>2160.0</td>
+<td>2406.0</td>
+<td>2565.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">betas[18]</td>
-<td>1.704</td>
-<td>0.080</td>
-<td>1.557</td>
-<td>1.858</td>
+<td>1.939</td>
+<td>0.129</td>
+<td>1.687</td>
+<td>2.169</td>
+<td>0.003</td>
 <td>0.002</td>
-<td>0.001</td>
-<td>1735.0</td>
-<td>2486.0</td>
+<td>2225.0</td>
+<td>2990.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">betas[19]</td>
-<td>1.786</td>
-<td>0.085</td>
-<td>1.623</td>
-<td>1.942</td>
+<td>2.060</td>
+<td>0.106</td>
+<td>1.875</td>
+<td>2.274</td>
 <td>0.002</td>
 <td>0.001</td>
-<td>1831.0</td>
-<td>976.0</td>
+<td>2802.0</td>
+<td>3035.0</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">alpha</td>
-<td>-0.909</td>
-<td>0.062</td>
-<td>-1.015</td>
-<td>-0.783</td>
+<td>-1.054</td>
+<td>0.078</td>
+<td>-1.200</td>
+<td>-0.905</td>
+<td>0.002</td>
 <td>0.001</td>
-<td>0.001</td>
-<td>1828.0</td>
-<td>2193.0</td>
+<td>2102.0</td>
+<td>2160.0</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">scale</td>
-<td>0.128</td>
-<td>0.030</td>
-<td>0.072</td>
-<td>0.181</td>
-<td>0.001</td>
-<td>0.000</td>
-<td>2605.0</td>
-<td>3014.0</td>
+<td data-quarto-table-cell-role="th">tau</td>
+<td>1.020</td>
+<td>5.563</td>
+<td>0.003</td>
+<td>2.581</td>
+<td>0.113</td>
+<td>0.080</td>
+<td>2561.0</td>
+<td>2382.0</td>
 <td>1.0</td>
 </tr>
 </tbody>
