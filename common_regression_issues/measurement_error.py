@@ -17,7 +17,7 @@ from tueplots import bundles
 from tueplots.constants.color import rgb
 from .utils.plotting import rgb_to_hex
 
-# %% ../nbs/00_measurement_error.ipynb 7
+# %% ../nbs/00_measurement_error.ipynb 8
 def random_walk_awareness_model(
   periods: list | pd.DatetimeIndex | np.ndarray, # Time periods to simulate
   ) -> pm.Model: # PyMC model for the random walk awareness model
@@ -39,7 +39,7 @@ def random_walk_awareness_model(
         awareness = pm.Deterministic('awareness', pm.math.invlogit(logit_awareness + weekly_shock*_noise), dims="Period")
     return model
 
-# %% ../nbs/00_measurement_error.ipynb 10
+# %% ../nbs/00_measurement_error.ipynb 11
 def survey_obs_model(
   population_awareness: xr.DataArray | pm.pytensorf.TensorVariable, # Population awareness
   avg_weekly_participants: float = 500.0, # Average number of participants per week
@@ -61,7 +61,7 @@ def survey_obs_model(
         N_positive = pm.Binomial('n_positive', N_survey_participant, population_awareness, dims="Period")
     return model
 
-# %% ../nbs/00_measurement_error.ipynb 11
+# %% ../nbs/00_measurement_error.ipynb 12
 def simulate_awareness_survey_data(
   start_date: str = '2020-01-01', # Start date of the survey data
   n_weeks: int = 156, # Number of weeks to simulate
@@ -90,7 +90,7 @@ def simulate_awareness_survey_data(
   return trace.assign(estimated_awareness = trace['n_positive']/trace['n_survey_participants'])
 
 
-# %% ../nbs/00_measurement_error.ipynb 12
+# %% ../nbs/00_measurement_error.ipynb 13
 def plot_survey_sim_data(
   data: xr.Dataset, # Simulated survey data must contain 'awareness' and 'estimated_awareness' variables
 ) -> None: # Plot of the simulated survey data
