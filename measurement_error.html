@@ -8,7 +8,7 @@
 
 <meta name="description" content="How to account for the observation process">
 
-<title>Measurement Error in Exogenous Variables – Common Regression Issues</title>
+<title>Sampling Error in Exogenous Variables – Common Regression Issues</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -136,10 +156,10 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Measurement Error in Exogenous Variables – Common Regression Issues">
+<meta property="og:title" content="Sampling Error in Exogenous Variables – Common Regression Issues">
 <meta property="og:description" content="How to account for the observation process">
 <meta property="og:site_name" content="Common Regression Issues">
-<meta name="twitter:title" content="Measurement Error in Exogenous Variables – Common Regression Issues">
+<meta name="twitter:title" content="Sampling Error in Exogenous Variables – Common Regression Issues">
 <meta name="twitter:description" content="How to account for the observation process">
 <meta name="twitter:card" content="summary">
 </head>
@@ -165,7 +185,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./measurement_error.html">Measurement Error in Exogenous Variables</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./measurement_error.html">Sampling Error in Exogenous Variables</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -186,13 +206,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./measurement_error.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Measurement Error in Exogenous Variables</span></a>
+ <span class="menu-text">Sampling Error in Exogenous Variables</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./multicollinearity.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">When is Multicollinearity an Issue?</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multiplicative_contributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to Interpret Multiplicative Models?</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -275,7 +301,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#survey-data" id="toc-survey-data" class="nav-link active" data-scroll-target="#survey-data">Survey Data</a></li>
-  <li><a href="#impact-of-measurement-error-on-regression-models" id="toc-impact-of-measurement-error-on-regression-models" class="nav-link" data-scroll-target="#impact-of-measurement-error-on-regression-models">Impact of Measurement Error on Regression Models</a></li>
+  <li><a href="#impact-of-sampling-error-on-regression-models" id="toc-impact-of-sampling-error-on-regression-models" class="nav-link" data-scroll-target="#impact-of-sampling-error-on-regression-models">Impact of Sampling Error on Regression Models</a></li>
   <li><a href="#simulation-approach" id="toc-simulation-approach" class="nav-link" data-scroll-target="#simulation-approach">Simulation Approach</a>
   <ul class="collapse">
   <li><a href="#the-naive-model" id="toc-the-naive-model" class="nav-link" data-scroll-target="#the-naive-model">The naive model</a></li>
@@ -292,7 +318,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Measurement Error in Exogenous Variables</h1>
+<h1 class="title">Sampling Error in Exogenous Variables</h1>
 </div>
 
 <div>
@@ -304,6 +330,12 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Reda <a href="mailto:redam94@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+  </div>
     
   
     
@@ -315,23 +347,24 @@ window.Quarto = {
 
 
 <!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
-<p>Measurement error in exogenous variables—those not influenced by other variables in a model—can significantly compromise the integrity of regression analyses. When these variables are inaccurately measured and the errors are not properly addressed, several issues may arise:</p>
+<p>Error in exogenous variables—those not influenced by other variables in a model—can significantly compromise the integrity of regression analyses. When these variables are inaccurately measured and the errors are not properly addressed, several issues may arise:</p>
 <ul>
-<li><strong>Attenuation Bias</strong>: This occurs when measurement errors lead to biased and inconsistent parameter estimates, typically causing the estimated coefficients to be closer to zero than their true values. <a href="https://en.wikipedia.org/wiki/Regression_dilution">(Wikipedia)</a></li>
-<li><strong>Reduced Statistical Power</strong>: Measurement errors increase the variance of estimators, making it more challenging to detect significant relationships between variables.</li>
-<li><strong>Misleading Inferences</strong>: Ignoring measurement errors can result in incorrect conclusions about the relationships between variables, potentially leading to flawed policy decisions or interpretations.</li>
+<li><strong>Attenuation Bias</strong>: This occurs when sampling errors lead to biased and inconsistent parameter estimates, typically causing the estimated coefficients to be closer to zero than their true values <span class="citation" data-cites="Bound_Brown_Mathiowetz_2001">(<a href="#ref-Bound_Brown_Mathiowetz_2001" role="doc-biblioref">Bound, Brown, and Mathiowetz 2001</a>)</span>.</li>
+<li><strong>Reduced Statistical Power</strong>: Sampling errors increase the variance of estimators, making it more challenging to detect significant relationships between variables.<br>
+</li>
+<li><strong>Misleading Inferences</strong>: Ignoring sampling errors can result in incorrect conclusions about the relationships between variables, potentially leading to flawed policy decisions or interpretations <span class="citation" data-cites="Bound_Brown_Mathiowetz_2001">(<a href="#ref-Bound_Brown_Mathiowetz_2001" role="doc-biblioref">Bound, Brown, and Mathiowetz 2001</a>)</span>.</li>
 </ul>
-<p>This website is dedicated to exploring the challenges posed by measurement errors in exogenous variables within regression models. We provide comprehensive insights into how these errors can distort results and discuss effective strategies to mitigate their impact.</p>
-<p>By understanding and addressing measurement errors in exogenous variables, data scientists can enhance the validity and reliability of their regression analyses.</p>
+<p>This website is dedicated to exploring the challenges posed by sampling errors in exogenous variables within regression models. We provide comprehensive insights into how these errors can distort results and discuss effective strategies to mitigate their impact.</p>
+<p>By understanding and addressing sampling errors in exogenous variables, data scientists can enhance the validity and reliability of their regression analyses.</p>
 <section id="survey-data" class="level2">
 <h2 class="anchored" data-anchor-id="survey-data">Survey Data</h2>
 <p>When analyzing survey data, it’s crucial to assess the precision of population parameter estimates. This precision is influenced by factors such as sample size, sampling design, and measurement error within the survey data.</p>
 </section>
-<section id="impact-of-measurement-error-on-regression-models" class="level2">
-<h2 class="anchored" data-anchor-id="impact-of-measurement-error-on-regression-models">Impact of Measurement Error on Regression Models</h2>
+<section id="impact-of-sampling-error-on-regression-models" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-sampling-error-on-regression-models">Impact of Sampling Error on Regression Models</h2>
 <p>Incorporating imprecise measurements into regression models can lead to biased and inconsistent coefficient estimates. This issue persists even with unbiased sampling designs and accurate respondent answers. In survey research, where sample sizes are often limited and sampling designs complex, measurement errors can significantly affect the precision of population parameter estimates.</p>
 <div id="exm-binary-outcome" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (Random Measurement Error in a Binary Outcome Variable)</strong></span> Consider a weekly survey involving approximately 500 participants, selected randomly to represent the general population. Participants are asked if they recall seeing a specific brand’s advertisement, with data collected via phone and online methods.</p>
+<p><span class="theorem-title"><strong>Example 1 (Sampling Error in a Binary Outcome Variable)</strong></span> Consider a weekly survey involving approximately 500 participants, selected randomly to represent the general population. Participants are asked if they recall seeing a specific brand’s advertisement, with data collected via phone and online methods.</p>
 <p>Assuming perfect recall accuracy, we aim to estimate the effect of advertisement recall on the brand’s sales using a simple linear regression model. To explore this, we can simulate three years of survey data to analyze the relationship between advertisement recall and sales.</p>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -347,7 +380,7 @@ Helper Functions
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <hr>
-<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/measurement_error.py#L21" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/sampling_error.py#L21" target="_blank" style="float:right; font-size:smaller">source</a></p>
 <section id="random_walk_awareness_model" class="level3">
 <h3 class="anchored" data-anchor-id="random_walk_awareness_model">random_walk_awareness_model</h3>
 <blockquote class="blockquote">
@@ -381,7 +414,7 @@ Helper Functions
 </tr>
 </tbody>
 </table>
-<div id="cell-6" class="cell">
+<div id="cell-7" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> pd.date_range(start<span class="op">=</span><span class="st">'2021-01-01'</span>, periods<span class="op">=</span><span class="dv">156</span>, freq<span class="op">=</span><span class="st">'W-MON'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>awareness_model <span class="op">=</span> random_walk_awareness_model(dates)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>starting_awareness <span class="op">=</span> <span class="fl">0.025</span></span>
@@ -416,7 +449,7 @@ Figure&nbsp;1: Population Awareness
 </div>
 </div>
 <hr>
-<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/measurement_error.py#L43" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/sampling_error.py#L43" target="_blank" style="float:right; font-size:smaller">source</a></p>
 </section>
 <section id="survey_obs_model" class="level3">
 <h3 class="anchored" data-anchor-id="survey_obs_model">survey_obs_model</h3>
@@ -475,7 +508,7 @@ Figure&nbsp;1: Population Awareness
 </tbody>
 </table>
 <hr>
-<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/measurement_error.py#L65" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/sampling_error.py#L65" target="_blank" style="float:right; font-size:smaller">source</a></p>
 </section>
 <section id="simulate_awareness_survey_data" class="level3">
 <h3 class="anchored" data-anchor-id="simulate_awareness_survey_data">simulate_awareness_survey_data</h3>
@@ -555,7 +588,7 @@ Figure&nbsp;1: Population Awareness
 </tbody>
 </table>
 <hr>
-<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/measurement_error.py#L94" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/sampling_error.py#L94" target="_blank" style="float:right; font-size:smaller">source</a></p>
 </section>
 <section id="plot_survey_sim_data" class="level3">
 <h3 class="anchored" data-anchor-id="plot_survey_sim_data">plot_survey_sim_data</h3>
@@ -629,7 +662,7 @@ log(S_t) &amp;= \beta \text{pop\_awareness}_t + \alpha + \varepsilon_t \\
 \end{align*}
 \tag{1}\]</span></span></p>
 <p>Lets see if the true coeff <span class="math inline">\(\beta\)</span> can be estimated using the simulated data.</p>
-<div id="cell-18" class="cell">
+<div id="cell-19" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ACTUAL_AWARENESS_COEFF <span class="op">=</span> <span class="dv">30</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>log_sales <span class="op">=</span> trace.awareness<span class="op">*</span>ACTUAL_AWARENESS_COEFF <span class="op">+</span> <span class="dv">10</span> <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.03</span>, trace.awareness.shape)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sales <span class="op">=</span> np.exp(log_sales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -667,43 +700,43 @@ Table&nbsp;1: Using estimated awareness to predict sales
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>awareness</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.410</td>
+<td>0.418</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.406</td>
+<td>0.414</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>107.0</td>
+<td>113.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Mon, 18 Nov 2024</td>
+<td>Tue, 19 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>2.28e-19</td>
+<td>3.91e-20</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:34:29</td>
+<td>22:38:07</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>134.53</td>
+<td>135.42</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>156</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-265.1</td>
+<td>-266.8</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>154</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-259.0</td>
+<td>-260.7</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -734,21 +767,21 @@ Table&nbsp;1: Using estimated awareness to predict sales
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>10.2522</td>
-<td>0.019</td>
-<td>546.969</td>
+<td>10.2477</td>
+<td>0.018</td>
+<td>566.284</td>
 <td>0.000</td>
-<td>10.215</td>
-<td>10.289</td>
+<td>10.212</td>
+<td>10.283</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">estimated_awareness</td>
-<td>12.1210</td>
-<td>1.172</td>
-<td>10.343</td>
+<td>12.2445</td>
+<td>1.152</td>
+<td>10.628</td>
 <td>0.000</td>
-<td>9.824</td>
-<td>14.418</td>
+<td>9.987</td>
+<td>14.502</td>
 </tr>
 </tbody>
 </table>
@@ -758,25 +791,25 @@ Table&nbsp;1: Using estimated awareness to predict sales
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>3.398</td>
+<td>2.478</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>1.022</td>
+<td>1.084</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.183</td>
+<td>0.290</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>3.451</td>
+<td>2.377</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.344</td>
+<td>0.233</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.178</td>
+<td>0.305</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>2.758</td>
+<td>2.615</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
 <td>142.</td>
 </tr>
@@ -822,43 +855,43 @@ Table&nbsp;2: Using moving average awareness as a predictor
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>awareness</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.741</td>
+<td>0.722</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.740</td>
+<td>0.721</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>318.2</td>
+<td>328.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Mon, 18 Nov 2024</td>
+<td>Tue, 19 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>6.66e-39</td>
+<td>1.39e-39</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:34:32</td>
+<td>22:38:19</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>196.96</td>
+<td>192.34</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>152</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-389.9</td>
+<td>-380.7</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>150</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-383.9</td>
+<td>-374.6</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -889,21 +922,21 @@ Table&nbsp;2: Using moving average awareness as a predictor
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>10.1019</td>
+<td>10.1037</td>
 <td>0.016</td>
-<td>615.351</td>
+<td>634.219</td>
 <td>0.000</td>
-<td>10.070</td>
-<td>10.134</td>
+<td>10.072</td>
+<td>10.135</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">estimated_awareness</td>
-<td>23.4003</td>
-<td>1.312</td>
-<td>17.837</td>
+<td>22.9943</td>
+<td>1.270</td>
+<td>18.111</td>
 <td>0.000</td>
-<td>20.829</td>
-<td>25.972</td>
+<td>20.506</td>
+<td>25.483</td>
 </tr>
 </tbody>
 </table>
@@ -913,25 +946,25 @@ Table&nbsp;2: Using moving average awareness as a predictor
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>0.894</td>
+<td>0.405</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>0.788</td>
+<td>0.989</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.639</td>
+<td>0.817</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>0.577</td>
+<td>0.371</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.129</td>
+<td>0.119</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.749</td>
+<td>0.831</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>3.158</td>
+<td>2.951</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
 <td>209.</td>
 </tr>
@@ -948,7 +981,7 @@ Table&nbsp;2: Using moving average awareness as a predictor
 <section id="moving-average-correctly-this-time" class="level3">
 <h3 class="anchored" data-anchor-id="moving-average-correctly-this-time">Moving Average (Correctly this time)</h3>
 <p>Let’s try a moving average model again, but this time we will take the moving average of the number of survey participants and the number of positive results before dividing each.</p>
-<div id="cell-26" class="cell">
+<div id="cell-27" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>moving_sum_n_positive <span class="op">=</span> trace.n_positive.rolling(Period<span class="op">=</span><span class="dv">5</span>).<span class="bu">sum</span>().shift(Period<span class="op">=-</span><span class="dv">2</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>moving_sum_n_participants <span class="op">=</span> trace.n_survey_participants.rolling(Period<span class="op">=</span><span class="dv">5</span>).<span class="bu">sum</span>().shift(Period<span class="op">=-</span><span class="dv">2</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>moving_avg_awareness <span class="op">=</span> moving_sum_n_positive<span class="op">/</span>moving_sum_n_participants</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -982,43 +1015,43 @@ Table&nbsp;3: Corrected Moving Average Model
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>awareness</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.740</td>
+<td>0.721</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.738</td>
+<td>0.719</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>327.9</td>
+<td>337.5</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Mon, 18 Nov 2024</td>
+<td>Tue, 19 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>1.41e-39</td>
+<td>3.19e-40</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:34:36</td>
+<td>22:38:25</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>196.47</td>
+<td>191.85</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>152</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-388.9</td>
+<td>-379.7</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>150</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-382.9</td>
+<td>-373.7</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -1049,21 +1082,21 @@ Table&nbsp;3: Corrected Moving Average Model
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>10.1006</td>
+<td>10.1025</td>
 <td>0.016</td>
-<td>617.023</td>
+<td>637.292</td>
 <td>0.000</td>
-<td>10.069</td>
-<td>10.133</td>
+<td>10.071</td>
+<td>10.134</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Moving Avg Awareness</td>
-<td>23.5425</td>
-<td>1.300</td>
-<td>18.109</td>
+<td>23.1316</td>
+<td>1.259</td>
+<td>18.370</td>
 <td>0.000</td>
-<td>20.994</td>
-<td>26.091</td>
+<td>20.664</td>
+<td>25.600</td>
 </tr>
 </tbody>
 </table>
@@ -1073,25 +1106,25 @@ Table&nbsp;3: Corrected Moving Average Model
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>1.628</td>
+<td>0.594</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>0.781</td>
+<td>0.980</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.443</td>
+<td>0.743</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>1.198</td>
+<td>0.506</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.171</td>
+<td>0.141</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.549</td>
+<td>0.776</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>3.268</td>
+<td>2.982</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
 <td>210.</td>
 </tr>
@@ -1108,7 +1141,7 @@ Table&nbsp;3: Corrected Moving Average Model
 <section id="latent-variable-model" class="level3">
 <h3 class="anchored" data-anchor-id="latent-variable-model">Latent Variable Model</h3>
 <p>Let us now try to first estimate the population level awareness using a bayesian model and then use the estimated population level awareness in the regression model.</p>
-<div id="cell-31" class="cell">
+<div id="cell-32" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> trace[<span class="st">"Period"</span>].values</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>awareness_model <span class="op">=</span> random_walk_awareness_model(dates)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1153,43 +1186,43 @@ Table&nbsp;4: Using modeled awareness to estimate sales
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>awareness</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.835</td>
+<td>0.838</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.833</td>
+<td>0.837</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>636.8</td>
+<td>688.1</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Mon, 18 Nov 2024</td>
+<td>Tue, 19 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>1.39e-56</td>
+<td>1.09e-58</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:35:11</td>
+<td>22:39:03</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>233.70</td>
+<td>235.35</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>156</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-463.4</td>
+<td>-466.7</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>154</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-457.3</td>
+<td>-460.6</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -1220,21 +1253,21 @@ Table&nbsp;4: Using modeled awareness to estimate sales
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>10.0276</td>
-<td>0.015</td>
-<td>665.156</td>
+<td>10.0235</td>
+<td>0.014</td>
+<td>697.016</td>
 <td>0.000</td>
-<td>9.998</td>
-<td>10.057</td>
+<td>9.995</td>
+<td>10.052</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">awareness</td>
-<td>28.9124</td>
-<td>1.146</td>
-<td>25.235</td>
+<td>29.0012</td>
+<td>1.106</td>
+<td>26.232</td>
 <td>0.000</td>
-<td>26.667</td>
-<td>31.158</td>
+<td>26.834</td>
+<td>31.168</td>
 </tr>
 </tbody>
 </table>
@@ -1244,25 +1277,25 @@ Table&nbsp;4: Using modeled awareness to estimate sales
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>1.670</td>
+<td>2.140</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>0.961</td>
+<td>1.175</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.434</td>
+<td>0.343</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>1.331</td>
+<td>1.722</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>0.036</td>
+<td>0.160</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.514</td>
+<td>0.423</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>3.447</td>
+<td>3.404</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
 <td>238.</td>
 </tr>
@@ -1294,43 +1327,43 @@ Table&nbsp;5: Using true awareness to estimate sales
 <td data-quarto-table-cell-role="th">Dep. Variable:</td>
 <td>awareness</td>
 <td data-quarto-table-cell-role="th">R-squared:</td>
-<td>0.952</td>
+<td>0.946</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Model:</td>
 <td>OLS</td>
 <td data-quarto-table-cell-role="th">Adj. R-squared:</td>
-<td>0.952</td>
+<td>0.946</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Method:</td>
 <td>Least Squares</td>
 <td data-quarto-table-cell-role="th">F-statistic:</td>
-<td>3171.</td>
+<td>2938.</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Mon, 18 Nov 2024</td>
+<td>Tue, 19 Nov 2024</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
-<td>1.20e-104</td>
+<td>3.22e-102</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>00:35:11</td>
+<td>22:39:04</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
-<td>330.05</td>
+<td>321.60</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">No. Observations:</td>
 <td>156</td>
 <td data-quarto-table-cell-role="th">AIC:</td>
-<td>-656.1</td>
+<td>-639.2</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Df Residuals:</td>
 <td>154</td>
 <td data-quarto-table-cell-role="th">BIC:</td>
-<td>-650.0</td>
+<td>-633.1</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Df Model:</td>
@@ -1361,21 +1394,21 @@ Table&nbsp;5: Using true awareness to estimate sales
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">const</td>
-<td>10.0034</td>
+<td>10.0014</td>
 <td>0.008</td>
-<td>1249.968</td>
+<td>1245.901</td>
 <td>0.000</td>
-<td>9.988</td>
-<td>10.019</td>
+<td>9.986</td>
+<td>10.017</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">awareness</td>
-<td>29.9196</td>
-<td>0.531</td>
-<td>56.311</td>
+<td>29.8593</td>
+<td>0.551</td>
+<td>54.205</td>
 <td>0.000</td>
-<td>28.878</td>
-<td>30.961</td>
+<td>28.780</td>
+<td>30.939</td>
 </tr>
 </tbody>
 </table>
@@ -1385,25 +1418,25 @@ Table&nbsp;5: Using true awareness to estimate sales
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Omnibus:</td>
-<td>5.753</td>
+<td>1.415</td>
 <td data-quarto-table-cell-role="th">Durbin-Watson:</td>
-<td>2.080</td>
+<td>2.184</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
-<td>0.056</td>
+<td>0.493</td>
 <td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
-<td>5.310</td>
+<td>1.363</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Skew:</td>
-<td>-0.401</td>
+<td>0.226</td>
 <td data-quarto-table-cell-role="th">Prob(JB):</td>
-<td>0.0703</td>
+<td>0.506</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Kurtosis:</td>
-<td>3.417</td>
+<td>2.924</td>
 <td data-quarto-table-cell-role="th">Cond. No.</td>
 <td>231.</td>
 </tr>
@@ -1418,10 +1451,24 @@ Table&nbsp;5: Using true awareness to estimate sales
 <p>Here we see that not only is the estimate spot on, but the standard error is also much lower than the other models. The better the measure of the exogenous variable, the more precise the estimate of the coefficient we can achieve.</p>
 
 
+
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Bound_Brown_Mathiowetz_2001" class="csl-entry" role="listitem">
+Bound, John, Charles Brown, and Nancy Mathiowetz. 2001. <span>“Measurement Error in Survey Data.”</span> In <em>Handbook of Econometrics</em>, 3705–3843. <a href="https://doi.org/10.1016/s1573-4412(01)05012-7">https://doi.org/10.1016/s1573-4412(01)05012-7</a>.
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{reda,
+  author = {Reda, Matthew},
+  title = {Sampling {Error} in {Exogenous} {Variables}},
+  url = {https://redam94.github.io/common_regression_issues/measurement_error.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-reda" class="csl-entry quarto-appendix-citeas" role="listitem">
+Reda, Matthew. n.d. <span>“Sampling Error in Exogenous
+Variables.”</span> <a href="https://redam94.github.io/common_regression_issues/measurement_error.html">https://redam94.github.io/common_regression_issues/measurement_error.html</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
