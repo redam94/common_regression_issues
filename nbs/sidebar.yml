@@ -4,7 +4,7 @@ website:
       - index.ipynb
       - 00_sampling_error.ipynb
       - 01_multicollinearity.ipynb
-      - 02_multiplicative_contributions.ipynb
+      - 02_group_level_normalization.ipynb
       - section: model_helpers
         contents:
           - model_helpers/00_fourier_components.ipynb
