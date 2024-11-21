@@ -2,7 +2,7 @@ website:
   sidebar:
     contents:
       - index.ipynb
-      - 00_measurement_error.ipynb
+      - 00_sampling_error.ipynb
       - 01_multicollinearity.ipynb
       - 02_multiplicative_contributions.ipynb
       - section: model_helpers
