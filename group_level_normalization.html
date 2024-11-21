@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Spline models and samples">
+<meta name="description" content="How to handle panel data">
 
-<title>Splines – Common Regression Issues</title>
+<title>A Comparison of Normalization Techniques for Group Level Data – Common Regression Issues</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,22 +58,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,17 +101,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
-<link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Splines – Common Regression Issues">
-<meta property="og:description" content="Spline models and samples">
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="A Comparison of Normalization Techniques for Group Level Data – Common Regression Issues">
+<meta property="og:description" content="How to handle panel data">
 <meta property="og:site_name" content="Common Regression Issues">
-<meta name="twitter:title" content="Splines – Common Regression Issues">
-<meta name="twitter:description" content="Spline models and samples">
+<meta name="twitter:title" content="A Comparison of Normalization Techniques for Group Level Data – Common Regression Issues">
+<meta name="twitter:description" content="How to handle panel data">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -122,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Common Regression Issues</span>
     </a>
   </div>
@@ -136,7 +133,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../model_helpers/fourier_components.html">model_helpers</a></li><li class="breadcrumb-item"><a href="../model_helpers/spline_models.html">Splines</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./group_level_normalization.html">A Comparison of Normalization Techniques for Group Level Data</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -150,25 +147,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Common Regression Issues</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../sampling_error.html" class="sidebar-item-text sidebar-link">
+  <a href="./sampling_error.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Sampling Error in Exogenous Variables</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../multicollinearity.html" class="sidebar-item-text sidebar-link">
+  <a href="./multicollinearity.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">When is Multicollinearity an Issue?</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../group_level_normalization.html" class="sidebar-item-text sidebar-link">
+  <a href="./group_level_normalization.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">A Comparison of Normalization Techniques for Group Level Data</span></a>
   </div>
 </li>
@@ -183,13 +180,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../model_helpers/fourier_components.html" class="sidebar-item-text sidebar-link">
+  <a href="./model_helpers/fourier_components.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Fourier Components</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../model_helpers/spline_models.html" class="sidebar-item-text sidebar-link active">
+  <a href="./model_helpers/spline_models.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Splines</span></a>
   </div>
 </li>
@@ -206,19 +203,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../synthetic_data/simple_regression_data.html" class="sidebar-item-text sidebar-link">
+  <a href="./synthetic_data/simple_regression_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Simple Regression Data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../synthetic_data/grouped_data.html" class="sidebar-item-text sidebar-link">
+  <a href="./synthetic_data/grouped_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Grouped Regression Data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../synthetic_data/multicollinearity_example_data.html" class="sidebar-item-text sidebar-link">
+  <a href="./synthetic_data/multicollinearity_example_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data Generation for Demonstrating Multicollinearity</span></a>
   </div>
 </li>
@@ -235,7 +232,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../utils/plotting.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/plotting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Plotting Utils</span></a>
   </div>
 </li>
@@ -251,27 +248,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#spline_component" id="toc-spline_component" class="nav-link active" data-scroll-target="#spline_component">spline_component</a></li>
+  <li><a href="#perform_fixed_effects" id="toc-perform_fixed_effects" class="nav-link active" data-scroll-target="#perform_fixed_effects">perform_fixed_effects</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="spline_models.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="group_level_normalization.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../model_helpers/fourier_components.html">model_helpers</a></li><li class="breadcrumb-item"><a href="../model_helpers/spline_models.html">Splines</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Splines</h1>
+<h1 class="title">A Comparison of Normalization Techniques for Group Level Data</h1>
 </div>
 
 <div>
   <div class="description">
-    Spline models and samples
+    How to handle panel data
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Reda <a href="mailto:redam94@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+  </div>
     
   
     
@@ -284,12 +287,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
 <hr>
-<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/model_helpers/spline_models.py#L19" target="_blank" style="float:right; font-size:smaller">source</a></p>
-<section id="spline_component" class="level3">
-<h3 class="anchored" data-anchor-id="spline_component">spline_component</h3>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/normalization.py#L17" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="perform_fixed_effects" class="level3">
+<h3 class="anchored" data-anchor-id="perform_fixed_effects">perform_fixed_effects</h3>
 <blockquote class="blockquote">
-<pre><code> spline_component (knots:Union[int,List[~T]], index:Iterable[~T],
-                   degree:int=3)</code></pre>
+<pre><code> perform_fixed_effects (df:pandas.core.frame.DataFrame, dependent_var:str,
+                        independent_var:str, group:None|str=None)</code></pre>
 </blockquote>
 <table class="caption-top table">
 <thead>
@@ -302,447 +305,213 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>knots</td>
-<td>Union</td>
+<td>df</td>
+<td>DataFrame</td>
 <td></td>
-<td>Number of knots or interior knots to use</td>
+<td>Data</td>
 </tr>
 <tr class="even">
-<td>index</td>
-<td>Iterable</td>
+<td>dependent_var</td>
+<td>str</td>
 <td></td>
-<td>index</td>
+<td>Dependent Variable Name</td>
 </tr>
 <tr class="odd">
-<td>degree</td>
-<td>int</td>
-<td>3</td>
-<td>Knot degree defaults to cubic splines</td>
+<td>independent_var</td>
+<td>str</td>
+<td></td>
+<td>Independent Variable Name</td>
+</tr>
+<tr class="even">
+<td>group</td>
+<td>None | str</td>
+<td>None</td>
+<td>Grouping Name</td>
 </tr>
 </tbody>
 </table>
-<div id="exm-num-splines-def" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (If knots are an integer)</strong></span> &nbsp;</p>
-<div id="cell-4" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>N_SPLINES <span class="op">=</span> <span class="dv">9</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>INDEX <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">156</span>)]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>splines <span class="op">=</span> spline_component(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    N_SPLINES,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    INDEX</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-fig-nknots-splines" class="cell">
-<div class="cell-output cell-output-display">
-<div id="fig-nknots-splines" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-nknots-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01_spline_models_files/figure-html/fig-nknots-splines-output-1.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nknots-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Representation of splines
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div id="cell-fig-sample-nknots-splines" class="cell">
-<div class="cell-output cell-output-display">
-<div id="fig-sample-nknots-splines" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-sample-nknots-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01_spline_models_files/figure-html/fig-sample-nknots-splines-output-1.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sample-nknots-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Samples of linear combination of splines.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div id="exm-knots-defined" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2 (Knots can be directly specified)</strong></span> &nbsp;</p>
-<div id="cell-9" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>INDEX <span class="op">=</span> pd.date_range(<span class="st">'01/01/2021'</span>, periods<span class="op">=</span><span class="dv">156</span>, freq<span class="op">=</span><span class="st">"W-MON"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>KNOTS <span class="op">=</span> [INDEX[<span class="dv">10</span>], INDEX[<span class="dv">30</span>], INDEX[<span class="dv">60</span>], INDEX[<span class="dv">120</span>]]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>splines_date <span class="op">=</span> spline_component(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">list</span>(<span class="bu">map</span>(INDEX.get_loc, KNOTS)),</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    np.arange(<span class="bu">len</span>(INDEX))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-10" class="cell">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="01_spline_models_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<div id="cell-11" class="cell">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="01_spline_models_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div id="exm-spline-regression-model" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3 (Spline Regression Model)</strong></span> &nbsp;</p>
-<div id="cell-14" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>INDEX <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">156</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>spline_data <span class="op">=</span> spline_component(<span class="dv">19</span>, INDEX, degree<span class="op">=</span><span class="dv">3</span>) <span class="co"># 19 Splines</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fun_ <span class="op">=</span> <span class="kw">lambda</span> x: np.sin(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span><span class="dv">5</span><span class="op">*</span>x)<span class="op">/</span>(<span class="dv">20</span><span class="op">*</span>(x<span class="op">-</span><span class="fl">.5</span>)) <span class="op">+</span> (x<span class="op">-</span><span class="fl">.5</span>) <span class="op">*</span> <span class="dv">2</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fun <span class="op">=</span> fun_(INDEX)<span class="co"># Complex Non-linear function to learn</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> fun <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">.1</span>, size<span class="op">=</span>spline_data.shape[<span class="dv">0</span>]) <span class="co"># Noisy observation process</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>tau_scale <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>c_scale <span class="op">=</span> <span class="fl">0.1</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pm.Model() <span class="im">as</span> model:</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    tau <span class="op">=</span> pm.HalfCauchy(<span class="st">'tau'</span>, tau_scale)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    lambdas <span class="op">=</span> pm.HalfCauchy(<span class="st">"lambdas"</span>, <span class="dv">1</span>, shape<span class="op">=</span>spline_data.shape[<span class="dv">1</span>])</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> pm.HalfCauchy(<span class="st">"c"</span>, beta<span class="op">=</span>c_scale)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    sigma_coeff <span class="op">=</span> pm.Deterministic(<span class="st">"sigma_coeff"</span>, tau <span class="op">*</span> lambdas <span class="op">/</span> pm.math.sqrt(c<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (tau <span class="op">*</span> lambdas)<span class="op">**</span><span class="dv">2</span>))</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    betas_ <span class="op">=</span> pm.Normal(<span class="st">"betas_"</span>, <span class="dv">0</span>, sigma_coeff)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    betas <span class="op">=</span> pm.Deterministic(<span class="st">"betas"</span>, pm.math.cumsum(betas_)) <span class="co"># Enforce Random Walk Process</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> pm.Normal(<span class="st">"alpha"</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    spline_trend <span class="op">=</span> pm.Deterministic(<span class="st">"splines"</span>, spline_data<span class="op">@</span>betas <span class="op">+</span> alpha)</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    precision <span class="op">=</span> pm.HalfCauchy(<span class="st">"precision"</span>, <span class="dv">2</span>)</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    pm.Normal(<span class="st">"mu"</span>, mu<span class="op">=</span>spline_trend, tau<span class="op">=</span>precision, observed<span class="op">=</span>y_obs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-fig-spline-regression-prior" class="cell">
-<div class="cell-output cell-output-display">
-<div id="fig-spline-regression-prior" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-spline-regression-prior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01_spline_models_files/figure-html/fig-spline-regression-prior-output-1.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spline-regression-prior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Graph of prior samples from the spline regression model.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div id="tbl-postrerior-trace" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="Regression">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Linear Regression</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Log-Log Model No Div Normalize</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Log-Log with Div Normalization</a></li></ul>
+<div class="tab-content" data-group="Regression">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div id="tbl-ols-od" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-postrerior-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Summary of coefficients for the spline regression model.
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ols-od-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: OLS Regression on Original Data
 </figcaption>
-<div aria-describedby="tbl-postrerior-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-ols-od-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model_original <span class="op">=</span> perform_fixed_effects(df, <span class="st">'Y'</span>, <span class="st">'X'</span>, group<span class="op">=</span><span class="st">"Group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.975
+Model:                            OLS   Adj. R-squared:                  0.974
+Method:                 Least Squares   F-statistic:                     321.0
+Date:                Wed, 20 Nov 2024   Prob (F-statistic):            0.00310
+Time:                        23:41:40   Log-Likelihood:                -400.16
+No. Observations:                 300   AIC:                             808.3
+Df Residuals:                     296   BIC:                             823.1
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -1.2542      0.763     -1.644      0.100      -2.749       0.241
+X              1.0725      0.282      3.805      0.000       0.520       1.625
+B              2.6161      0.199     13.124      0.000       2.225       3.007
+C             11.8617      0.382     31.044      0.000      11.113      12.611
+==============================================================================
+Omnibus:                       74.420   Durbin-Watson:                   2.001
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              379.356
+Skew:                           0.904   Prob(JB):                     4.21e-83
+Kurtosis:                       8.204   Cond. No.                         18.2
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (cluster)</code></pre>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="tbl-log-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-log-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: OLS Regression on Log-Transformed Data
+</figcaption>
+<div aria-describedby="tbl-log-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model_log <span class="op">=</span> perform_fixed_effects(df, <span class="st">'log_Y'</span>, <span class="st">'log_X'</span>, <span class="st">"Group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  log_Y   R-squared:                       0.988
+Model:                            OLS   Adj. R-squared:                  0.988
+Method:                 Least Squares   F-statistic:                     49.98
+Date:                Wed, 20 Nov 2024   Prob (F-statistic):             0.0194
+Time:                        23:51:17   Log-Likelihood:                 269.61
+No. Observations:                 300   AIC:                            -531.2
+Df Residuals:                     296   BIC:                            -516.4
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0305      0.065      0.470      0.639      -0.097       0.158
+log_X          0.4711      0.066      7.099      0.000       0.341       0.601
+B              1.0007      0.015     64.917      0.000       0.970       1.031
+C              2.0174      0.027     75.848      0.000       1.965       2.070
+==============================================================================
+Omnibus:                        5.308   Durbin-Watson:                   1.950
+Prob(Omnibus):                  0.070   Jarque-Bera (JB):                5.394
+Skew:                           0.325   Prob(JB):                       0.0674
+Kurtosis:                       2.905   Cond. No.                         12.9
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (cluster)</code></pre>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div id="tbl-normed" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-normed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: OLS Regression on Log-Transformed and Mean-Normalized Data
+</figcaption>
+<div aria-describedby="tbl-normed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model_log_norm <span class="op">=</span> perform_fixed_effects(df, <span class="st">'log_Y_norm'</span>, <span class="st">'log_X'</span>, <span class="st">'Group'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             log_Y_norm   R-squared:                       0.284
+Model:                            OLS   Adj. R-squared:                  0.277
+Method:                 Least Squares   F-statistic:                     4.051
+Date:                Wed, 20 Nov 2024   Prob (F-statistic):              0.182
+Time:                        23:53:36   Log-Likelihood:                 183.09
+No. Observations:                 300   AIC:                            -358.2
+Df Residuals:                     296   BIC:                            -343.4
+Df Model:                           3                                         
+Covariance Type:              cluster                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.5718      0.213      2.688      0.007       0.155       0.989
+log_X          0.4372      0.217      2.013      0.044       0.011       0.863
+B             -0.1016      0.050     -2.013      0.044      -0.200      -0.003
+C             -0.1752      0.087     -2.013      0.044      -0.346      -0.005
+==============================================================================
+Omnibus:                       30.117   Durbin-Watson:                   2.240
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              106.155
+Skew:                           0.321   Prob(JB):                     8.89e-24
+Kurtosis:                       5.843   Cond. No.                         12.9
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (cluster)</code></pre>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="Regression">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Linear Regression</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Log-Log Model No Div Normalize</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Log-Log with Div Normalization</a></li></ul>
+<div class="tab-content" data-group="Regression">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="cell-fig-model-comparison" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_group_level_normalization_files/figure-html/fig-model-comparison-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Comparison of fit between models
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="cell-16" class="cell">
 <div class="cell-output cell-output-display">
 <div>
-
-
-<table class="dataframe do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">mean</th>
-<th data-quarto-table-cell-role="th">sd</th>
-<th data-quarto-table-cell-role="th">hdi_3%</th>
-<th data-quarto-table-cell-role="th">hdi_97%</th>
-<th data-quarto-table-cell-role="th">mcse_mean</th>
-<th data-quarto-table-cell-role="th">mcse_sd</th>
-<th data-quarto-table-cell-role="th">ess_bulk</th>
-<th data-quarto-table-cell-role="th">ess_tail</th>
-<th data-quarto-table-cell-role="th">r_hat</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[0]</td>
-<td>0.009</td>
-<td>0.131</td>
-<td>-0.243</td>
-<td>0.262</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1407.0</td>
-<td>2094.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[1]</td>
-<td>-0.063</td>
-<td>0.118</td>
-<td>-0.281</td>
-<td>0.159</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>2027.0</td>
-<td>2518.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[2]</td>
-<td>0.378</td>
-<td>0.114</td>
-<td>0.173</td>
-<td>0.598</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1621.0</td>
-<td>2392.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[3]</td>
-<td>0.548</td>
-<td>0.112</td>
-<td>0.324</td>
-<td>0.743</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1845.0</td>
-<td>2276.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[4]</td>
-<td>0.389</td>
-<td>0.109</td>
-<td>0.177</td>
-<td>0.590</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1625.0</td>
-<td>2538.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[5]</td>
-<td>0.197</td>
-<td>0.113</td>
-<td>-0.034</td>
-<td>0.391</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1607.0</td>
-<td>2097.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[6]</td>
-<td>0.977</td>
-<td>0.111</td>
-<td>0.757</td>
-<td>1.175</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1613.0</td>
-<td>1949.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[7]</td>
-<td>1.206</td>
-<td>0.113</td>
-<td>1.009</td>
-<td>1.435</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1537.0</td>
-<td>2096.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[8]</td>
-<td>0.692</td>
-<td>0.109</td>
-<td>0.469</td>
-<td>0.883</td>
-<td>0.002</td>
-<td>0.002</td>
-<td>1924.0</td>
-<td>2232.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[9]</td>
-<td>-0.551</td>
-<td>0.107</td>
-<td>-0.756</td>
-<td>-0.350</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1737.0</td>
-<td>2105.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[10]</td>
-<td>-0.544</td>
-<td>0.106</td>
-<td>-0.734</td>
-<td>-0.341</td>
-<td>0.002</td>
-<td>0.002</td>
-<td>2018.0</td>
-<td>2124.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[11]</td>
-<td>1.054</td>
-<td>0.110</td>
-<td>0.851</td>
-<td>1.265</td>
-<td>0.002</td>
-<td>0.002</td>
-<td>1973.0</td>
-<td>2353.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[12]</td>
-<td>1.833</td>
-<td>0.111</td>
-<td>1.622</td>
-<td>2.037</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1930.0</td>
-<td>2226.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[13]</td>
-<td>1.488</td>
-<td>0.111</td>
-<td>1.281</td>
-<td>1.702</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1957.0</td>
-<td>2474.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[14]</td>
-<td>1.369</td>
-<td>0.104</td>
-<td>1.173</td>
-<td>1.565</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1728.0</td>
-<td>2645.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[15]</td>
-<td>1.458</td>
-<td>0.109</td>
-<td>1.247</td>
-<td>1.655</td>
-<td>0.002</td>
-<td>0.002</td>
-<td>2259.0</td>
-<td>2227.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[16]</td>
-<td>2.077</td>
-<td>0.109</td>
-<td>1.865</td>
-<td>2.279</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>1800.0</td>
-<td>1994.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[17]</td>
-<td>1.644</td>
-<td>0.133</td>
-<td>1.367</td>
-<td>1.864</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>2406.0</td>
-<td>2565.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">betas[18]</td>
-<td>1.939</td>
-<td>0.129</td>
-<td>1.687</td>
-<td>2.169</td>
-<td>0.003</td>
-<td>0.002</td>
-<td>2225.0</td>
-<td>2990.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">betas[19]</td>
-<td>2.060</td>
-<td>0.106</td>
-<td>1.875</td>
-<td>2.274</td>
-<td>0.002</td>
-<td>0.001</td>
-<td>2802.0</td>
-<td>3035.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">alpha</td>
-<td>-1.054</td>
-<td>0.078</td>
-<td>-1.200</td>
-<td>-0.905</td>
-<td>0.002</td>
-<td>0.001</td>
-<td>2102.0</td>
-<td>2160.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">tau</td>
-<td>1.020</td>
-<td>5.563</td>
-<td>0.003</td>
-<td>2.581</td>
-<td>0.113</td>
-<td>0.080</td>
-<td>2561.0</td>
-<td>2382.0</td>
-<td>1.0</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
+<figure class="figure">
+<p><img src="02_group_level_normalization_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div id="cell-fig-spline-regression-posterior" class="cell">
-<div class="cell-output cell-output-display">
-<div id="fig-spline-regression-posterior" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-spline-regression-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01_spline_models_files/figure-html/fig-spline-regression-posterior-output-1.png" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spline-regression-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Posterior for horseshoe regularized spline regression.
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div id="cell-18" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_group_level_normalization_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-fig-model-comparison-C" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-comparison-c" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-comparison-c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_group_level_normalization_files/figure-html/fig-model-comparison-c-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-comparison-c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Comparison of fit between models
 </figcaption>
 </figure>
-</div>
 </div>
 </div>
 </div>
@@ -750,7 +519,17 @@ Figure&nbsp;4: Posterior for horseshoe regularized spline regression.
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{reda,
+  author = {Reda, Matthew},
+  title = {A {Comparison} of {Normalization} {Techniques} for {Group}
+    {Level} {Data}},
+  url = {https://redam94.github.io/common_regression_issues/group_level_normalization.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-reda" class="csl-entry quarto-appendix-citeas" role="listitem">
+Reda, Matthew. n.d. <span>“A Comparison of Normalization Techniques for
+Group Level Data.”</span> <a href="https://redam94.github.io/common_regression_issues/group_level_normalization.html">https://redam94.github.io/common_regression_issues/group_level_normalization.html</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
