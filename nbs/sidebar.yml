@@ -5,6 +5,7 @@ website:
       - 00_sampling_error.ipynb
       - 01_multicollinearity.ipynb
       - 02_group_level_normalization.ipynb
+      - 03_bayesian_mmm.ipynb
       - section: model_helpers
         contents:
           - model_helpers/00_fourier_components.ipynb
