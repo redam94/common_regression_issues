@@ -35,5 +35,6 @@ d = { 'settings': { 'branch': 'main',
                                                                                                                                                                              'common_regression_issues/synthetic_data/multicollinearity_datagen.py')},
             'common_regression_issues.synthetic_data.simple_regression_data': { 'common_regression_issues.synthetic_data.simple_regression_data.generate_ols_data': ( 'synthetic_data/simple_regression_data.html#generate_ols_data',
                                                                                                                                                                       'common_regression_issues/synthetic_data/simple_regression_data.py')},
+            'common_regression_issues.trends_seasons': {},
             'common_regression_issues.utils.plotting': { 'common_regression_issues.utils.plotting.rgb_to_hex': ( 'utils/plotting.html#rgb_to_hex',
                                                                                                                  'common_regression_issues/utils/plotting.py')}}}
