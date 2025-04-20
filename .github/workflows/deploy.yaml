@@ -11,4 +11,5 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps: [uses: fastai/workflows/quarto-ghp@master]
