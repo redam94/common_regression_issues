@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Data simulated with the causal structure defined in Figure&nbsp;1. For use in When is Multicollinearity an Issue?">
+
+<title>Data Generation for Demonstrating Multicollinearity – Common Regression Issues</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-90617d54abb8d6c97f964c4c092f6cad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Data Generation for Demonstrating Multicollinearity – Common Regression Issues">
+<meta property="og:description" content="Data simulated with the causal structure defined in Figure&nbsp;1. For use in When is Multicollinearity an Issue?">
+<meta property="og:site_name" content="Common Regression Issues">
+<meta name="twitter:title" content="Data Generation for Demonstrating Multicollinearity – Common Regression Issues">
+<meta name="twitter:description" content="Data simulated with the causal structure defined in Figure&nbsp;1. For use in When is Multicollinearity an Issue?">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Common Regression Issues</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../synthetic_data/simple_regression_data.html">synthetic_data</a></li><li class="breadcrumb-item"><a href="../synthetic_data/multicollinearity_example_data.html">Data Generation for Demonstrating Multicollinearity</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Common Regression Issues</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sampling_error.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sampling Error in Exogenous Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">When is Multicollinearity an Issue?</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../the_illusion_of_significance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Illusion of Significance</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../trends_and_seasons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trends And Seasons</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../normalization_in_panel_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Centering in Panel Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">model_helpers</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../model_helpers/fourier_components.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fourier Components</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../model_helpers/spline_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Splines</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">synthetic_data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../synthetic_data/simple_regression_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Regression Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../synthetic_data/grouped_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grouped Regression Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../synthetic_data/multicollinearity_example_data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Data Generation for Demonstrating Multicollinearity</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">utils</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../utils/plotting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Plotting Utils</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#hill" id="toc-hill" class="nav-link active" data-scroll-target="#hill">hill</a></li>
+  <li><a href="#sample_random_data" id="toc-sample_random_data" class="nav-link" data-scroll-target="#sample_random_data">sample_random_data</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="multicollinearity_example_data.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../synthetic_data/simple_regression_data.html">synthetic_data</a></li><li class="breadcrumb-item"><a href="../synthetic_data/multicollinearity_example_data.html">Data Generation for Demonstrating Multicollinearity</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Data Generation for Demonstrating Multicollinearity</h1>
+</div>
+
+<div>
+  <div class="description">
+    Data simulated with the causal structure defined in <a href="#fig-causal" class="quarto-xref">Figure&nbsp;1</a>. For use in <a href="../multicollinearity.html">When is Multicollinearity an Issue?</a>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="cell" data-file="../graphs/vifs/causal_graph.dot" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-causal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-causal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<svg width="672" height="480" viewbox="0.00 0.00 663.71 548.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>Paid Media on Sales</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-544 659.71,-544 659.71,4 -4,4"></polygon>
+<!-- Seasonality -->
+<g id="node1" class="node">
+<title>Seasonality</title>
+<ellipse fill="none" stroke="black" cx="300.83" cy="-522" rx="55.62" ry="18"></ellipse>
+<text text-anchor="middle" x="300.83" y="-517.8" font-family="Times,serif" font-size="14.00">Seasonality</text>
+</g>
+<!-- OLV Impression -->
+<g id="node2" class="node">
+<title>OLV Impression</title>
+<ellipse fill="none" stroke="black" cx="499.83" cy="-450" rx="76.42" ry="18"></ellipse>
+<text text-anchor="middle" x="499.83" y="-445.8" font-family="Times,serif" font-size="14.00">OLV Impression</text>
+</g>
+<!-- Seasonality&#45;&gt;OLV Impression -->
+<g id="edge1" class="edge">
+<title>Seasonality-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M337.33,-508.16C368.81,-497.09 414.6,-480.98 449.55,-468.68"></path>
+<polygon fill="black" stroke="black" points="450.83,-471.95 459.1,-465.33 448.51,-465.34 450.83,-471.95"></polygon>
+</g>
+<!-- Demand -->
+<g id="node4" class="node">
+<title>Demand</title>
+<ellipse fill="none" stroke="black" cx="429.83" cy="-378" rx="43.5" ry="18"></ellipse>
+<text text-anchor="middle" x="429.83" y="-373.8" font-family="Times,serif" font-size="14.00">Demand</text>
+</g>
+<!-- Seasonality&#45;&gt;Demand -->
+<g id="edge4" class="edge">
+<title>Seasonality-&gt;Demand</title>
+<path fill="none" stroke="black" d="M327.94,-506.03C343.5,-496.53 362.69,-483.19 376.83,-468 394.25,-449.28 408.67,-423.89 418.05,-405.02"></path>
+<polygon fill="black" stroke="black" points="421.29,-406.35 422.48,-395.82 414.99,-403.31 421.29,-406.35"></polygon>
+</g>
+<!-- Social Impression -->
+<g id="node5" class="node">
+<title>Social Impression</title>
+<ellipse fill="none" stroke="black" cx="286.83" cy="-450" rx="80.5" ry="18"></ellipse>
+<text text-anchor="middle" x="286.83" y="-445.8" font-family="Times,serif" font-size="14.00">Social Impression</text>
+</g>
+<!-- Seasonality&#45;&gt;Social Impression -->
+<g id="edge5" class="edge">
+<title>Seasonality-&gt;Social Impression</title>
+<path fill="none" stroke="black" d="M297.37,-503.7C295.82,-495.98 293.97,-486.71 292.25,-478.11"></path>
+<polygon fill="black" stroke="black" points="295.64,-477.22 290.25,-468.1 288.78,-478.6 295.64,-477.22"></polygon>
+</g>
+<!-- Search Query -->
+<g id="node6" class="node">
+<title>Search Query</title>
+<ellipse fill="none" stroke="black" cx="256.83" cy="-306" rx="63.72" ry="18"></ellipse>
+<text text-anchor="middle" x="256.83" y="-301.8" font-family="Times,serif" font-size="14.00">Search Query</text>
+</g>
+<!-- Seasonality&#45;&gt;Search Query -->
+<g id="edge11" class="edge">
+<title>Seasonality-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M257.66,-510.63C235.37,-502.85 210.11,-489.69 196.83,-468 169.39,-423.22 208.08,-363.87 234.91,-331.18"></path>
+<polygon fill="black" stroke="black" points="237.65,-333.37 241.43,-323.47 232.3,-328.85 237.65,-333.37"></polygon>
+</g>
+<!-- OLV Impression&#45;&gt;Demand -->
+<g id="edge3" class="edge">
+<title>OLV Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M483.24,-432.41C474.22,-423.39 462.91,-412.09 453.03,-402.21"></path>
+<polygon fill="black" stroke="black" points="455.36,-399.58 445.81,-394.99 450.41,-404.53 455.36,-399.58"></polygon>
+</g>
+<!-- Video Platform Sentiment -->
+<g id="node3" class="node">
+<title>Video Platform Sentiment</title>
+<ellipse fill="none" stroke="black" cx="499.83" cy="-522" rx="112.34" ry="18"></ellipse>
+<text text-anchor="middle" x="499.83" y="-517.8" font-family="Times,serif" font-size="14.00">Video Platform Sentiment</text>
+</g>
+<!-- Video Platform Sentiment&#45;&gt;OLV Impression -->
+<g id="edge2" class="edge">
+<title>Video Platform Sentiment-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M499.83,-503.7C499.83,-495.98 499.83,-486.71 499.83,-478.11"></path>
+<polygon fill="black" stroke="black" points="503.33,-478.1 499.83,-468.1 496.33,-478.1 503.33,-478.1"></polygon>
+</g>
+<!-- Demand&#45;&gt;Search Query -->
+<g id="edge10" class="edge">
+<title>Demand-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M399.69,-364.81C372.53,-353.81 332.22,-337.51 301.34,-325.01"></path>
+<polygon fill="black" stroke="black" points="302.26,-321.61 291.67,-321.1 299.63,-328.1 302.26,-321.61"></polygon>
+</g>
+<!-- Paid Search Click -->
+<g id="node9" class="node">
+<title>Paid Search Click</title>
+<ellipse fill="none" stroke="black" cx="375.83" cy="-90" rx="80.46" ry="18"></ellipse>
+<text text-anchor="middle" x="375.83" y="-85.8" font-family="Times,serif" font-size="14.00">Paid Search Click</text>
+</g>
+<!-- Demand&#45;&gt;Paid Search Click -->
+<g id="edge13" class="edge">
+<title>Demand-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M427.43,-359.94C421.87,-321.3 407.27,-224.21 389.83,-144 387.98,-135.5 385.66,-126.31 383.45,-118.01"></path>
+<polygon fill="black" stroke="black" points="386.76,-116.82 380.75,-108.09 380,-118.66 386.76,-116.82"></polygon>
+</g>
+<!-- Sales -->
+<g id="node11" class="node">
+<title>Sales</title>
+<ellipse fill="none" stroke="black" cx="429.83" cy="-18" rx="31.34" ry="18"></ellipse>
+<text text-anchor="middle" x="429.83" y="-13.8" font-family="Times,serif" font-size="14.00">Sales</text>
+</g>
+<!-- Demand&#45;&gt;Sales -->
+<g id="edge17" class="edge">
+<title>Demand-&gt;Sales</title>
+<path fill="none" stroke="black" d="M440.75,-360.3C456.53,-334.52 483.83,-283 483.83,-235 483.83,-235 483.83,-235 483.83,-161 483.83,-120.55 480.46,-109.3 464.83,-72 460.61,-61.93 454.42,-51.73 448.41,-42.99"></path>
+<polygon fill="black" stroke="black" points="451.22,-40.9 442.55,-34.81 445.53,-44.98 451.22,-40.9"></polygon>
+</g>
+<!-- Social Impression&#45;&gt;Demand -->
+<g id="edge6" class="edge">
+<title>Social Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M318.92,-433.29C341.07,-422.45 370.55,-408.02 393.55,-396.76"></path>
+<polygon fill="black" stroke="black" points="395.21,-399.84 402.65,-392.3 392.13,-393.56 395.21,-399.84"></polygon>
+</g>
+<!-- Auction -->
+<g id="node7" class="node">
+<title>Auction</title>
+<ellipse fill="none" stroke="black" cx="291.83" cy="-234" rx="42.3" ry="18"></ellipse>
+<text text-anchor="middle" x="291.83" y="-229.8" font-family="Times,serif" font-size="14.00">Auction</text>
+</g>
+<!-- Search Query&#45;&gt;Auction -->
+<g id="edge7" class="edge">
+<title>Search Query-&gt;Auction</title>
+<path fill="none" stroke="black" d="M265.3,-288.05C269.38,-279.89 274.37,-269.91 278.91,-260.82"></path>
+<polygon fill="black" stroke="black" points="282.09,-262.3 283.43,-251.79 275.83,-259.17 282.09,-262.3"></polygon>
+</g>
+<!-- Paid Search Impression -->
+<g id="node8" class="node">
+<title>Paid Search Impression</title>
+<ellipse fill="none" stroke="black" cx="261.83" cy="-162" rx="102.44" ry="18"></ellipse>
+<text text-anchor="middle" x="261.83" y="-157.8" font-family="Times,serif" font-size="14.00">Paid Search Impression</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Impression -->
+<g id="edge8" class="edge">
+<title>Search Query-&gt;Paid Search Impression</title>
+<path fill="none" stroke="black" d="M250.17,-287.63C246.62,-277.42 242.62,-264.17 240.83,-252 238.49,-236.17 237.83,-231.72 240.83,-216 242.53,-207.06 245.73,-197.7 249.12,-189.37"></path>
+<polygon fill="black" stroke="black" points="252.34,-190.73 253.11,-180.17 245.92,-187.95 252.34,-190.73"></polygon>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Click -->
+<g id="edge14" class="edge">
+<title>Search Query-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M290.58,-290.45C308.09,-281.49 328.71,-268.54 342.83,-252 375.06,-214.24 378.72,-153.43 377.76,-118.35"></path>
+<polygon fill="black" stroke="black" points="381.26,-118.19 377.34,-108.34 374.26,-118.48 381.26,-118.19"></polygon>
+</g>
+<!-- Organic Search -->
+<g id="node10" class="node">
+<title>Organic Search</title>
+<ellipse fill="none" stroke="black" cx="70.83" cy="-162" rx="70.65" ry="18"></ellipse>
+<text text-anchor="middle" x="70.83" y="-157.8" font-family="Times,serif" font-size="14.00">Organic Search</text>
+</g>
+<!-- Search Query&#45;&gt;Organic Search -->
+<g id="edge15" class="edge">
+<title>Search Query-&gt;Organic Search</title>
+<path fill="none" stroke="black" d="M235.85,-288.99C202.73,-263.7 138.2,-214.44 100.39,-185.57"></path>
+<polygon fill="black" stroke="black" points="102.37,-182.68 92.3,-179.39 98.12,-188.24 102.37,-182.68"></polygon>
+</g>
+<!-- Auction&#45;&gt;Paid Search Impression -->
+<g id="edge9" class="edge">
+<title>Auction-&gt;Paid Search Impression</title>
+<path fill="none" stroke="black" d="M284.56,-216.05C281.15,-208.09 277,-198.41 273.19,-189.51"></path>
+<polygon fill="black" stroke="black" points="276.39,-188.09 269.23,-180.28 269.95,-190.85 276.39,-188.09"></polygon>
+</g>
+<!-- Paid Search Impression&#45;&gt;Paid Search Click -->
+<g id="edge12" class="edge">
+<title>Paid Search Impression-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M288.55,-144.59C304.1,-135.04 323.88,-122.9 340.68,-112.58"></path>
+<polygon fill="black" stroke="black" points="342.97,-115.28 349.66,-107.07 339.31,-109.32 342.97,-115.28"></polygon>
+</g>
+<!-- Paid Search Click&#45;&gt;Sales -->
+<g id="edge18" class="edge">
+<title>Paid Search Click-&gt;Sales</title>
+<path fill="none" stroke="black" d="M388.9,-72.05C395.66,-63.29 404.02,-52.45 411.42,-42.86"></path>
+<polygon fill="black" stroke="black" points="414.28,-44.89 417.62,-34.83 408.74,-40.61 414.28,-44.89"></polygon>
+</g>
+<!-- Organic Search&#45;&gt;Sales -->
+<g id="edge16" class="edge">
+<title>Organic Search-&gt;Sales</title>
+<path fill="none" stroke="black" d="M105.46,-146.28C148,-128.31 222.43,-97.19 286.83,-72 323.22,-57.76 365.18,-42.33 394.2,-31.8"></path>
+<polygon fill="black" stroke="black" points="395.67,-34.99 403.89,-28.3 393.29,-28.41 395.67,-34.99"></polygon>
+</g>
+<!-- Price -->
+<g id="node12" class="node">
+<title>Price</title>
+<ellipse fill="none" stroke="black" cx="624.83" cy="-450" rx="30.76" ry="18"></ellipse>
+<text text-anchor="middle" x="624.83" y="-445.8" font-family="Times,serif" font-size="14.00">Price</text>
+</g>
+<!-- Price&#45;&gt;Demand -->
+<g id="edge19" class="edge">
+<title>Price-&gt;Demand</title>
+<path fill="none" stroke="black" d="M600.83,-438.47C595.58,-436.26 590.04,-434 584.83,-432 547.44,-417.69 504.3,-403.09 473.05,-392.85"></path>
+<polygon fill="black" stroke="black" points="473.93,-389.45 463.34,-389.68 471.76,-396.11 473.93,-389.45"></polygon>
+</g>
+<!-- Price&#45;&gt;Sales -->
+<g id="edge20" class="edge">
+<title>Price-&gt;Sales</title>
+<path fill="none" stroke="black" d="M617.91,-432.28C607.71,-406.06 589.83,-353.46 589.83,-307 589.83,-307 589.83,-307 589.83,-161 589.83,-94.81 512.28,-51.96 465.16,-32.03"></path>
+<polygon fill="black" stroke="black" points="466.47,-28.78 455.89,-28.24 463.82,-35.26 466.47,-28.78"></polygon>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-causal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Causal Model of the data generating process
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/synthetic_data/multicollinearity_datagen.py#L17" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="hill" class="level3">
+<h3 class="anchored" data-anchor-id="hill">hill</h3>
+<blockquote class="blockquote">
+<pre><code> hill (x, K=1, n=1.2)</code></pre>
+</blockquote>
+<p><em>Hill tranformation</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td></td>
+<td></td>
+<td>input array</td>
+</tr>
+<tr class="even">
+<td>K</td>
+<td>int</td>
+<td>1</td>
+<td>Half saturation point</td>
+</tr>
+<tr class="odd">
+<td>n</td>
+<td>float</td>
+<td>1.2</td>
+<td>Shape parameter</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/redam94/common_regression_issues/blob/main/common_regression_issues/synthetic_data/multicollinearity_datagen.py#L26" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="sample_random_data" class="level3">
+<h3 class="anchored" data-anchor-id="sample_random_data">sample_random_data</h3>
+<blockquote class="blockquote">
+<pre><code> sample_random_data (N_weeks:int, include_hidden_confounds:bool=False,
+                     random_seed:int|None=None)</code></pre>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>N_weeks</td>
+<td>int</td>
+<td></td>
+<td>Number of weeks to generate</td>
+</tr>
+<tr class="even">
+<td>include_hidden_confounds</td>
+<td>bool</td>
+<td>False</td>
+<td>Should hidden confounds be included in the dataset</td>
+</tr>
+<tr class="odd">
+<td>random_seed</td>
+<td>int | None</td>
+<td>None</td>
+<td>Random Seed</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>Dataset</strong></td>
+<td></td>
+<td><strong>Dataset containing the variables described by the above causal model</strong></td>
+</tr>
+</tbody>
+</table>
+<div id="cell-5" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> sample_random_data(<span class="dv">156</span>, random_seed<span class="op">=</span><span class="dv">2</span>, include_hidden_confounds<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dataset.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+html[data-theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 0 20px 0 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: inline-block;
+  opacity: 0;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:focus + label {
+  border: 2px solid var(--xr-font-color0);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.Dataset&gt; Size: 520B
+Dimensions:                  (Period: 5)
+Coordinates:
+  * Period                   (Period) datetime64[ns] 40B 2021-01-04 ... 2021-...
+Data variables:
+    price                    (Period) float64 40B 3.856 3.767 3.767 4.3 4.3
+    season                   (Period) float64 40B -0.9613 -0.9732 ... -1.0
+    olv_sentiment            (Period) int64 40B 0 0 0 0 0
+    social_impressions       (Period) float64 40B 4.516e+03 ... 2.289e+03
+    olv_impressions          (Period) float64 40B 1.69e+04 ... 1.227e+04
+    demand                   (Period) float64 40B 28.92 29.4 31.64 27.92 26.14
+    search_query             (Period) float64 40B 2.182e+06 ... 2.366e+06
+    auction                  (Period) float64 40B 0.07852 0.08937 ... 0.0854
+    paid_search_impressions  (Period) float64 40B 1.713e+05 ... 2.021e+05
+    paid_search_clicks       (Period) float64 40B 669.2 938.3 ... 645.8 636.1
+    organic_search           (Period) float64 40B 2.054e+06 ... 2.055e+06
+    sales                    (Period) float64 40B 6.47e+03 ... 6.29e+03
+Attributes:
+    olv_params:     {'K': 0.7960875579897572, 'n': 1.0072716356157956}
+    social_params:  {'K': 0.9767776434467591, 'n': 2.7744792328982424}
+    olv_beta:       0.21671224557085256
+    social_beta:    0.06881513644667057</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-556cdb4e-2c1e-498f-a30f-ac75f12ebd49" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-556cdb4e-2c1e-498f-a30f-ac75f12ebd49" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">Period</span>: 5</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-61d4bfea-e4ae-4bd7-ac55-02e436acdd35" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-61d4bfea-e4ae-4bd7-ac55-02e436acdd35" class="xr-section-summary">Coordinates: <span>(1)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">Period</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2021-01-04 ... 2021-02-01</div><input id="attrs-ccc9d1ba-b794-406b-b16e-e27fc982897f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ccc9d1ba-b794-406b-b16e-e27fc982897f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-c68b5df1-a54b-4ae5-91b4-cfe6870b68f5" class="xr-var-data-in" type="checkbox"><label for="data-c68b5df1-a54b-4ae5-91b4-cfe6870b68f5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2021-01-04T00:00:00.000000000', '2021-01-11T00:00:00.000000000',
+       '2021-01-18T00:00:00.000000000', '2021-01-25T00:00:00.000000000',
+       '2021-02-01T00:00:00.000000000'], dtype='datetime64[ns]')</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-3655fce9-8306-42ee-8c96-6e762df7c82f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-3655fce9-8306-42ee-8c96-6e762df7c82f" class="xr-section-summary">Data variables: <span>(12)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>price</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.856 3.767 3.767 4.3 4.3</div><input id="attrs-2dcd5da1-c8c9-493d-bb7f-c4e336fcf764" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-2dcd5da1-c8c9-493d-bb7f-c4e336fcf764" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ffb1e598-57f6-41ba-ac10-cac40ccba0b0" class="xr-var-data-in" type="checkbox"><label for="data-ffb1e598-57f6-41ba-ac10-cac40ccba0b0" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3.85623064, 3.76666366, 3.76666366, 4.30004006, 4.30004006])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>season</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-0.9613 -0.9732 -0.986 -0.9962 -1.0</div><input id="attrs-d9628b45-7c88-4266-b022-f92117381833" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-d9628b45-7c88-4266-b022-f92117381833" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-caec0d30-fc59-4b38-9adc-e69d21726799" class="xr-var-data-in" type="checkbox"><label for="data-caec0d30-fc59-4b38-9adc-e69d21726799" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-0.96125225, -0.97320297, -0.9859537 , -0.99622428, -1.        ])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>olv_sentiment</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0 0 0 0 0</div><input id="attrs-365db48e-ce35-48a8-b32b-cb2f24c2c53b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-365db48e-ce35-48a8-b32b-cb2f24c2c53b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-99791e3b-7430-440a-a82a-a59c9fc3dacf" class="xr-var-data-in" type="checkbox"><label for="data-99791e3b-7430-440a-a82a-a59c9fc3dacf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0, 0, 0, 0, 0])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>social_impressions</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">4.516e+03 2.69e+03 ... 2.289e+03</div><input id="attrs-42f63491-99b2-40d3-a021-8034c39354b8" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-42f63491-99b2-40d3-a021-8034c39354b8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-9f2c012b-378d-4fee-8105-bf452ffb1460" class="xr-var-data-in" type="checkbox"><label for="data-9f2c012b-378d-4fee-8105-bf452ffb1460" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([4516.32985667, 2690.15487369, 4408.82594089,  821.07433792,
+       2289.26431861])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>olv_impressions</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.69e+04 1.443e+04 ... 1.227e+04</div><input id="attrs-8b6d6239-05f7-4bc1-a254-68a989396488" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-8b6d6239-05f7-4bc1-a254-68a989396488" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5dd143eb-f816-4bb7-acab-6baaf6433961" class="xr-var-data-in" type="checkbox"><label for="data-5dd143eb-f816-4bb7-acab-6baaf6433961" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([16902.29928553, 14428.15003436, 10031.36337111, 12919.47391971,
+       12268.58976982])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>demand</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">28.92 29.4 31.64 27.92 26.14</div><input id="attrs-1fafde9b-e174-4a12-9fc1-e0b8511921f5" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-1fafde9b-e174-4a12-9fc1-e0b8511921f5" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e5723920-a57c-4328-a53b-7fce8845b9ce" class="xr-var-data-in" type="checkbox"><label for="data-e5723920-a57c-4328-a53b-7fce8845b9ce" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([28.91586164, 29.39881976, 31.63871304, 27.92203104, 26.14024436])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>search_query</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.182e+06 3.005e+06 ... 2.366e+06</div><input id="attrs-064233a4-007e-4aac-b51c-b89eeaddd730" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-064233a4-007e-4aac-b51c-b89eeaddd730" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-512ff9d2-3bcb-44bf-a85b-3b928a136a35" class="xr-var-data-in" type="checkbox"><label for="data-512ff9d2-3bcb-44bf-a85b-3b928a136a35" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([2182051.27979312, 3005187.1995009 , 2901400.41364904,
+       1465383.57215318, 2366366.85440288])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>auction</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.07852 0.08937 ... 0.1123 0.0854</div><input id="attrs-d2b2787a-a23c-4c29-88c0-41f40dd79f97" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-d2b2787a-a23c-4c29-88c0-41f40dd79f97" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6457621d-1b26-47bf-9ee1-e72e751ca3fd" class="xr-var-data-in" type="checkbox"><label for="data-6457621d-1b26-47bf-9ee1-e72e751ca3fd" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.07852333, 0.08937114, 0.08316361, 0.11232354, 0.08539509])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>paid_search_impressions</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.713e+05 2.686e+05 ... 2.021e+05</div><input id="attrs-262c1c3b-dbda-4828-bce4-45502086acab" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-262c1c3b-dbda-4828-bce4-45502086acab" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-9202782c-0a56-440e-a519-828887ec4569" class="xr-var-data-in" type="checkbox"><label for="data-9202782c-0a56-440e-a519-828887ec4569" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([171341.93333533, 268577.00396097, 241290.93840434, 164597.06925048,
+       202076.10225716])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>paid_search_clicks</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">669.2 938.3 1.133e+03 645.8 636.1</div><input id="attrs-453bb927-d5f6-4e9a-bfd5-51cf5bb9a369" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-453bb927-d5f6-4e9a-bfd5-51cf5bb9a369" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-21569beb-9f03-44bd-83de-1980af839a1d" class="xr-var-data-in" type="checkbox"><label for="data-21569beb-9f03-44bd-83de-1980af839a1d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 669.21744438,  938.33665502, 1132.50226126,  645.80771116,
+        636.05519104])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>organic_search</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.054e+06 2.688e+06 ... 2.055e+06</div><input id="attrs-bde3ba65-2450-4e5b-9ad0-3e662b5306a3" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-bde3ba65-2450-4e5b-9ad0-3e662b5306a3" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1f15df69-6a16-425e-bad9-7b85c0da369d" class="xr-var-data-in" type="checkbox"><label for="data-1f15df69-6a16-425e-bad9-7b85c0da369d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([2053759.98996706, 2688297.54792605, 2580925.8707826 ,
+       1345931.37962197, 2054808.91711597])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>sales</span></div><div class="xr-var-dims">(Period)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">6.47e+03 6.702e+03 ... 6.29e+03</div><input id="attrs-fdc5e50c-1ac4-4352-be1e-fb7eb854c864" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-fdc5e50c-1ac4-4352-be1e-fb7eb854c864" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d56ccb6b-154d-435c-9691-096883fc246b" class="xr-var-data-in" type="checkbox"><label for="data-d56ccb6b-154d-435c-9691-096883fc246b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6470.24406348, 6702.13210895, 9193.50249468, 6272.93497578,
+       6290.24525121])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-4cae2616-f760-43fa-abfa-662d419d150d" class="xr-section-summary-in" type="checkbox"><label for="section-4cae2616-f760-43fa-abfa-662d419d150d" class="xr-section-summary">Indexes: <span>(1)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>Period</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-b6f5bae4-ad70-49c4-8828-af5b9589dbca" class="xr-index-data-in" type="checkbox"><label for="index-b6f5bae4-ad70-49c4-8828-af5b9589dbca" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2021-01-04', '2021-01-11', '2021-01-18', '2021-01-25',
+               '2021-02-01'],
+              dtype='datetime64[ns]', name='Period', freq='W-MON'))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-01a6c981-3bbe-4c8d-9786-7cab39aaf7c4" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-01a6c981-3bbe-4c8d-9786-7cab39aaf7c4" class="xr-section-summary">Attributes: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>olv_params :</span></dt><dd>{'K': 0.7960875579897572, 'n': 1.0072716356157956}</dd><dt><span>social_params :</span></dt><dd>{'K': 0.9767776434467591, 'n': 2.7744792328982424}</dd><dt><span>olv_beta :</span></dt><dd>0.21671224557085256</dd><dt><span>social_beta :</span></dt><dd>0.06881513644667057</dd></dl></div></li></ul></div></div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/redam94\.github\.io\/common_regression_issues");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
