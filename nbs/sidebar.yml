@@ -6,6 +6,7 @@ website:
       - 01_multicollinearity.ipynb
       - 02_the_illusion_of_significance.ipynb
       - 03_trends_and_seasons.ipynb
+      - 04_normalization_in_panel_models.ipynb
       - section: model_helpers
         contents:
           - model_helpers/00_fourier_components.ipynb
