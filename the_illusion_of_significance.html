@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="The Cost of p-Values">
+
+<title>The Illusion of Significance – Common Regression Issues</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-90617d54abb8d6c97f964c4c092f6cad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="The Illusion of Significance – Common Regression Issues">
+<meta property="og:description" content="The Cost of p-Values">
+<meta property="og:image" content="https://redam94.github.io/common_regression_issues/02_the_illusion_of_significance_files/figure-html/fig-histogram-backward-selection-output-1.png">
+<meta property="og:site_name" content="Common Regression Issues">
+<meta property="og:image:height" content="728">
+<meta property="og:image:width" content="1637">
+<meta name="twitter:title" content="The Illusion of Significance – Common Regression Issues">
+<meta name="twitter:description" content="The Cost of p-Values">
+<meta name="twitter:image" content="https://redam94.github.io/common_regression_issues/02_the_illusion_of_significance_files/figure-html/fig-histogram-backward-selection-output-1.png">
+<meta name="twitter:image-height" content="728">
+<meta name="twitter:image-width" content="1637">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Common Regression Issues</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./the_illusion_of_significance.html">The Illusion of Significance</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Common Regression Issues</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sampling_error.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sampling Error in Exogenous Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">When is Multicollinearity an Issue?</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./the_illusion_of_significance.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">The Illusion of Significance</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./trends_and_seasons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trends And Seasons</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./normalization_in_panel_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Centering in Panel Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">model_helpers</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_helpers/fourier_components.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fourier Components</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_helpers/spline_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Splines</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">synthetic_data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./synthetic_data/simple_regression_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Regression Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./synthetic_data/grouped_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grouped Regression Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./synthetic_data/multicollinearity_example_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Generation for Demonstrating Multicollinearity</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">utils</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./utils/plotting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Plotting Utils</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-illusion-to-insight-tldr" id="toc-from-illusion-to-insight-tldr" class="nav-link active" data-scroll-target="#from-illusion-to-insight-tldr">From Illusion to Insight — TLDR</a></li>
+  <li><a href="#introduction-modeling-for-decision-making" id="toc-introduction-modeling-for-decision-making" class="nav-link" data-scroll-target="#introduction-modeling-for-decision-making">Introduction: Modeling for Decision Making</a>
+  <ul class="collapse">
+  <li><a href="#the-hidden-costs-of-misspecification-why-model-selection-matters" id="toc-the-hidden-costs-of-misspecification-why-model-selection-matters" class="nav-link" data-scroll-target="#the-hidden-costs-of-misspecification-why-model-selection-matters">The Hidden Costs of Misspecification: Why Model Selection Matters</a></li>
+  <li><a href="#p-value-selection-common-pitfalls" id="toc-p-value-selection-common-pitfalls" class="nav-link" data-scroll-target="#p-value-selection-common-pitfalls">P-Value Selection: Common Pitfalls</a></li>
+  <li><a href="#consequences-for-causal-interpretation-and-decision-accuracy" id="toc-consequences-for-causal-interpretation-and-decision-accuracy" class="nav-link" data-scroll-target="#consequences-for-causal-interpretation-and-decision-accuracy">Consequences for Causal Interpretation and Decision Accuracy</a></li>
+  </ul></li>
+  <li><a href="#core-statistical-challenges-in-mmm-selection" id="toc-core-statistical-challenges-in-mmm-selection" class="nav-link" data-scroll-target="#core-statistical-challenges-in-mmm-selection">Core Statistical Challenges in MMM Selection</a>
+  <ul class="collapse">
+  <li><a href="#multiple-testing-problem" id="toc-multiple-testing-problem" class="nav-link" data-scroll-target="#multiple-testing-problem">Multiple Testing Problem</a></li>
+  <li><a href="#post-selection-inference-psi-invalidity" id="toc-post-selection-inference-psi-invalidity" class="nav-link" data-scroll-target="#post-selection-inference-psi-invalidity">Post-Selection Inference (PSI) Invalidity</a></li>
+  <li><a href="#time-series-complications" id="toc-time-series-complications" class="nav-link" data-scroll-target="#time-series-complications">Time-Series Complications</a></li>
+  </ul></li>
+  <li><a href="#common-problematic-selection-practices-in-mmm" id="toc-common-problematic-selection-practices-in-mmm" class="nav-link" data-scroll-target="#common-problematic-selection-practices-in-mmm">Common Problematic Selection Practices in MMM</a></li>
+  <li><a href="#consequences-of-flawed-selection-in-mmm" id="toc-consequences-of-flawed-selection-in-mmm" class="nav-link" data-scroll-target="#consequences-of-flawed-selection-in-mmm">Consequences of Flawed Selection in MMM</a></li>
+  <li><a href="#recommended-approaches-and-considerations" id="toc-recommended-approaches-and-considerations" class="nav-link" data-scroll-target="#recommended-approaches-and-considerations">Recommended Approaches and Considerations</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="the_illusion_of_significance.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Illusion of Significance</h1>
+</div>
+
+<div>
+  <div class="description">
+    The Cost of p-Values
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Reda <a href="mailto:redam94@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    <p>Statistical models drive millions in spending decisions, yet beneath their precise-looking numbers lurks a dangerous problem. This post examines how the practice of selecting variables based on p-values creates a statistical house of cards; especially in Marketing Mix Modeling (MMM) and budget optimization. I show why common techniques like stepwise regression inevitably produce overconfident models with biased estimates that violate the very statistical principles they claim to uphold. These methodological flaws can result in money flowing to the wrong marketing channels based on <strong>illusory</strong> performance metrics. I demonstrate why Bayesian approaches offer a more honest alternative by naturally tempering overconfidence, incorporating what we already know, and providing intuitive uncertainty measures. Through techniques like spike-and-slab priors (or regularized horseshoe priors) and Bayesian Model Averaging (BMA), analysts can move beyond arbitrary significance thresholds toward probability-based decision-making. While Bayesian methods do require more computational horsepower and thoughtful prior specification, modern software has made them increasingly accessible. Using simulated examples inspired by real-world marketing and economic modeling, I show how Bayesian methods produce more reliable insights that lead to smarter budget allocation decisions.</p>
+  </div>
+</div>
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="from-illusion-to-insight-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="from-illusion-to-insight-tldr">From Illusion to Insight — TLDR</h2>
+<p>We’ve all seen it (perhaps even presented it); the perfectly constructed model with impressive-looking p-values that is used to justify adding millions in budget to a particular marketing channel. But how much can we really trust these insights? Statistical modeling approaches that rely on p-value thresholds (or <span class="math inline">\(\left| \text{t-stat}\right| &gt; 1\)</span>) for variable selection create a fundamental problem: the same data that builds the model also validates it, creating a circular logic that <strong>inevitably</strong> results in overconfidence. Methods like stepwise regression don’t just produce slightly inaccurate models: they systematically generate <strong>biased coefficients</strong>, <strong>invalid statistical tests</strong>, and <strong>unstable predictions</strong>. When these flawed models drive budget decisions, organizations end up misallocating resources based on what amounts to <strong>statistical mirages</strong> rather than <strong>genuine insights</strong>.</p>
+<p>Bayesian statistics offers a more realistic alternative that acknowledges what traditional methods try to hide. <strong>Uncertainty is real!</strong> It should inform our decisions and not be artificially removed through statistical hocus-pocus for a slick deck. By treating parameters as variables with probability distributions and formally incorporating prior knowledge, Bayesian methods can help regularize models; prevent them from making wild claims the data can’t support. Techniques like spike-and-slab priors let us evaluate which variables truly matter without arbitrary cutoffs, while Bayesian Model Averaging sensibly hedges bets across multiple plausible models rather than on a single one. Though implementing Bayesian approaches does require more computational power, technical skill, and careful thought about prior assumptions, the payoff is substantial: <strong>more stable estimates</strong>, <strong>intuitive uncertainty measures</strong> that stakeholders can actually understand (seriously what is a confidence interval), and ultimately, budget allocation <strong>insights</strong> based on reality rather than <strong>statistical illusions</strong>.</p>
+</section>
+<section id="introduction-modeling-for-decision-making" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-modeling-for-decision-making">Introduction: Modeling for Decision Making</h2>
+<section id="the-hidden-costs-of-misspecification-why-model-selection-matters" class="level3">
+<h3 class="anchored" data-anchor-id="the-hidden-costs-of-misspecification-why-model-selection-matters">The Hidden Costs of Misspecification: Why Model Selection Matters</h3>
+<p>Statistical models, particularly within econometrics and marketing analytics, serve as critical instruments for dissecting complex business phenomena and guiding strategic decisions. Marketing Mix Modeling (MMM) stands as a prime example. The insights derived from MMM are frequently used for two primary purposes: understanding the historical contribution of different marketing levers and, crucially, optimizing future budget allocations to maximize return on investment (ROI).</p>
+<p>MMM’s use extends beyond prediction toward causal inference: understanding the “true”, incremental impact of altering a specific input, such as increasing social advertising spend, on the outcome variable (i.e.&nbsp;sales). This causal understanding is paramount for effective budget optimization.</p>
+<p>However, standard modeling procedures, particularly those involving selection based on statistical significance, prioritize in-sample fit over robustness and causal validity. This focus inadvertently introduces substantial biases and instability. When models that systematically misrepresent causal effects guide budget decisions, organizations face significant resource misallocation that directly impacts profitability. The aggregated and time-series nature of marketing data further compounds these challenges, as weekly or monthly observations limit statistical power while still requiring controls for seasonality, economic trends, and competitive actions</p>
+<p>As marketing analytics continues to drive increasingly larger investment decisions, the potential damage from flawed model specifications grows proportionally. This page examines how traditional variable selection approaches might generate misleading insights and offers a more robust Bayesian framework for addressing these methodological pitfalls.</p>
+</section>
+<section id="p-value-selection-common-pitfalls" class="level3">
+<h3 class="anchored" data-anchor-id="p-value-selection-common-pitfalls">P-Value Selection: Common Pitfalls</h3>
+<p>The p-value is perhaps the most ubiquitous statistic in empirical research across many disciplines, including econometrics and marketing analytics. However, its widespread use is accompanied by pervasive misuse and misinterpretation. A p-value represents the probability of observing data as extreme as, or more extreme than, the data actually obtained, under the assumption that a specific null hypothesis (e.g., a regression coefficient being zero) is true. It is crucial to recognize that it does not represent the probability that the null hypothesis is true, nor the probability that the alternative hypothesis is false, given the data.</p>
+<p>Furthermore, statistical significance, typically declared when a p-value falls below an arbitrary threshold like 0.05, is not synonymous with practical, economic, or causal importance. An effect can be statistically significant but trivially small in magnitude, especially in large datasets where even minute deviations from the null hypothesis can yield very small p-values.</p>
+<p>Despite these limitations, p-values are frequently employed as the primary criterion in automated variable selection procedures, such as forward selection, backward elimination, and stepwise regression. These algorithms iteratively add or remove predictor variables from a model based on whether their associated p-values meet a predefined significance threshold, or based on related criteria like changes in R-squared or information criteria (AIC, BIC) which themselves have connections to significance testing. While seemingly objective and computationally convenient, this reliance on p-values for model construction introduces several severe pitfalls.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The math behind t-stats
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In the context of linear regression the test statistic for the i-th coefficient estimate is given as:</p>
+<p><span class="math display">\[
+\frac{\hat{\beta_i}}{\frac{\hat{\sigma}}{\sqrt{n\hat{\text{Var}}[X_i]}}\sqrt{VIF_i}}
+\]</span></p>
+<p>It’s clear from the mathematical description of the test statistic that:</p>
+<ol type="1">
+<li>Coefficients (<span class="math inline">\(\hat{\beta_i}\)</span>) with larger magnitudes — all else being equal — will be more “significant”.</li>
+<li>Models with lower variance (<span class="math inline">\(\hat{\sigma}\)</span>) will lead to all coefficients being more “significant”.</li>
+<li>Larger sample sizes (n) will increase all coefficients t-stat.</li>
+<li>With increased variance in a predictor (<span class="math inline">\(\hat{\sigma}\)</span>) — all else being equal — that predictor will be more “significant”.</li>
+<li>With increased correlation of covariate <span class="math inline">\(X_i\)</span> (<span class="math inline">\(VIF_i\)</span>) — all else being equal — that predictor will be less “significant”.</li>
+</ol>
+</div>
+</div>
+</div>
+<section id="pitfall-1-p-hacking-and-data-dredging" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-1-p-hacking-and-data-dredging">Pitfall 1: P-hacking and Data Dredging</h4>
+<p>This refers to the practice of exploring multiple analytical choices—testing different variables, functional forms (transformations), subgroups, outlier handling rules, or data collection stopping points—and selectively reporting only those combinations that yield statistically significant p-values. This exploits the “researcher degrees of freedom” inherent in data analysis. Stepwise regression procedures automate this process, systematically “dredging” the data for significant predictors based on p-value thresholds. This will occur even if multiple regressions aren’t run. For example, if residuals of a model are peaked at and variables that seem to match that residual pattern are then added to the model.</p>
+</section>
+<section id="pitfall-2-multiple-comparisons-problem" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-2-multiple-comparisons-problem">Pitfall 2: Multiple Comparisons Problem</h4>
+<p>When numerous variables are tested for inclusion, as in stepwise methods, the probability of incorrectly finding at least one variable to be significant purely by chance (a Type I error or false positive) becomes substantially inflated. The p-values reported by standard software for the variables in the final selected model are typically not adjusted for the multitude of tests performed during the selection process. The probability of encountering at least one false positive grows exponentially with the number of potential predictors considered.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Helper Functions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_covariance(n_vars):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Create a random covariance matrix with a given correlation."""</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a random correlation matrix</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.random.randn(n_vars, n_vars)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    cov_matrix <span class="op">=</span> np.dot(A, A.T)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cov_matrix</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_data_no_signal(n_samples, n_vars, correlated<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Create completely random data with no signal."""</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    mean <span class="op">=</span> np.zeros(n_vars)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> correlated:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        cov <span class="op">=</span> random_covariance(n_signal_vars<span class="op">+</span>n_noise_vars)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        var <span class="op">=</span> np.diag(cov)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Ensure var of variables is 1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        cov <span class="op">=</span> cov <span class="op">/</span> np.sqrt(var[:, <span class="va">None</span>] <span class="op">*</span> var[<span class="va">None</span>, :])</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        cov <span class="op">=</span> np.eye(n_signal_vars<span class="op">+</span>n_noise_vars)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.multivariate_normal(</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        mean<span class="op">=</span>mean, </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        cov<span class="op">=</span>cov, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        size<span class="op">=</span>n_samples</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.random.randn(n_samples)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(X), pd.Series(y)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_data_with_signal(</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    n_samples, </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    n_signal_vars, </span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    n_noise_vars, </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    betas <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    correlated <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    noise_level<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Create data with a signal in the first n_signal_vars."""</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    mean <span class="op">=</span> np.zeros(n_signal_vars<span class="op">+</span>n_noise_vars)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> correlated:</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        cov <span class="op">=</span> random_covariance(n_signal_vars<span class="op">+</span>n_noise_vars)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        var <span class="op">=</span> np.diag(cov)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Ensure var of variables is 1</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        cov <span class="op">=</span> cov <span class="op">/</span> np.sqrt(var[:, <span class="va">None</span>] <span class="op">*</span> var[<span class="va">None</span>, :])</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        cov <span class="op">=</span> np.eye(n_signal_vars<span class="op">+</span>n_noise_vars)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.multivariate_normal(</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        mean<span class="op">=</span>mean, </span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        cov<span class="op">=</span>cov,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        size<span class="op">=</span>n_samples)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> betas <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        betas <span class="op">=</span> np.zeros(n_signal_vars <span class="op">+</span> n_noise_vars)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        betas[:n_signal_vars] <span class="op">=</span> np.random.randn(n_signal_vars)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(betas) <span class="op">==</span> n_signal_vars <span class="op">+</span> n_noise_vars, <span class="st">"betas must have the same length as the number of variables"</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a signal in the first n_signal_vars</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.dot(X, betas) <span class="op">+</span> np.random.randn(n_samples) <span class="op">*</span> noise_level <span class="op">*</span> np.var(np.dot(X, betas))</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(X), pd.Series(y), betas</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward_selection(</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    X: pd.DataFrame, y: pd.Series,</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    threshold_in<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Perform forward selection with p-values to find the best subset of features."""</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize variables</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    n_features <span class="op">=</span> X.shape[<span class="dv">1</span>]</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    selected_features <span class="op">=</span> []</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    remaining_features <span class="op">=</span> <span class="bu">list</span>(X.columns)</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    np.random.shuffle(remaining_features) <span class="co"># Shuffle features to simulate repeated runs</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Perform forward selection with p-values</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> remaining_features:</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>        scores_with_candidates <span class="op">=</span> []</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> candidate <span class="kw">in</span> remaining_features:</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>            features <span class="op">=</span> selected_features <span class="op">+</span> [candidate]</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>            X_subset <span class="op">=</span> X.loc[:, features]</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> sm.OLS(y, sm.add_constant(X_subset)).fit()</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>            p_value <span class="op">=</span> model.pvalues[candidate]</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>            scores_with_candidates.append((p_value, candidate))</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sort scores and select the best candidate</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>        scores_with_candidates.sort()</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>        best_new_score, best_candidate <span class="op">=</span> scores_with_candidates[<span class="dv">0</span>]</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> best_new_score <span class="op">&lt;</span> threshold_in:</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>            selected_features.append(best_candidate)</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>            remaining_features.remove(best_candidate)</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> selected_features</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward_selection(</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>    X: pd.DataFrame, y: pd.Series,</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    threshold_out<span class="op">=</span><span class="fl">0.1</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Perform backward selection with p-values to find the best subset of features."""</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize variables</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    selected_features <span class="op">=</span> <span class="bu">list</span>(X.columns)</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Perform backward selection with p-values</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> selected_features:</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> selected_features</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>        X_subset <span class="op">=</span> X.loc[:, features]</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> sm.OLS(y, sm.add_constant(X_subset)).fit()</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get the feature with the highest p-value</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>        p_values <span class="op">=</span> model.pvalues[<span class="dv">1</span>:]  <span class="co"># Exclude intercept</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>        max_p_value <span class="op">=</span> p_values.<span class="bu">max</span>()</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> max_p_value <span class="op">&gt;</span> threshold_out:</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>            feature_to_remove <span class="op">=</span> p_values.idxmax()</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>            selected_features.remove(feature_to_remove)</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> selected_features</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Simulate Variable Selection Based on P-Values
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n_trials <span class="op">=</span> <span class="dv">1_000</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n_signal_vars <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n_noise_vars <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> create_data_no_signal(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    n_trials<span class="op">*</span>n_samples,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    n_signal_vars<span class="op">+</span>n_noise_vars, </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    correlated<span class="op">=</span><span class="va">False</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>X.columns <span class="op">=</span> [<span class="ss">f"X</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(X.shape[<span class="dv">1</span>])]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>y.name <span class="op">=</span> <span class="st">"y"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>forward_selected_vars <span class="op">=</span> []</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> trial <span class="kw">in</span> <span class="bu">range</span>(n_trials):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    trial_df <span class="op">=</span> X.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    trial_y <span class="op">=</span> y.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    forward_selected_vars.append(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        forward_selection(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            trial_df, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            trial_y, </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            threshold_in<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>backward_selected_vars <span class="op">=</span> []</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> trial <span class="kw">in</span> <span class="bu">range</span>(n_trials):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    trial_df <span class="op">=</span> X.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    trial_y <span class="op">=</span> y.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    backward_selected_vars.append(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        backward_selection(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            trial_df, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            trial_y, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            threshold_out<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Backward Selection</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Foward Selection</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div id="cell-fig-histogram-backward-selection" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-histogram-backward-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogram-backward-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-histogram-backward-selection-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-backward-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Histogram of the number of selected variables in each trial using backward selection. The number of variables that are actually predictive are 0, however over 50% of the trials selected at least one variable as a statistically significant predictor.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-21" class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Family-wise error rate: 69.7%</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="cell-fig-histogram-forward-selection" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-histogram-forward-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogram-forward-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-histogram-forward-selection-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-forward-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Histogram of the number of selected variables in each trial using forward selection. The number of variables that are actually predictive are 0, however over 50% of the trials selected at least one variable as a statistically significant predictor.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-24" class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Family-wise error rate: 67.2%</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pitfall-3-overfitting" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-3-overfitting">Pitfall 3: Overfitting</h4>
+<p>Models constructed through procedures that aggressively optimize for in-sample fit based on significance tests tend to overfit the data. They capture random noise and idiosyncrasies specific to the training sample, rather than the stable, underlying relationships. Consequently, these models often exhibit poor predictive performance when applied to new, independent datasets.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Backward Selection</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Forward Selection</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Model Analysis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-30" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>SELECTION_METHOD <span class="op">=</span> backward_selected_vars</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n_models_with_var <span class="op">=</span> {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    var: <span class="bu">sum</span>([var <span class="kw">in</span> selected <span class="cf">for</span> selected <span class="kw">in</span> SELECTION_METHOD])</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> var <span class="kw">in</span> X.columns</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>in_sample_models <span class="op">=</span> [</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        y.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        ).fit() </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>out_sample_model <span class="op">=</span> [</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        y.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        ).fit()</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>in_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> in_sample_models]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>out_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> out_sample_model]</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> [</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    model.predict(sm.add_constant(X[selected])) </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> selected, model <span class="kw">in</span> <span class="bu">zip</span>(SELECTION_METHOD, in_sample_models)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>out_of_sample_mse <span class="op">=</span> [</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        y.loc[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>in_samples_mse <span class="op">=</span> [</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        y.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-fig-histogram-backward-selection-r2" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-histogram-backward-selection-r2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogram-backward-selection-r2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-histogram-backward-selection-r2-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-backward-selection-r2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: In sample and out of sample R2 of the models selected using backward selection. The models are each trained on 100 samples and tested on the remaining samples. This demonstrates the overfitting of the models.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Model Analysis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-35" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>SELECTION_METHOD <span class="op">=</span> forward_selected_vars</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n_models_with_var <span class="op">=</span> {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    var: <span class="bu">sum</span>([var <span class="kw">in</span> selected <span class="cf">for</span> selected <span class="kw">in</span> SELECTION_METHOD])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> var <span class="kw">in</span> X.columns</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>in_sample_models <span class="op">=</span> [</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        y.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        ).fit() </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>out_sample_model <span class="op">=</span> [</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        y.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        ).fit()</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>in_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> in_sample_models]</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>out_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> out_sample_model]</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> [</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    model.predict(sm.add_constant(X[selected])) </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> selected, model <span class="kw">in</span> <span class="bu">zip</span>(SELECTION_METHOD, in_sample_models)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>out_of_sample_mse <span class="op">=</span> [</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        y.loc[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>in_samples_mse <span class="op">=</span> [</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        y.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-fig-histogram-forward-selection-r2" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-histogram-forward-selection-r2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogram-forward-selection-r2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-histogram-forward-selection-r2-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-forward-selection-r2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: In sample and out of sample R2 of the models selected using forward selection. The models are each trained on 100 samples and tested on the remaining samples. This demonstrates the overfitting of the models.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Simulation with Signal
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-40" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>betas <span class="op">=</span> np.array([<span class="fl">.2</span>, <span class="fl">.1</span>, <span class="fl">.3</span>] <span class="op">+</span> [<span class="dv">0</span>]<span class="op">*</span>n_noise_vars)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>X_signal, y_signal, betas <span class="op">=</span> create_data_with_signal(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    n_trials<span class="op">*</span>n_samples,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    n_signal_vars, </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    n_noise_vars, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    correlated<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    betas<span class="op">=</span>betas, </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    noise_level<span class="op">=</span><span class="dv">3</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>X_signal.columns <span class="op">=</span> [<span class="ss">f"X</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(X_signal.shape[<span class="dv">1</span>])]</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>y_signal.name <span class="op">=</span> <span class="st">"y"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-41" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>forward_selected_signal_vars <span class="op">=</span> []</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> trial <span class="kw">in</span> <span class="bu">range</span>(n_trials):</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    trial_df <span class="op">=</span> X_signal.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    trial_y <span class="op">=</span> y_signal.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    forward_selected_signal_vars.append(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        forward_selection(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            trial_df, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            trial_y, </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            threshold_in<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-42" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>backward_selected_signal_vars <span class="op">=</span> []</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> trial <span class="kw">in</span> <span class="bu">range</span>(n_trials):</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    trial_df <span class="op">=</span> X_signal.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    trial_y <span class="op">=</span> y_signal.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    backward_selected_signal_vars.append(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        backward_selection(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            trial_df, </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>            trial_y, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            threshold_out<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Forward Selection</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Backward Selection</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Model Analysis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-46" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SELECTION_METHOD <span class="op">=</span> forward_selected_signal_vars</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>in_sample_models <span class="op">=</span> [</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X_signal.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        ).fit() </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>out_sample_model <span class="op">=</span> [</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X_signal.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        ).fit()</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>in_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> in_sample_models]</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>out_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> out_sample_model]</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> [</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    model.predict(sm.add_constant(X_signal[selected])) </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> selected, model <span class="kw">in</span> <span class="bu">zip</span>(SELECTION_METHOD, in_sample_models)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>out_of_sample_mse <span class="op">=</span> [</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>in_samples_mse <span class="op">=</span> [</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-fig-histogram-forward-selection-r2-signal" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-histogram-forward-selection-r2-signal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogram-forward-selection-r2-signal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-histogram-forward-selection-r2-signal-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-forward-selection-r2-signal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: In sample and out of sample R2 of the models selected using forward selection. The models are each trained on 100 samples and tested on the remaining samples. This demonstrates the overfitting of the models.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Model Analysis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="cell-51" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>SELECTION_METHOD <span class="op">=</span> backward_selected_signal_vars</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>in_sample_models <span class="op">=</span> [</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X_signal.loc[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        ).fit() </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>out_sample_model <span class="op">=</span> [</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    sm.OLS(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>], </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        sm.add_constant(X_signal.loc[<span class="op">~</span>i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>, selected])</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        ).fit()</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, selected <span class="kw">in</span> <span class="bu">enumerate</span>(SELECTION_METHOD)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>in_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> in_sample_models]</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>out_sample_r2 <span class="op">=</span> [model.rsquared <span class="cf">for</span> model <span class="kw">in</span> out_sample_model]</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> [</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    model.predict(sm.add_constant(X_signal[selected])) </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> selected, model <span class="kw">in</span> <span class="bu">zip</span>(SELECTION_METHOD, in_sample_models)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>out_of_sample_mse <span class="op">=</span> [</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[<span class="op">~</span>trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>in_samples_mse <span class="op">=</span> [</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    np.mean((</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>        y_signal.loc[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>] </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> pred[trial<span class="op">*</span>n_samples:(trial<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>        )<span class="op">**</span><span class="dv">2</span>) </span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> trial, pred <span class="kw">in</span> <span class="bu">enumerate</span>(predictions)</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-fig-histogram-backward-selection-r2-signal" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-histogram-backward-selection-r2-signal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogram-backward-selection-r2-signal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-histogram-backward-selection-r2-signal-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-backward-selection-r2-signal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: In sample and out of sample R2 of the models selected using backward selection. The models are each trained on 100 samples and tested on the remaining samples. This demonstrates the overfitting of the models.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pitfall-4-biased-coefficient-estimates" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-4-biased-coefficient-estimates">Pitfall 4: Biased Coefficient Estimates</h4>
+<p>The regression coefficients associated with the variables selected through stepwise or p-value driven methods are systematically biased, typically inflated in magnitude (biased away from zero). This bias arises because the selection process inherently favors variables that, perhaps partly due to random sampling variation, exhibited stronger relationships with the outcome in the specific dataset used for model building.</p>
+<div id="cell-fig-bias-induced-by-selection" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-bias-induced-by-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bias-induced-by-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_the_illusion_of_significance_files/figure-html/fig-bias-induced-by-selection-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bias-induced-by-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: The variable selection method systematically biases the coefficient estimates. This happens because models where the variable has a higher estimated effect are more likely to have that variable selected to be in the model. This is a form of selection bias.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pitfall-5-invalid-standard-errors-confidence-intervals-and-p-values" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-5-invalid-standard-errors-confidence-intervals-and-p-values">Pitfall 5: Invalid Standard Errors, Confidence Intervals, and P-values</h4>
+<p>The standard errors calculated for the coefficients in the final, selected model are systematically underestimated. This leads to confidence intervals that are falsely narrow, suggesting greater precision than is warranted, and p-values that are artificially small, exaggerating statistical significance. Standard statistical inference relies on the assumption that the model structure was specified before examining the data. Applying these inferential tools after the model has been selected based on the data violates this fundamental assumption, rendering the resulting p-values, confidence intervals, and standard errors statistically invalid without specialized (and often complex) adjustments for the selection process.</p>
+<div id="cell-58" class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Coverage of 95% confidence interval for X0: 85.3%
+Coverage of 95% confidence interval for X1: 80.1%
+Coverage of 95% confidence interval for X2: 83.1%</code></pre>
+</div>
+</div>
+</section>
+<section id="pitfall-6-model-instability" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-6-model-instability">Pitfall 6: Model Instability</h4>
+<p>The set of variables chosen by stepwise procedures can be highly sensitive to small perturbations in the data, particularly when predictor variables are correlated, a common issue in MMM. A slight change in the dataset might lead to a substantially different selected model.</p>
+<div id="cell-60" class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Selection frequency of model Y ~ X0 + X1 + X2: 17.8%
+Selection frequency of model Y ~ X0 + X2: 12.2%
+Selection frequency of model Y ~ X0 + X2 + X18: 1.4%
+Selection frequency of model Y ~ X0 + X2 + X22: 1.1%
+Selection frequency of model Y ~ X0 + X2 + X5: 1.1%
+Selection frequency of model Y ~ X0 + X1 + X2 + X21: 0.9%
+Selection frequency of model Y ~ X0 + X2 + X15: 0.9%
+Selection frequency of model Y ~ X0 + X1 + X2 + X15: 0.8%
+Selection frequency of model Y ~ X0 + X1 + X2 + X19: 0.8%
+Selection frequency of model Y ~ X0 + X2 + X4: 0.7%
+Selection frequency of other models: 62.3%</code></pre>
+</div>
+</div>
+</section>
+<section id="pitfall-7-issues-with-variable-transformations" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-7-issues-with-variable-transformations">Pitfall 7: Issues with Variable Transformations</h4>
+<p>The problems extend beyond selecting which variables to include; selecting the form of variables (e.g., choosing between linear, logarithmic, c-curve, or s-curve terms) based on p-values or fit statistics introduces the same risks. Optimizing transformations based on in-sample fit can lead to overfitting and results that do not generalize.</p>
+<p>The root cause of these numerous pitfalls lies in the practice of using the same dataset for both model specification (choosing variables, choosing transformations) and subsequent statistical inference (calculating coefficients, standard errors, p-values, CIs). Frequentist statistical inference is predicated on the idea of evaluating a pre-specified hypothesis or model against the data. When the data itself is used to iteratively search for and construct the model that best fits it, the assumptions underpinning the calculation of p-values and confidence intervals are violated. The model is no longer a fixed entity being tested; it is a product of the data exploration process. Performing inference on this data-derived model as if it were pre-specified leads to a systematic underestimation of uncertainty and an overestimation of the significance and magnitude of the included effects.</p>
+</section>
+</section>
+<section id="consequences-for-causal-interpretation-and-decision-accuracy" class="level3">
+<h3 class="anchored" data-anchor-id="consequences-for-causal-interpretation-and-decision-accuracy">Consequences for Causal Interpretation and Decision Accuracy</h3>
+<p>The statistical pathologies induced by p-value driven variable selection have profound negative consequences, particularly when models are intended to inform causal understanding and guide high-stakes decisions like budget allocation.</p>
+<p>Firstly, these methods are susceptible to identifying spurious correlations as statistically significant relationships. In time-series contexts like MMM, variables often exhibit trends or seasonality. Two variables trending together (e.g., ice cream sales and drowning incidents both rising in summer) can show a strong statistical correlation even without a direct causal link. P-value based selection, blind to the underlying causal structure, may readily incorporate such spurious predictors, muddying the interpretation of genuine effects and potentially reducing the precision of estimates for truly relevant variables.</p>
+<p>Secondly, the arbitrary nature of significance thresholds can lead to omitted variable bias. A variable that is a genuine cause of the outcome and is correlated with included predictors (a confounder) might be excluded from the model simply because its p-value in the specific sample happens to fall above the 0.05 threshold. Omitting necessary confounders is a well-known source of bias in estimating the causal effects of the remaining variables.</p>
+<p>Thirdly, automated selection procedures lack awareness of the causal roles variables play. They cannot distinguish between confounders (which should generally be included to block backdoor paths), mediators (which lie on the causal pathway and whose inclusion biases estimates of total effects), or colliders (which can induce spurious associations if conditioned upon). Selecting variables based solely on statistical association with the outcome, without considering the underlying causal graph (DAG), can lead to the inclusion of inappropriate variables (mediators, colliders) or the exclusion of necessary ones (confounders), severely compromising the model’s ability to yield valid causal estimates.</p>
+<p>These issues culminate in poor budget allocation decisions. The biased coefficients resulting from p-value driven selection provide a distorted picture of marketing effectiveness. ROI estimates for some channels might be artificially inflated, while others might be underestimated or even incorrectly estimated as negative. Allocating budgets based on these flawed estimates inevitably leads to suboptimal resource deployment, wasting money on ineffective channels and underinvesting in potentially high-return activities. The overconfidence stemming from falsely narrow confidence intervals further compounds this risk, leading decision-makers to believe their flawed estimates are more precise than they truly are.</p>
+<p>Finally, the instability and sample-specificity of models built using these techniques contribute to a lack of reproducibility. A model selected based on the idiosyncrasies of one dataset is unlikely to perform well or yield the same variable set when applied to new data, hindering cumulative learning and reliable business forecasting. In summary, the reliance on p-values for variable and transformation selection, while computationally convenient, fundamentally undermines the goal of building reliable and causally interpretable models for decision support. The resulting biases in coefficient estimates and the invalidity of standard statistical inferences directly translate into poor decision-making, particularly in the context of budget optimization where accurate estimation of incremental impact is essential.</p>
+</section>
+</section>
+<section id="core-statistical-challenges-in-mmm-selection" class="level2">
+<h2 class="anchored" data-anchor-id="core-statistical-challenges-in-mmm-selection">Core Statistical Challenges in MMM Selection</h2>
+<p>The selection of factors and transformations in MMM faces a confluence of statistical difficulties:</p>
+<ul>
+<li><p><strong>Multiple Testing Problem:</strong> Simultaneously testing numerous potential external factors and functional forms for media variables drastically increases the probability of false positives (Type I errors). Standard significance thresholds (e.g., p &lt; 0.05) are inadequate for controlling the overall error rate across such extensive testing.</p></li>
+<li><p><strong>Post-Selection Inference (PSI) Invalidity:</strong> Standard statistical inference (p-values, confidence intervals) lacks theoretical validity when applied after model components have been selected using the same data. These post-selection metrics are often biased (e.g., p-values too small, confidence intervals too narrow), failing to maintain their nominal error rates or coverage probabilities.</p></li>
+<li><p><strong>Time-Series Complications:</strong> MMM data’s time-series nature introduces further challenges:</p>
+<ul>
+<li><p><em>Autocorrelation:</em> Residuals are often correlated over time, violating standard regression assumptions and rendering OLS p-values inaccurate.</p></li>
+<li><p><em>Non-stationarity:</em> Trends in variables can lead to spurious regression—finding significant relationships where none exist causally.</p></li>
+<li><p><em>Seasonality:</em> Unaccounted-for seasonal patterns can induce spurious correlations. These properties can invalidate the significance tests used during selection, compounding the problem.</p></li>
+</ul></li>
+</ul>
+<section id="multiple-testing-problem" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-testing-problem">Multiple Testing Problem</h3>
+</section>
+<section id="post-selection-inference-psi-invalidity" class="level3">
+<h3 class="anchored" data-anchor-id="post-selection-inference-psi-invalidity">Post-Selection Inference (PSI) Invalidity</h3>
+</section>
+<section id="time-series-complications" class="level3">
+<h3 class="anchored" data-anchor-id="time-series-complications">Time-Series Complications</h3>
+</section>
+</section>
+<section id="common-problematic-selection-practices-in-mmm" class="level2">
+<h2 class="anchored" data-anchor-id="common-problematic-selection-practices-in-mmm">Common Problematic Selection Practices in MMM</h2>
+<p>Several widely used methodologies are particularly susceptible to the challenges outlined above:</p>
+<ul>
+<li><p><strong>Stepwise Regression:</strong> Automated procedures (forward, backward, bidirectional) iteratively add/remove variables based on significance thresholds. These are highly prone to multiple testing errors and instability, especially with autocorrelated or non-stationary time-series data, potentially selecting variables based on spurious correlations or invalid tests.</p></li>
+<li><p><strong>Significance-Based Transformation Selection:</strong> Testing numerous functional forms (e.g., hundreds of adstock decays or saturation curves) for each media variable and selecting the one yielding the “most significant” coefficient represents a severe form of multiple testing, risking the selection of forms that fit noise.</p></li>
+<li><p><strong>Correlation Screening / Univariate Tests:</strong> Selecting external factors based on simple correlations or individual significance tests ignores multicollinearity and is highly vulnerable to spurious findings driven by trends or seasonality, while also failing to account for multiple comparisons.</p></li>
+<li><p><strong>Best Subset Selection:</strong> While potentially better if using information criteria (AIC/BIC), evaluating numerous model subsets still incurs a multiple testing burden and remains vulnerable to underlying time-series issues if not properly addressed within the model structure.</p></li>
+</ul>
+</section>
+<section id="consequences-of-flawed-selection-in-mmm" class="level2">
+<h2 class="anchored" data-anchor-id="consequences-of-flawed-selection-in-mmm">Consequences of Flawed Selection in MMM</h2>
+<p>Employing naive selection methods and subsequent inference leads to significant practical problems:</p>
+<ul>
+<li><p><strong>Misattribution of ROI &amp; Effects:</strong> Biased estimates for marketing coefficients (ROI) and potentially inaccurate representations of media dynamics (adstock, saturation).</p></li>
+<li><p><strong>Flawed Budget Allocation:</strong> Suboptimal marketing investment decisions stemming from unreliable ROI figures.</p></li>
+<li><p><strong>Poor Understanding of Business Drivers:</strong> Incorrect identification of baseline factors (trends, seasonality, macroeconomics) and media response patterns.</p></li>
+<li><p><strong>Model Instability &amp; Non-Reproducibility:</strong> Selected factors and transformations may vary considerably with data updates, reducing model credibility.</p></li>
+<li><p><strong>Overfitting:</strong> Models capture noise specific to the historical data, resulting in poor predictive performance for forecasting or simulations.</p></li>
+<li><p><strong>Misinterpretation of Control Factor Coefficients:</strong> Attributing causal effects to the coefficients of baseline or control factors (e.g., macroeconomic variables, competitor activity) included in the model. These factors are typically observational and likely confounded themselves; their coefficients primarily reflect statistical association and adjustment needed to isolate media effects, not necessarily isolated causal impacts. This misinterpretation is related to the “Table 2 fallacy,” where coefficients from a multivariable model are improperly treated as independent causal effects.</p></li>
+</ul>
+</section>
+<section id="recommended-approaches-and-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="recommended-approaches-and-considerations">Recommended Approaches and Considerations</h2>
+<p>Addressing these challenges requires more robust methodologies:</p>
+<ul>
+<li><p><strong>Rigorous Time-Series Handling:</strong> Explicitly model or remove seasonality (e.g., dummies, Fourier terms, decomposition); test for and address non-stationarity (e.g., differencing); incorporate theoretically sound lags for media (adstock) and potentially external variables.</p></li>
+<li><p><strong>Regularization Methods (LASSO, Ridge, Elastic Net):</strong> Handle many predictors simultaneously, perform coefficient shrinkage and implicit variable selection, often yielding more stable results than stepwise methods. Must be applied in conjunction with appropriate time-series structures.</p></li>
+<li><p><strong>Information Criteria (AIC, BIC):</strong> Use for comparing non-nested models that correctly account for time-series properties, providing a more principled approach than p-value thresholds alone.</p></li>
+<li><p><strong>Time-Series Cross-Validation:</strong> Employ methods like rolling-origin validation to assess out-of-sample predictive performance robustly.</p></li>
+<li><p><strong>Bayesian Frameworks:</strong> Offer a probabilistic approach to uncertainty.</p>
+<ul>
+<li><p><em>Priors on Functional Forms:</em> Incorporate prior knowledge or average over plausible media transformations (adstock/saturation) instead of hard selection.</p></li>
+<li><p><em>Sparsity-Inducing Priors (e.g., Regularized Horseshoe):</em> Provide principled variable selection for external factors by shrinking irrelevant coefficients while retaining influential ones, directly modeling inclusion uncertainty.</p></li>
+</ul></li>
+<li><p><strong>Causal Inference Techniques:</strong> Explore advanced time-series methods if the primary goal is establishing causal links (use with caution).</p></li>
+<li><p><strong>Domain Knowledge &amp; Theory:</strong> Prioritize pre-selecting candidate factors and transformation ranges based on business logic, economic theory, and prior research. Validate final model components for plausibility and stability.</p></li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Improper Use of Domain Knowledge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Exogenous factors in MMM are frequently confounded with media variables or other unobserved drivers. Consequently, the estimated coefficient for an exogenous variable may not represent its direct causal impact on the outcome but rather the statistical adjustment necessary to deconfound the estimated media effects. Rejecting such a variable because its coefficient sign contradicts simple causal expectations might inadvertently remove a necessary control variable, potentially leading to more biased estimates of media effectiveness.</p>
+</div>
+</div>
+<p>Adopting these more rigorous approaches is fundamental to developing media mix models that are statistically sound, reliable, and strategically valuable.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{reda,
+  author = {Reda, Matthew},
+  title = {The {Illusion} of {Significance}},
+  url = {https://redam94.github.io/common_regression_issues/the_illusion_of_significance.html},
+  langid = {en},
+  abstract = {Statistical models drive millions in spending decisions,
+    yet beneath their precise-looking numbers lurks a dangerous problem.
+    This post examines how the practice of selecting variables based on
+    p-values creates a statistical house of cards; especially in
+    Marketing Mix Modeling (MMM) and budget optimization. I show why
+    common techniques like stepwise regression inevitably produce
+    overconfident models with biased estimates that violate the very
+    statistical principles they claim to uphold. These methodological
+    flaws can result in money flowing to the wrong marketing channels
+    based on **illusory** performance metrics. I demonstrate why
+    Bayesian approaches offer a more honest alternative by naturally
+    tempering overconfidence, incorporating what we already know, and
+    providing intuitive uncertainty measures. Through techniques like
+    spike-and-slab priors (or regularized horseshoe priors) and Bayesian
+    Model Averaging (BMA), analysts can move beyond arbitrary
+    significance thresholds toward probability-based decision-making.
+    While Bayesian methods do require more computational horsepower and
+    thoughtful prior specification, modern software has made them
+    increasingly accessible. Using simulated examples inspired by
+    real-world marketing and economic modeling, I show how Bayesian
+    methods produce more reliable insights that lead to smarter budget
+    allocation decisions.}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-reda" class="csl-entry quarto-appendix-citeas" role="listitem">
+Reda, Matthew. n.d. <span>“The Illusion of Significance.”</span> <a href="https://redam94.github.io/common_regression_issues/the_illusion_of_significance.html">https://redam94.github.io/common_regression_issues/the_illusion_of_significance.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/redam94\.github\.io\/common_regression_issues");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
