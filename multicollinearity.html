@@ -1,0 +1,3067 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="A causal perspective">
+
+<title>When is Multicollinearity an Issue? – Common Regression Issues</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-90617d54abb8d6c97f964c4c092f6cad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="When is Multicollinearity an Issue? – Common Regression Issues">
+<meta property="og:description" content="A causal perspective">
+<meta property="og:image" content="https://redam94.github.io/common_regression_issues/01_multicollinearity_files/figure-html/fig-fourier-season-samples-output-1.png">
+<meta property="og:site_name" content="Common Regression Issues">
+<meta property="og:image:height" content="728">
+<meta property="og:image:width" content="1637">
+<meta name="twitter:title" content="When is Multicollinearity an Issue? – Common Regression Issues">
+<meta name="twitter:description" content="A causal perspective">
+<meta name="twitter:image" content="https://redam94.github.io/common_regression_issues/01_multicollinearity_files/figure-html/fig-fourier-season-samples-output-1.png">
+<meta name="twitter:image-height" content="728">
+<meta name="twitter:image-width" content="1637">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Common Regression Issues</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./multicollinearity.html">When is Multicollinearity an Issue?</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Common Regression Issues</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sampling_error.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sampling Error in Exogenous Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multicollinearity.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">When is Multicollinearity an Issue?</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./the_illusion_of_significance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Illusion of Significance</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./trends_and_seasons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Trends And Seasons</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./normalization_in_panel_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Centering in Panel Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">model_helpers</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_helpers/fourier_components.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fourier Components</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_helpers/spline_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Splines</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">synthetic_data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./synthetic_data/simple_regression_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Regression Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./synthetic_data/grouped_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grouped Regression Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./synthetic_data/multicollinearity_example_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Generation for Demonstrating Multicollinearity</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">utils</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./utils/plotting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Plotting Utils</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-dag" id="toc-the-dag" class="nav-link active" data-scroll-target="#the-dag">The DAG</a>
+  <ul class="collapse">
+  <li><a href="#sec-paid-search" id="toc-sec-paid-search" class="nav-link" data-scroll-target="#sec-paid-search">How Effective is Paid Search at Driving Sales?</a></li>
+  <li><a href="#when-high-vifs-are-an-issue" id="toc-when-high-vifs-are-an-issue" class="nav-link" data-scroll-target="#when-high-vifs-are-an-issue">When High VIFs are an issue</a></li>
+  <li><a href="#how-effective-is-olv-at-driving-sales" id="toc-how-effective-is-olv-at-driving-sales" class="nav-link" data-scroll-target="#how-effective-is-olv-at-driving-sales">How effective is OLV at driving sales?</a></li>
+  </ul></li>
+  <li><a href="#appendix-a---paid-search-data" id="toc-appendix-a---paid-search-data" class="nav-link" data-scroll-target="#appendix-a---paid-search-data">Appendix A - Paid Search Data</a></li>
+  <li><a href="#appendix-b---olv-data" id="toc-appendix-b---olv-data" class="nav-link" data-scroll-target="#appendix-b---olv-data">Appendix B - OLV Data</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="multicollinearity.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">When is Multicollinearity an Issue?</h1>
+</div>
+
+<div>
+  <div class="description">
+    A causal perspective
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Reda <a href="mailto:redam94@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>Multicollinearity arises when independent variables in a regression model are highly correlated, leading to challenges in estimating individual effects accurately. This issue can inflate standard errors, reduce the precision of coefficient estimates, and complicate the interpretation of results. Understanding when multicollinearity becomes problematic is crucial for developing robust regression models. This section explores the conditions under which multicollinearity affects model performance, discusses its implications, and provides strategies for detection and mitigation.</p>
+<section id="the-dag" class="level2">
+<h2 class="anchored" data-anchor-id="the-dag">The DAG</h2>
+<div class="cell fig-cap-location-bottom" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-causal-graph" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-causal-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<svg width="672" height="480" viewbox="0.00 0.00 667.71 548.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>Paid Media on Sales</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-544 663.71,-544 663.71,4 -4,4"></polygon>
+<!-- Seasonality -->
+<g id="node1" class="node">
+<title>Seasonality</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="304.83" cy="-522" rx="55.62" ry="18"></ellipse>
+<text text-anchor="middle" x="304.83" y="-517.8" font-family="Times,serif" font-size="14.00">Seasonality</text>
+</g>
+<!-- Demand -->
+<g id="node2" class="node">
+<title>Demand</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="429.83" cy="-378" rx="43.5" ry="18"></ellipse>
+<text text-anchor="middle" x="429.83" y="-373.8" font-family="Times,serif" font-size="14.00">Demand</text>
+</g>
+<!-- Seasonality&#45;&gt;Demand -->
+<g id="edge4" class="edge">
+<title>Seasonality-&gt;Demand</title>
+<path fill="none" stroke="black" d="M332.14,-506.2C347.76,-496.76 366.95,-483.43 380.83,-468 397.6,-449.35 410.86,-423.96 419.33,-405.07"></path>
+<polygon fill="black" stroke="black" points="422.56,-406.42 423.32,-395.85 416.14,-403.64 422.56,-406.42"></polygon>
+</g>
+<!-- OLV Impression -->
+<g id="node4" class="node">
+<title>OLV Impression</title>
+<ellipse fill="none" stroke="black" cx="503.83" cy="-450" rx="76.42" ry="18"></ellipse>
+<text text-anchor="middle" x="503.83" y="-445.8" font-family="Times,serif" font-size="14.00">OLV Impression</text>
+</g>
+<!-- Seasonality&#45;&gt;OLV Impression -->
+<g id="edge1" class="edge">
+<title>Seasonality-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M341.33,-508.16C372.81,-497.09 418.6,-480.98 453.55,-468.68"></path>
+<polygon fill="black" stroke="black" points="454.83,-471.95 463.1,-465.33 452.51,-465.34 454.83,-471.95"></polygon>
+</g>
+<!-- Social Impression -->
+<g id="node6" class="node">
+<title>Social Impression</title>
+<ellipse fill="none" stroke="black" cx="290.83" cy="-450" rx="80.5" ry="18"></ellipse>
+<text text-anchor="middle" x="290.83" y="-445.8" font-family="Times,serif" font-size="14.00">Social Impression</text>
+</g>
+<!-- Seasonality&#45;&gt;Social Impression -->
+<g id="edge5" class="edge">
+<title>Seasonality-&gt;Social Impression</title>
+<path fill="none" stroke="black" d="M301.37,-503.7C299.82,-495.98 297.97,-486.71 296.25,-478.11"></path>
+<polygon fill="black" stroke="black" points="299.64,-477.22 294.25,-468.1 292.78,-478.6 299.64,-477.22"></polygon>
+</g>
+<!-- Search Query -->
+<g id="node7" class="node">
+<title>Search Query</title>
+<ellipse fill="none" stroke="black" cx="256.83" cy="-306" rx="63.72" ry="18"></ellipse>
+<text text-anchor="middle" x="256.83" y="-301.8" font-family="Times,serif" font-size="14.00">Search Query</text>
+</g>
+<!-- Seasonality&#45;&gt;Search Query -->
+<g id="edge11" class="edge">
+<title>Seasonality-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M261.66,-510.63C239.37,-502.85 214.11,-489.69 200.83,-468 173.72,-423.76 210.01,-364.6 235.57,-331.71"></path>
+<polygon fill="black" stroke="black" points="238.59,-333.54 242.12,-323.55 233.13,-329.16 238.59,-333.54"></polygon>
+</g>
+<!-- Demand&#45;&gt;Search Query -->
+<g id="edge10" class="edge">
+<title>Demand-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M399.69,-364.81C372.53,-353.81 332.22,-337.51 301.34,-325.01"></path>
+<polygon fill="black" stroke="black" points="302.26,-321.61 291.67,-321.1 299.63,-328.1 302.26,-321.61"></polygon>
+</g>
+<!-- Paid Search Click -->
+<g id="node9" class="node">
+<title>Paid Search Click</title>
+<ellipse fill="none" stroke="black" cx="375.83" cy="-90" rx="80.46" ry="18"></ellipse>
+<text text-anchor="middle" x="375.83" y="-85.8" font-family="Times,serif" font-size="14.00">Paid Search Click</text>
+</g>
+<!-- Demand&#45;&gt;Paid Search Click -->
+<g id="edge13" class="edge">
+<title>Demand-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M427.43,-359.94C421.87,-321.3 407.27,-224.21 389.83,-144 387.98,-135.5 385.66,-126.31 383.45,-118.01"></path>
+<polygon fill="black" stroke="black" points="386.76,-116.82 380.75,-108.09 380,-118.66 386.76,-116.82"></polygon>
+</g>
+<!-- Sales -->
+<g id="node11" class="node">
+<title>Sales</title>
+<ellipse fill="none" stroke="black" cx="429.83" cy="-18" rx="31.34" ry="18"></ellipse>
+<text text-anchor="middle" x="429.83" y="-13.8" font-family="Times,serif" font-size="14.00">Sales</text>
+</g>
+<!-- Demand&#45;&gt;Sales -->
+<g id="edge17" class="edge">
+<title>Demand-&gt;Sales</title>
+<path fill="none" stroke="black" d="M440.75,-360.3C456.53,-334.52 483.83,-283 483.83,-235 483.83,-235 483.83,-235 483.83,-161 483.83,-120.55 480.46,-109.3 464.83,-72 460.61,-61.93 454.42,-51.73 448.41,-42.99"></path>
+<polygon fill="black" stroke="black" points="451.22,-40.9 442.55,-34.81 445.53,-44.98 451.22,-40.9"></polygon>
+</g>
+<!-- Auction -->
+<g id="node3" class="node">
+<title>Auction</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="291.83" cy="-234" rx="42.3" ry="18"></ellipse>
+<text text-anchor="middle" x="291.83" y="-229.8" font-family="Times,serif" font-size="14.00">Auction</text>
+</g>
+<!-- Paid Search Impression -->
+<g id="node8" class="node">
+<title>Paid Search Impression</title>
+<ellipse fill="none" stroke="black" cx="261.83" cy="-162" rx="102.44" ry="18"></ellipse>
+<text text-anchor="middle" x="261.83" y="-157.8" font-family="Times,serif" font-size="14.00">Paid Search Impression</text>
+</g>
+<!-- Auction&#45;&gt;Paid Search Impression -->
+<g id="edge9" class="edge">
+<title>Auction-&gt;Paid Search Impression</title>
+<path fill="none" stroke="black" d="M284.56,-216.05C281.15,-208.09 277,-198.41 273.19,-189.51"></path>
+<polygon fill="black" stroke="black" points="276.39,-188.09 269.23,-180.28 269.95,-190.85 276.39,-188.09"></polygon>
+</g>
+<!-- OLV Impression&#45;&gt;Demand -->
+<g id="edge3" class="edge">
+<title>OLV Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M486.29,-432.41C476.59,-423.24 464.4,-411.7 453.83,-401.7"></path>
+<polygon fill="black" stroke="black" points="456.15,-399.08 446.48,-394.75 451.33,-404.16 456.15,-399.08"></polygon>
+</g>
+<!-- Video Platform Sentiment -->
+<g id="node5" class="node">
+<title>Video Platform Sentiment</title>
+<ellipse fill="none" stroke="black" cx="503.83" cy="-522" rx="112.34" ry="18"></ellipse>
+<text text-anchor="middle" x="503.83" y="-517.8" font-family="Times,serif" font-size="14.00">Video Platform Sentiment</text>
+</g>
+<!-- Video Platform Sentiment&#45;&gt;OLV Impression -->
+<g id="edge2" class="edge">
+<title>Video Platform Sentiment-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M503.83,-503.7C503.83,-495.98 503.83,-486.71 503.83,-478.11"></path>
+<polygon fill="black" stroke="black" points="507.33,-478.1 503.83,-468.1 500.33,-478.1 507.33,-478.1"></polygon>
+</g>
+<!-- Social Impression&#45;&gt;Demand -->
+<g id="edge6" class="edge">
+<title>Social Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M322.02,-433.29C343.31,-422.57 371.58,-408.33 393.83,-397.13"></path>
+<polygon fill="black" stroke="black" points="395.6,-400.16 402.95,-392.53 392.45,-393.9 395.6,-400.16"></polygon>
+</g>
+<!-- Search Query&#45;&gt;Auction -->
+<g id="edge7" class="edge">
+<title>Search Query-&gt;Auction</title>
+<path fill="none" stroke="black" d="M265.3,-288.05C269.38,-279.89 274.37,-269.91 278.91,-260.82"></path>
+<polygon fill="black" stroke="black" points="282.09,-262.3 283.43,-251.79 275.83,-259.17 282.09,-262.3"></polygon>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Impression -->
+<g id="edge8" class="edge">
+<title>Search Query-&gt;Paid Search Impression</title>
+<path fill="none" stroke="black" d="M250.17,-287.63C246.62,-277.42 242.62,-264.17 240.83,-252 238.49,-236.17 237.83,-231.72 240.83,-216 242.53,-207.06 245.73,-197.7 249.12,-189.37"></path>
+<polygon fill="black" stroke="black" points="252.34,-190.73 253.11,-180.17 245.92,-187.95 252.34,-190.73"></polygon>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Click -->
+<g id="edge14" class="edge">
+<title>Search Query-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M290.58,-290.45C308.09,-281.49 328.71,-268.54 342.83,-252 375.06,-214.24 378.72,-153.43 377.76,-118.35"></path>
+<polygon fill="black" stroke="black" points="381.26,-118.19 377.34,-108.34 374.26,-118.48 381.26,-118.19"></polygon>
+</g>
+<!-- Organic Search -->
+<g id="node10" class="node">
+<title>Organic Search</title>
+<ellipse fill="none" stroke="black" cx="70.83" cy="-162" rx="70.65" ry="18"></ellipse>
+<text text-anchor="middle" x="70.83" y="-157.8" font-family="Times,serif" font-size="14.00">Organic Search</text>
+</g>
+<!-- Search Query&#45;&gt;Organic Search -->
+<g id="edge15" class="edge">
+<title>Search Query-&gt;Organic Search</title>
+<path fill="none" stroke="black" d="M235.85,-288.99C202.73,-263.7 138.2,-214.44 100.39,-185.57"></path>
+<polygon fill="black" stroke="black" points="102.37,-182.68 92.3,-179.39 98.12,-188.24 102.37,-182.68"></polygon>
+</g>
+<!-- Paid Search Impression&#45;&gt;Paid Search Click -->
+<g id="edge12" class="edge">
+<title>Paid Search Impression-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M288.55,-144.59C304.1,-135.04 323.88,-122.9 340.68,-112.58"></path>
+<polygon fill="black" stroke="black" points="342.97,-115.28 349.66,-107.07 339.31,-109.32 342.97,-115.28"></polygon>
+</g>
+<!-- Paid Search Click&#45;&gt;Sales -->
+<g id="edge18" class="edge">
+<title>Paid Search Click-&gt;Sales</title>
+<path fill="none" stroke="black" d="M388.9,-72.05C395.66,-63.29 404.02,-52.45 411.42,-42.86"></path>
+<polygon fill="black" stroke="black" points="414.28,-44.89 417.62,-34.83 408.74,-40.61 414.28,-44.89"></polygon>
+</g>
+<!-- Organic Search&#45;&gt;Sales -->
+<g id="edge16" class="edge">
+<title>Organic Search-&gt;Sales</title>
+<path fill="none" stroke="black" d="M105.46,-146.28C148,-128.31 222.43,-97.19 286.83,-72 323.22,-57.76 365.18,-42.33 394.2,-31.8"></path>
+<polygon fill="black" stroke="black" points="395.67,-34.99 403.89,-28.3 393.29,-28.41 395.67,-34.99"></polygon>
+</g>
+<!-- Price -->
+<g id="node12" class="node">
+<title>Price</title>
+<ellipse fill="none" stroke="black" cx="628.83" cy="-450" rx="30.76" ry="18"></ellipse>
+<text text-anchor="middle" x="628.83" y="-445.8" font-family="Times,serif" font-size="14.00">Price</text>
+</g>
+<!-- Price&#45;&gt;Demand -->
+<g id="edge19" class="edge">
+<title>Price-&gt;Demand</title>
+<path fill="none" stroke="black" d="M604.84,-438.44C599.59,-436.23 594.05,-433.98 588.83,-432 550.23,-417.39 505.6,-402.7 473.46,-392.51"></path>
+<polygon fill="black" stroke="black" points="474.5,-389.16 463.91,-389.49 472.39,-395.84 474.5,-389.16"></polygon>
+</g>
+<!-- Price&#45;&gt;Sales -->
+<g id="edge20" class="edge">
+<title>Price-&gt;Sales</title>
+<path fill="none" stroke="black" d="M622.7,-432.21C613.67,-405.9 597.83,-353.18 597.83,-307 597.83,-307 597.83,-307 597.83,-161 597.83,-92.44 515.2,-50.2 465.84,-31.09"></path>
+<polygon fill="black" stroke="black" points="467.04,-27.8 456.45,-27.57 464.59,-34.36 467.04,-27.8"></polygon>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-causal-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The causal graph reflects our assumptions about the data-generating process in this example. This model may need refinement, so it’s essential to review it with experts and stakeholders to enhance its structure and incorporate additional factors that could influence the variables of interest.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="note-dag-notation" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+How to read a DAG
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A Directed Acyclic Graph (DAG) serves as a model of causality, where directional relationships between nodes indicate that causes flow from one node to another along the arrows, forming a distinct pathway of influence. Each arrow represents a causal link, signaling how changes in one node could potentially impact another. In a DAG, the relationships between nodes (depicted by an arrow) are not restricted to being linear; they can incorporate complex, non-linear interactions.</p>
+<p>Edges will be color-coded to emphasize whether they represent causal paths (green <button disabled="" style="background-color: #326E1E; height: 13px; width: 11px;"></button>), biasing paths (red <button disabled="" style="background-color: #8D2D39; height: 13px; width: 11px;"></button>), or non-causal paths (black <button disabled="" style="background-color: #000000; height: 13px; width: 11px;"></button>). Refer to <a href="#fig-causal-graph-paid-search" class="quarto-xref">Figure&nbsp;2</a> and <a href="#fig-causal-graph-paid-search-adjusted" class="quarto-xref">Figure&nbsp;3</a>.</p>
+<p>Nodes indicating exposures (factors for which we want to understand the effect) will have a green background (<button disabled="" style="background-color: #82B9A0; height: 13px; width: 11px;"></button>). The outcome variable of interest will have a blue background (<button disabled="" style="background-color: #0069AA; height: 13px; width: 11px;"></button>), while variables adjusted for will have a light gray background (<button disabled="" style="background-color: #AFB3B7; height: 13px; width: 11px;"></button>). Nodes with a dashed outline represent elements that are challenging or impossible to observe directly, while nodes with a solid outline and no fill represent variables for which data is available or can be acquired.</p>
+</div>
+</div>
+</div>
+<section id="sec-paid-search" class="level3">
+<h3 class="anchored" data-anchor-id="sec-paid-search">How Effective is Paid Search at Driving Sales?</h3>
+<p>To accurately measure the impact of Paid Search on Sales, we must carefully consider the causal pathways influencing this relationship. The causal model presented in <a href="#fig-causal-graph" class="quarto-xref">Figure&nbsp;1</a> reveals several open biasing paths from both <strong>paid search impressions</strong> and <strong>paid search clicks</strong> to <strong>sales</strong>. These open paths introduce potential sources of bias that can distort our understanding of Paid Search’s effectiveness.</p>
+<p>Additionally, the DAG highlights a complex correlation structure within the data, which suggests that variables may be highly interrelated. This correlation can lead to high Variance Inflation Factors (VIFs) in a regression model.</p>
+<p>Elevated VIFs inflate standard errors and reduce the precision of our estimates, but excluding the wrong variables could result in biased estimates. Balancing these considerations—minimizing multicollinearity without overlooking key variables—is essential for creating a model that yields accurate and precise estimates of paid search’s impact on sales.</p>
+<section id="sec-paid-search-solution" class="level4">
+<h4 class="anchored" data-anchor-id="sec-paid-search-solution">Solution</h4>
+<p>To get an unbiased estimate of the effect of <strong>paid search impressions</strong> on <strong>sale</strong>, given the bias introduced by <strong>demand</strong> (an unobserved variable), focusing on <strong>search query</strong> as an adjustment variable is a sound approach. Here’s a breakdown of the reasoning and approach based on the DAG structure:</p>
+<ol type="1">
+<li>Direct Path and Biasing Path:
+<ul>
+<li><strong>Paid search clicks</strong> have a direct impact on sales, but due to <strong>demand</strong> (which is unobserved and thus unadjustable in this analysis), there’s a risk of confounding.</li>
+<li>Since <strong>demand</strong> also influences <strong>search query</strong>, which in turn influences both <strong>paid search impressions</strong> and <strong>paid search clicks</strong>, <strong>search query</strong> becomes a potential control variable to block the non-causal path through <strong>demand</strong>. See <a href="#fig-causal-graph-paid-search" class="quarto-xref">Figure&nbsp;2</a></li>
+</ul></li>
+<li>Adjustment for Search Query:
+<ul>
+<li>By adjusting for search query, we aim to block the path from demand that leads through <strong>search query</strong> to both <strong>paid search impressions</strong> and <strong>paid search clicks</strong>. This adjustment helps remove the confounding influence of <strong>demand</strong> on <strong>sales</strong> via <strong>search query</strong>, allowing for a more accurate estimate of <strong>paid search impressions’</strong> effect on <strong>sales</strong>. See <a href="#fig-causal-graph-paid-search-adjusted" class="quarto-xref">Figure&nbsp;3</a></li>
+</ul></li>
+<li>Outcome:
+<ul>
+<li>Adjusting for <strong>search query</strong> should allow for a clearer view of the total effect of <strong>paid search impressions</strong> on <strong>sales</strong> by blocking the biasing path from <strong>demand</strong>, leading to a more reliable analysis.</li>
+</ul></li>
+</ol>
+<p>In summary, adjusting for <strong>search query</strong> effectively helps control for the unobserved demand factor, allowing us to examine the impact of <strong>paid search impressions</strong> on <strong>sales</strong> with minimized bias. We can also increase the precision of this estimate by controlling for <strong>price</strong>.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="Models">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Un-Adjusted Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Adjusted Model</a></li></ul>
+<div class="tab-content" data-group="Models">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell fig-cap-location-bottom" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-causal-graph-paid-search" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-causal-graph-paid-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<svg width="672" height="480" viewbox="0.00 0.00 608.71 548.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>Paid Media on Sales</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-544 604.71,-544 604.71,4 -4,4"></polygon>
+<!-- Paid Search Impression -->
+<g id="node1" class="node">
+<title>Paid Search Impression</title>
+<ellipse fill="#82b9a0" stroke="#7da54b" cx="299.83" cy="-162" rx="102.44" ry="18"></ellipse>
+<text text-anchor="middle" x="299.83" y="-157.8" font-family="Times,serif" font-size="14.00">Paid Search Impression</text>
+</g>
+<!-- Paid Search Click -->
+<g id="node7" class="node">
+<title>Paid Search Click</title>
+<ellipse fill="none" stroke="#afb3b7" cx="329.83" cy="-90" rx="80.46" ry="18"></ellipse>
+<text text-anchor="middle" x="329.83" y="-85.8" font-family="Times,serif" font-size="14.00">Paid Search Click</text>
+</g>
+<!-- Paid Search Impression&#45;&gt;Paid Search Click -->
+<g id="edge12" class="edge">
+<title>Paid Search Impression-&gt;Paid Search Click</title>
+<path fill="none" stroke="#8d2d39" stroke-width="2" d="M307.24,-143.7C310.62,-135.81 314.7,-126.3 318.45,-117.55"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" stroke-width="2" points="321.77,-118.67 322.5,-108.1 315.34,-115.92 321.77,-118.67"></polygon>
+</g>
+<!-- Sales -->
+<g id="node2" class="node">
+<title>Sales</title>
+<ellipse fill="#0069aa" stroke="black" cx="413.83" cy="-18" rx="31.34" ry="18"></ellipse>
+<text text-anchor="middle" x="413.83" y="-13.8" font-family="Times,serif" font-size="14.00" fill="white">Sales</text>
+</g>
+<!-- OLV Impression -->
+<g id="node3" class="node">
+<title>OLV Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="444.83" cy="-450" rx="76.42" ry="18"></ellipse>
+<text text-anchor="middle" x="444.83" y="-445.8" font-family="Times,serif" font-size="14.00">OLV Impression</text>
+</g>
+<!-- Demand -->
+<g id="node11" class="node">
+<title>Demand</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="429.83" cy="-378" rx="43.5" ry="18"></ellipse>
+<text text-anchor="middle" x="429.83" y="-373.8" font-family="Times,serif" font-size="14.00">Demand</text>
+</g>
+<!-- OLV Impression&#45;&gt;Demand -->
+<g id="edge3" class="edge">
+<title>OLV Impression-&gt;Demand</title>
+<path fill="none" stroke="#8d2d39" d="M441.12,-431.7C439.47,-423.98 437.48,-414.71 435.64,-406.11"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="439.01,-405.15 433.49,-396.1 432.16,-406.62 439.01,-405.15"></polygon>
+</g>
+<!-- Social Impression -->
+<g id="node4" class="node">
+<title>Social Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="269.83" cy="-450" rx="80.5" ry="18"></ellipse>
+<text text-anchor="middle" x="269.83" y="-445.8" font-family="Times,serif" font-size="14.00">Social Impression</text>
+</g>
+<!-- Social Impression&#45;&gt;Demand -->
+<g id="edge6" class="edge">
+<title>Social Impression-&gt;Demand</title>
+<path fill="none" stroke="#8d2d39" d="M304.94,-433.64C330.58,-422.42 365.32,-407.22 391.65,-395.7"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="393.18,-398.85 400.94,-391.64 390.38,-392.44 393.18,-398.85"></polygon>
+</g>
+<!-- Video Platform Sentiment -->
+<g id="node5" class="node">
+<title>Video Platform Sentiment</title>
+<ellipse fill="none" stroke="#afb3b7" cx="444.83" cy="-522" rx="112.34" ry="18"></ellipse>
+<text text-anchor="middle" x="444.83" y="-517.8" font-family="Times,serif" font-size="14.00">Video Platform Sentiment</text>
+</g>
+<!-- Video Platform Sentiment&#45;&gt;OLV Impression -->
+<g id="edge1" class="edge">
+<title>Video Platform Sentiment-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M444.83,-503.7C444.83,-495.98 444.83,-486.71 444.83,-478.11"></path>
+<polygon fill="black" stroke="black" points="448.33,-478.1 444.83,-468.1 441.33,-478.1 448.33,-478.1"></polygon>
+</g>
+<!-- Search Query -->
+<g id="node6" class="node">
+<title>Search Query</title>
+<ellipse fill="none" stroke="#afb3b7" cx="183.83" cy="-306" rx="63.72" ry="18"></ellipse>
+<text text-anchor="middle" x="183.83" y="-301.8" font-family="Times,serif" font-size="14.00">Search Query</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Impression -->
+<g id="edge8" class="edge">
+<title>Search Query-&gt;Paid Search Impression</title>
+<path fill="none" stroke="#8d2d39" d="M192.13,-287.87C201.66,-269.13 218.51,-238.72 237.83,-216 247.03,-205.17 258.56,-194.68 269.16,-185.93"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="271.43,-188.59 277.04,-179.6 267.05,-183.14 271.43,-188.59"></polygon>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Click -->
+<g id="edge14" class="edge">
+<title>Search Query-&gt;Paid Search Click</title>
+<path fill="none" stroke="#8d2d39" d="M178.75,-288.03C170.39,-256.39 157.58,-187.66 188.83,-144 203.87,-122.97 228.33,-110.28 252.69,-102.62"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="253.72,-105.97 262.36,-99.83 251.78,-99.24 253.72,-105.97"></polygon>
+</g>
+<!-- Organic Search -->
+<g id="node9" class="node">
+<title>Organic Search</title>
+<ellipse fill="none" stroke="#afb3b7" cx="70.83" cy="-162" rx="70.65" ry="18"></ellipse>
+<text text-anchor="middle" x="70.83" y="-157.8" font-family="Times,serif" font-size="14.00">Organic Search</text>
+</g>
+<!-- Search Query&#45;&gt;Organic Search -->
+<g id="edge15" class="edge">
+<title>Search Query-&gt;Organic Search</title>
+<path fill="none" stroke="#8d2d39" d="M170.42,-288.15C150.63,-263.28 113.46,-216.57 90.55,-187.79"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="93.18,-185.47 84.22,-179.82 87.7,-189.83 93.18,-185.47"></polygon>
+</g>
+<!-- Auction -->
+<g id="node12" class="node">
+<title>Auction</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="288.83" cy="-234" rx="42.3" ry="18"></ellipse>
+<text text-anchor="middle" x="288.83" y="-229.8" font-family="Times,serif" font-size="14.00">Auction</text>
+</g>
+<!-- Search Query&#45;&gt;Auction -->
+<g id="edge7" class="edge">
+<title>Search Query-&gt;Auction</title>
+<path fill="none" stroke="#8d2d39" d="M207.65,-289.12C222.66,-279.11 242.18,-266.1 258.32,-255.34"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="260.51,-258.09 266.89,-249.63 256.62,-252.26 260.51,-258.09"></polygon>
+</g>
+<!-- Paid Search Click&#45;&gt;Sales -->
+<g id="edge18" class="edge">
+<title>Paid Search Click-&gt;Sales</title>
+<path fill="none" stroke="#8d2d39" stroke-width="2" d="M349.73,-72.41C361.43,-62.66 376.33,-50.25 388.82,-39.84"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" stroke-width="2" points="391.18,-42.43 396.62,-33.34 386.7,-37.05 391.18,-42.43"></polygon>
+</g>
+<!-- Price -->
+<g id="node8" class="node">
+<title>Price</title>
+<ellipse fill="none" stroke="#afb3b7" cx="569.83" cy="-450" rx="30.76" ry="18"></ellipse>
+<text text-anchor="middle" x="569.83" y="-445.8" font-family="Times,serif" font-size="14.00">Price</text>
+</g>
+<!-- Price&#45;&gt;Sales -->
+<g id="edge20" class="edge">
+<title>Price-&gt;Sales</title>
+<path fill="none" stroke="#8d2d39" d="M563.5,-432.23C554.18,-405.94 537.83,-353.25 537.83,-307 537.83,-307 537.83,-307 537.83,-161 537.83,-104.58 481.6,-59.75 444.87,-36.49"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="446.35,-33.29 436,-31.05 442.69,-39.26 446.35,-33.29"></polygon>
+</g>
+<!-- Price&#45;&gt;Demand -->
+<g id="edge19" class="edge">
+<title>Price-&gt;Demand</title>
+<path fill="none" stroke="#8d2d39" d="M547.02,-437.6C524.94,-426.56 491.13,-409.65 465.49,-396.83"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="466.96,-393.65 456.45,-392.31 463.83,-399.91 466.96,-393.65"></polygon>
+</g>
+<!-- Organic Search&#45;&gt;Sales -->
+<g id="edge16" class="edge">
+<title>Organic Search-&gt;Sales</title>
+<path fill="none" stroke="#8d2d39" d="M97.18,-145.24C129.98,-126.09 188.13,-93.65 240.83,-72 285.92,-53.48 339.91,-37.94 375.45,-28.57"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="376.61,-31.88 385.4,-25.98 374.84,-25.11 376.61,-31.88"></polygon>
+</g>
+<!-- Seasonality -->
+<g id="node10" class="node">
+<title>Seasonality</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="209.83" cy="-522" rx="55.62" ry="18"></ellipse>
+<text text-anchor="middle" x="209.83" y="-517.8" font-family="Times,serif" font-size="14.00">Seasonality</text>
+</g>
+<!-- Seasonality&#45;&gt;OLV Impression -->
+<g id="edge2" class="edge">
+<title>Seasonality-&gt;OLV Impression</title>
+<path fill="none" stroke="#8d2d39" d="M249.16,-509.28C287.59,-497.84 346.43,-480.31 389.55,-467.47"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="390.74,-470.76 399.32,-464.55 388.74,-464.05 390.74,-470.76"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Social Impression -->
+<g id="edge5" class="edge">
+<title>Seasonality-&gt;Social Impression</title>
+<path fill="none" stroke="#8d2d39" d="M224.05,-504.41C231.41,-495.82 240.55,-485.16 248.72,-475.63"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="251.44,-477.83 255.29,-467.96 246.13,-473.27 251.44,-477.83"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Search Query -->
+<g id="edge11" class="edge">
+<title>Seasonality-&gt;Search Query</title>
+<path fill="none" stroke="#8d2d39" d="M192.93,-504.53C184.2,-494.83 174.44,-481.77 169.83,-468 154.63,-422.63 165.89,-366.26 175.11,-333.68"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="178.49,-334.56 177.99,-323.98 171.79,-332.57 178.49,-334.56"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Demand -->
+<g id="edge4" class="edge">
+<title>Seasonality-&gt;Demand</title>
+<path fill="none" stroke="#8d2d39" d="M195.78,-504.57C181.11,-485.34 162.48,-453.41 179.83,-432 204.12,-402.02 310.82,-388.31 376.72,-382.6"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="377.26,-386.07 386.93,-381.76 376.68,-379.1 377.26,-386.07"></polygon>
+</g>
+<!-- Demand&#45;&gt;Sales -->
+<g id="edge17" class="edge">
+<title>Demand-&gt;Sales</title>
+<path fill="none" stroke="#8d2d39" d="M438.36,-360.21C443.25,-349.97 449.12,-336.5 452.83,-324 464.23,-285.54 467.83,-275.11 467.83,-235 467.83,-235 467.83,-235 467.83,-161 467.83,-117.82 445.75,-71.8 429.82,-44.23"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="432.62,-42.08 424.5,-35.28 426.6,-45.66 432.62,-42.08"></polygon>
+</g>
+<!-- Demand&#45;&gt;Search Query -->
+<g id="edge10" class="edge">
+<title>Demand-&gt;Search Query</title>
+<path fill="none" stroke="#8d2d39" d="M394.84,-367.05C353.6,-355.31 284.65,-335.69 236.83,-322.08"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="237.55,-318.65 226.97,-319.28 235.63,-325.38 237.55,-318.65"></polygon>
+</g>
+<!-- Demand&#45;&gt;Paid Search Click -->
+<g id="edge13" class="edge">
+<title>Demand-&gt;Paid Search Click</title>
+<path fill="none" stroke="#8d2d39" d="M433.19,-359.98C440.27,-319.32 452.83,-214.64 410.83,-144 402.65,-130.25 389.37,-119.4 375.89,-111.2"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="377.49,-108.08 367.07,-106.18 374.03,-114.16 377.49,-108.08"></polygon>
+</g>
+<!-- Auction&#45;&gt;Paid Search Impression -->
+<g id="edge9" class="edge">
+<title>Auction-&gt;Paid Search Impression</title>
+<path fill="none" stroke="#8d2d39" d="M291.55,-215.7C292.76,-207.98 294.21,-198.71 295.57,-190.11"></path>
+<polygon fill="#8d2d39" stroke="#8d2d39" points="299.04,-190.53 297.14,-180.1 292.13,-189.44 299.04,-190.53"></polygon>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-causal-graph-paid-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: We aim to understand the effect of <strong>Paid Search Impressions</strong> on <strong>Sales</strong>. Without any adjustments, all biasing paths remain open. To accurately estimate this effect, we need to adjust for variables that close these biasing paths and include additional variables to reduce variance in our estimate.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell fig-cap-location-bottom" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-causal-graph-paid-search-adjusted" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-causal-graph-paid-search-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<svg width="672" height="480" viewbox="0.00 0.00 609.88 548.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>Paid Media on Sales</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-544 605.88,-544 605.88,4 -4,4"></polygon>
+<!-- Paid Search Impression -->
+<g id="node1" class="node">
+<title>Paid Search Impression</title>
+<ellipse fill="#82b9a0" stroke="#7da54b" cx="433.88" cy="-162" rx="102.44" ry="18"></ellipse>
+<text text-anchor="middle" x="433.88" y="-157.8" font-family="Times,serif" font-size="14.00">Paid Search Impression</text>
+</g>
+<!-- Paid Search Click -->
+<g id="node8" class="node">
+<title>Paid Search Click</title>
+<ellipse fill="none" stroke="#afb3b7" cx="392.88" cy="-90" rx="80.46" ry="18"></ellipse>
+<text text-anchor="middle" x="392.88" y="-85.8" font-family="Times,serif" font-size="14.00">Paid Search Click</text>
+</g>
+<!-- Paid Search Impression&#45;&gt;Paid Search Click -->
+<g id="edge12" class="edge">
+<title>Paid Search Impression-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M423.95,-144.05C419.19,-135.92 413.38,-126 408.07,-116.94"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="411.07,-115.14 403,-108.28 405.03,-118.67 411.07,-115.14"></polygon>
+</g>
+<!-- Sales -->
+<g id="node2" class="node">
+<title>Sales</title>
+<ellipse fill="#0069aa" stroke="black" cx="242.88" cy="-18" rx="31.34" ry="18"></ellipse>
+<text text-anchor="middle" x="242.88" y="-13.8" font-family="Times,serif" font-size="14.00" fill="white">Sales</text>
+</g>
+<!-- Price -->
+<g id="node3" class="node">
+<title>Price</title>
+<ellipse fill="#afb3b7" stroke="black" cx="30.88" cy="-450" rx="30.76" ry="18"></ellipse>
+<text text-anchor="middle" x="30.88" y="-445.8" font-family="Times,serif" font-size="14.00">Price</text>
+</g>
+<!-- Price&#45;&gt;Sales -->
+<g id="edge20" class="edge">
+<title>Price-&gt;Sales</title>
+<path fill="none" stroke="black" d="M33.45,-432C37.24,-405.4 43.88,-352.3 43.88,-307 43.88,-307 43.88,-307 43.88,-161 43.88,-83.13 146.11,-43.93 204.02,-27.98"></path>
+<polygon fill="black" stroke="black" points="205.17,-31.3 213.94,-25.36 203.38,-24.53 205.17,-31.3"></polygon>
+</g>
+<!-- Demand -->
+<g id="node11" class="node">
+<title>Demand</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="155.88" cy="-378" rx="43.5" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-373.8" font-family="Times,serif" font-size="14.00">Demand</text>
+</g>
+<!-- Price&#45;&gt;Demand -->
+<g id="edge19" class="edge">
+<title>Price-&gt;Demand</title>
+<path fill="none" stroke="black" d="M52.37,-436.97C71.51,-426.25 99.84,-410.38 122.02,-397.96"></path>
+<polygon fill="black" stroke="black" points="123.79,-400.98 130.8,-393.04 120.37,-394.87 123.79,-400.98"></polygon>
+</g>
+<!-- Search Query -->
+<g id="node4" class="node">
+<title>Search Query</title>
+<ellipse fill="#afb3b7" stroke="black" cx="428.88" cy="-306" rx="63.72" ry="18"></ellipse>
+<text text-anchor="middle" x="428.88" y="-301.8" font-family="Times,serif" font-size="14.00">Search Query</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Impression -->
+<g id="edge8" class="edge">
+<title>Search Query-&gt;Paid Search Impression</title>
+<path fill="none" stroke="black" d="M422.23,-287.63C418.68,-277.42 414.68,-264.17 412.88,-252 410.54,-236.17 409.88,-231.72 412.88,-216 414.59,-207.06 417.78,-197.7 421.17,-189.37"></path>
+<polygon fill="black" stroke="black" points="424.39,-190.73 425.16,-180.17 417.97,-187.95 424.39,-190.73"></polygon>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Click -->
+<g id="edge14" class="edge">
+<title>Search Query-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M462.63,-290.45C480.14,-281.49 500.76,-268.54 514.88,-252 547.22,-214.11 573.73,-184.61 544.88,-144 528.59,-121.07 501.62,-107.98 474.88,-100.53"></path>
+<polygon fill="black" stroke="black" points="475.61,-97.11 465.06,-98.04 473.89,-103.89 475.61,-97.11"></polygon>
+</g>
+<!-- Organic Search -->
+<g id="node9" class="node">
+<title>Organic Search</title>
+<ellipse fill="none" stroke="#afb3b7" cx="242.88" cy="-162" rx="70.65" ry="18"></ellipse>
+<text text-anchor="middle" x="242.88" y="-157.8" font-family="Times,serif" font-size="14.00">Organic Search</text>
+</g>
+<!-- Search Query&#45;&gt;Organic Search -->
+<g id="edge15" class="edge">
+<title>Search Query-&gt;Organic Search</title>
+<path fill="none" stroke="black" d="M407.9,-288.99C374.78,-263.7 310.25,-214.44 272.44,-185.57"></path>
+<polygon fill="black" stroke="black" points="274.42,-182.68 264.35,-179.39 270.17,-188.24 274.42,-182.68"></polygon>
+</g>
+<!-- Auction -->
+<g id="node12" class="node">
+<title>Auction</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="463.88" cy="-234" rx="42.3" ry="18"></ellipse>
+<text text-anchor="middle" x="463.88" y="-229.8" font-family="Times,serif" font-size="14.00">Auction</text>
+</g>
+<!-- Search Query&#45;&gt;Auction -->
+<g id="edge7" class="edge">
+<title>Search Query-&gt;Auction</title>
+<path fill="none" stroke="black" d="M437.35,-288.05C441.44,-279.89 446.42,-269.91 450.97,-260.82"></path>
+<polygon fill="black" stroke="black" points="454.14,-262.3 455.48,-251.79 447.88,-259.17 454.14,-262.3"></polygon>
+</g>
+<!-- OLV Impression -->
+<g id="node5" class="node">
+<title>OLV Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="155.88" cy="-450" rx="76.42" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-445.8" font-family="Times,serif" font-size="14.00">OLV Impression</text>
+</g>
+<!-- OLV Impression&#45;&gt;Demand -->
+<g id="edge3" class="edge">
+<title>OLV Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M155.88,-431.7C155.88,-423.98 155.88,-414.71 155.88,-406.11"></path>
+<polygon fill="black" stroke="black" points="159.38,-406.1 155.88,-396.1 152.38,-406.1 159.38,-406.1"></polygon>
+</g>
+<!-- Social Impression -->
+<g id="node6" class="node">
+<title>Social Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="330.88" cy="-450" rx="80.5" ry="18"></ellipse>
+<text text-anchor="middle" x="330.88" y="-445.8" font-family="Times,serif" font-size="14.00">Social Impression</text>
+</g>
+<!-- Social Impression&#45;&gt;Demand -->
+<g id="edge6" class="edge">
+<title>Social Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M293.34,-433.98C264.55,-422.47 224.92,-406.62 195.61,-394.89"></path>
+<polygon fill="black" stroke="black" points="196.68,-391.55 186.09,-391.09 194.08,-398.05 196.68,-391.55"></polygon>
+</g>
+<!-- Video Platform Sentiment -->
+<g id="node7" class="node">
+<title>Video Platform Sentiment</title>
+<ellipse fill="none" stroke="#afb3b7" cx="155.88" cy="-522" rx="112.34" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-517.8" font-family="Times,serif" font-size="14.00">Video Platform Sentiment</text>
+</g>
+<!-- Video Platform Sentiment&#45;&gt;OLV Impression -->
+<g id="edge2" class="edge">
+<title>Video Platform Sentiment-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M155.88,-503.7C155.88,-495.98 155.88,-486.71 155.88,-478.11"></path>
+<polygon fill="black" stroke="black" points="159.38,-478.1 155.88,-468.1 152.38,-478.1 159.38,-478.1"></polygon>
+</g>
+<!-- Paid Search Click&#45;&gt;Sales -->
+<g id="edge18" class="edge">
+<title>Paid Search Click-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M359.59,-73.46C334.75,-61.87 300.96,-46.1 276.13,-34.52"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="277.3,-31.2 266.76,-30.14 274.34,-37.54 277.3,-31.2"></polygon>
+</g>
+<!-- Organic Search&#45;&gt;Sales -->
+<g id="edge16" class="edge">
+<title>Organic Search-&gt;Sales</title>
+<path fill="none" stroke="black" d="M242.88,-143.87C242.88,-119.67 242.88,-75.21 242.88,-46.39"></path>
+<polygon fill="black" stroke="black" points="246.38,-46.19 242.88,-36.19 239.38,-46.19 246.38,-46.19"></polygon>
+</g>
+<!-- Seasonality -->
+<g id="node10" class="node">
+<title>Seasonality</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="439.88" cy="-522" rx="55.62" ry="18"></ellipse>
+<text text-anchor="middle" x="439.88" y="-517.8" font-family="Times,serif" font-size="14.00">Seasonality</text>
+</g>
+<!-- Seasonality&#45;&gt;Sales -->
+<g id="edge21" class="edge">
+<title>Seasonality-&gt;Sales</title>
+<path fill="none" stroke="black" d="M475.83,-508.03C523.56,-488.22 601.88,-445.57 601.88,-379 601.88,-379 601.88,-379 601.88,-161 601.88,-94.6 542.28,-99.57 481.88,-72 416.5,-42.16 333.22,-28.62 284.21,-22.86"></path>
+<polygon fill="black" stroke="black" points="284.32,-19.35 273.99,-21.72 283.54,-26.31 284.32,-19.35"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Search Query -->
+<g id="edge11" class="edge">
+<title>Seasonality-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M441.1,-503.82C441.77,-493.46 442.54,-479.98 442.88,-468 443.33,-452.01 443.77,-447.98 442.88,-432 440.99,-398.23 436.27,-359.57 432.82,-334.3"></path>
+<polygon fill="black" stroke="black" points="436.28,-333.76 431.44,-324.34 429.35,-334.73 436.28,-333.76"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;OLV Impression -->
+<g id="edge1" class="edge">
+<title>Seasonality-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M397.05,-510.44C349.06,-498.62 270.88,-479.34 216.59,-465.96"></path>
+<polygon fill="black" stroke="black" points="217.29,-462.53 206.75,-463.54 215.62,-469.33 217.29,-462.53"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Social Impression -->
+<g id="edge5" class="edge">
+<title>Seasonality-&gt;Social Impression</title>
+<path fill="none" stroke="black" d="M415.96,-505.64C401.05,-496.06 381.62,-483.59 365.1,-472.97"></path>
+<polygon fill="black" stroke="black" points="366.57,-469.76 356.26,-467.3 362.78,-475.65 366.57,-469.76"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Demand -->
+<g id="edge4" class="edge">
+<title>Seasonality-&gt;Demand</title>
+<path fill="none" stroke="black" d="M441.36,-504C442.1,-483.92 439.99,-450.87 420.88,-432 391.5,-403 277.3,-388.83 208.77,-382.8"></path>
+<polygon fill="black" stroke="black" points="208.86,-379.29 198.6,-381.93 208.26,-386.27 208.86,-379.29"></polygon>
+</g>
+<!-- Demand&#45;&gt;Sales -->
+<g id="edge17" class="edge">
+<title>Demand-&gt;Sales</title>
+<path fill="none" stroke="black" d="M145.76,-360.19C131.15,-334.27 105.88,-282.57 105.88,-235 105.88,-235 105.88,-235 105.88,-161 105.88,-101.09 169.81,-56.77 210.33,-34.69"></path>
+<polygon fill="black" stroke="black" points="212.12,-37.71 219.33,-29.94 208.85,-31.52 212.12,-37.71"></polygon>
+</g>
+<!-- Demand&#45;&gt;Search Query -->
+<g id="edge10" class="edge">
+<title>Demand-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M192.13,-367.7C238.56,-355.8 319.46,-335.06 373.59,-321.18"></path>
+<polygon fill="black" stroke="black" points="374.55,-324.54 383.37,-318.67 372.82,-317.76 374.55,-324.54"></polygon>
+</g>
+<!-- Demand&#45;&gt;Paid Search Click -->
+<g id="edge13" class="edge">
+<title>Demand-&gt;Paid Search Click</title>
+<path fill="none" stroke="black" d="M150.15,-359.96C137.16,-317.88 110.51,-207.82 162.88,-144 181.68,-121.09 252.65,-107.15 310.84,-99.36"></path>
+<polygon fill="black" stroke="black" points="311.33,-102.82 320.8,-98.07 310.43,-95.88 311.33,-102.82"></polygon>
+</g>
+<!-- Auction&#45;&gt;Paid Search Impression -->
+<g id="edge9" class="edge">
+<title>Auction-&gt;Paid Search Impression</title>
+<path fill="none" stroke="black" d="M456.62,-216.05C453.2,-208.09 449.05,-198.41 445.24,-189.51"></path>
+<polygon fill="black" stroke="black" points="448.44,-188.09 441.28,-180.28 442,-190.85 448.44,-188.09"></polygon>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-causal-graph-paid-search-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Adjusting for <strong>Search Query</strong> closes all biasing paths. Additionally, <strong>Price</strong> is adjusted, not to close biasing paths, but to reduce the variance in estimating the effect of <strong>Paid Search Impressions</strong> on <strong>Sales</strong>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Correlation Matrix</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">VIFs</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="cell-fig-corr-matrix" class="cell">
+<div id="fig-corr-matrix" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-corr-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<style type="text/css">
+#T_cfbcf_row0_col0, #T_cfbcf_row1_col1, #T_cfbcf_row2_col2, #T_cfbcf_row3_col3 {
+  background-color: #006837;
+  color: #f1f1f1;
+}
+#T_cfbcf_row0_col1, #T_cfbcf_row1_col0 {
+  background-color: #097940;
+  color: #f1f1f1;
+}
+#T_cfbcf_row0_col2, #T_cfbcf_row2_col0 {
+  background-color: #fdbd6d;
+  color: #000000;
+}
+#T_cfbcf_row0_col3, #T_cfbcf_row1_col3, #T_cfbcf_row3_col0, #T_cfbcf_row3_col1 {
+  background-color: #0c7f43;
+  color: #f1f1f1;
+}
+#T_cfbcf_row1_col2, #T_cfbcf_row2_col1 {
+  background-color: #fdbf6f;
+  color: #000000;
+}
+#T_cfbcf_row2_col3, #T_cfbcf_row3_col2 {
+  background-color: #fee28f;
+  color: #000000;
+}
+</style>
+
+<table id="T_cfbcf" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_cfbcf_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">paid_search_impressions</th>
+<th id="T_cfbcf_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">search_query</th>
+<th id="T_cfbcf_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">price</th>
+<th id="T_cfbcf_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_cfbcf_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">paid_search_impressions</td>
+<td id="T_cfbcf_row0_col0" class="data row0 col0">1.00</td>
+<td id="T_cfbcf_row0_col1" class="data row0 col1">0.93</td>
+<td id="T_cfbcf_row0_col2" class="data row0 col2">-0.34</td>
+<td id="T_cfbcf_row0_col3" class="data row0 col3">0.90</td>
+</tr>
+<tr class="even">
+<td id="T_cfbcf_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">search_query</td>
+<td id="T_cfbcf_row1_col0" class="data row1 col0">0.93</td>
+<td id="T_cfbcf_row1_col1" class="data row1 col1">1.00</td>
+<td id="T_cfbcf_row1_col2" class="data row1 col2">-0.33</td>
+<td id="T_cfbcf_row1_col3" class="data row1 col3">0.91</td>
+</tr>
+<tr class="odd">
+<td id="T_cfbcf_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">price</td>
+<td id="T_cfbcf_row2_col0" class="data row2 col0">-0.34</td>
+<td id="T_cfbcf_row2_col1" class="data row2 col1">-0.33</td>
+<td id="T_cfbcf_row2_col2" class="data row2 col2">1.00</td>
+<td id="T_cfbcf_row2_col3" class="data row2 col3">-0.19</td>
+</tr>
+<tr class="even">
+<td id="T_cfbcf_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">sales</td>
+<td id="T_cfbcf_row3_col0" class="data row3 col0">0.90</td>
+<td id="T_cfbcf_row3_col1" class="data row3 col1">0.91</td>
+<td id="T_cfbcf_row3_col2" class="data row3 col2">-0.19</td>
+<td id="T_cfbcf_row3_col3" class="data row3 col3">1.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-corr-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Correlation matrix
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="tbl-vifs" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vifs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: VIF for the regression model
+</figcaption>
+<div aria-describedby="tbl-vifs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-stdout">
+<pre><code>                           VIF
+paid_search_impressions  : 1667.63
+search_query             : 1952.48
+price                    : 72.44</code></pre>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>With our adjustment set established, let’s examine the correlation structure among the key variables (<strong>paid search impressions</strong>, <strong>search query</strong>, <strong>price</strong>, and <strong>sales</strong>). As shown in <a href="#fig-corr-matrix" class="quarto-xref">Figure&nbsp;4</a>, <strong>search query</strong> and <strong>paid search impressions</strong> exhibit a high correlation. Additionally, the VIF values presented in <a href="#tbl-vifs" class="quarto-xref">Table&nbsp;1</a> reveal some extreme figures.</p>
+<p>Rather than being immediately concerned about the high VIFs (even those exceeding 1000), let’s proceed by running the regression to assess the actual impact.</p>
+<p>In <a href="#tbl-adjusted" class="quarto-xref">Table&nbsp;3</a>, the standard errors for the coefficients are reasonably sized. Since this is synthetic data, we can compare the estimated coefficient for <strong>paid search impressions</strong> to the expected value of 0.4, which indeed falls within the confidence interval for this coefficient.</p>
+<p>In <a href="#tbl-unadjusted" class="quarto-xref">Table&nbsp;2</a>, where <strong>search query</strong> is excluded from the model, we observe a reduction in standard errors. However, this reduction comes at the expense of introducing bias into the estimate of <strong>paid search impressions’</strong> effect on <strong>sales</strong>. In fact it produces an estimate that is much larger than the true value.</p>
+<p>Given that the correctly adjusted model provides an estimate with reasonable precision, it should be preferred, even in light of the high VIFs.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="Models">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Un-Adjusted Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Adjusted Model</a></li></ul>
+<div class="tab-content" data-group="Models">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div id="tbl-unadjusted" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-unadjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: The unadjusted regression of the form <span class="math display">\[log(Sales) \sim \beta_{psi} log(Paid Search Impressions) + \beta_p log(Price)\]</span>
+</figcaption>
+<div aria-describedby="tbl-unadjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.832</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.830</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>379.1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 19 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>5.21e-60</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>19:17:11</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-27.949</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>61.90</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>153</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>71.05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>2</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>-2.0391</td>
+<td>0.532</td>
+<td>-3.835</td>
+<td>0.000</td>
+<td>-3.090</td>
+<td>-0.989</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">paid_search_impressions</td>
+<td>0.8323</td>
+<td>0.031</td>
+<td>26.950</td>
+<td>0.000</td>
+<td>0.771</td>
+<td>0.893</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">price</td>
+<td>0.6034</td>
+<td>0.160</td>
+<td>3.779</td>
+<td>0.000</td>
+<td>0.288</td>
+<td>0.919</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>1.250</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.504</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.535</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>0.862</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>0.042</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.650</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>3.354</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>299.</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div id="tbl-adjusted" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: The correctly adjusted regression model of the following form <span class="math display">\[log(Sales) \sim \beta_{SQ} log(Search Query) + \beta_{psi} log(Paid Search Impressions) + \beta_p log(Price)\]</span>
+</figcaption>
+<div aria-describedby="tbl-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.867</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.865</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>331.6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 19 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>1.82e-66</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>19:17:12</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-9.4959</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>26.99</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>152</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>39.19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>3</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>-4.1601</td>
+<td>0.579</td>
+<td>-7.182</td>
+<td>0.000</td>
+<td>-5.305</td>
+<td>-3.016</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">paid_search_impressions</td>
+<td>0.4287</td>
+<td>0.069</td>
+<td>6.205</td>
+<td>0.000</td>
+<td>0.292</td>
+<td>0.565</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">search_query</td>
+<td>0.4739</td>
+<td>0.074</td>
+<td>6.369</td>
+<td>0.000</td>
+<td>0.327</td>
+<td>0.621</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">price</td>
+<td>0.6448</td>
+<td>0.142</td>
+<td>4.526</td>
+<td>0.000</td>
+<td>0.363</td>
+<td>0.926</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>0.507</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.777</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.776</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>0.214</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.035</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.899</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>3.167</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>559.</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="when-high-vifs-are-an-issue" class="level3">
+<h3 class="anchored" data-anchor-id="when-high-vifs-are-an-issue">When High VIFs are an issue</h3>
+<p>While high VIFs are not inherently problematic, they serve as a useful diagnostic tool for identifying potential issues in regression results. Let’s explore this further with a slightly more complex example.</p>
+</section>
+<section id="how-effective-is-olv-at-driving-sales" class="level3">
+<h3 class="anchored" data-anchor-id="how-effective-is-olv-at-driving-sales">How effective is OLV at driving sales?</h3>
+<p>From the causal model, we can see that <strong>seasonality</strong> is part of the necessary adjustment set to accurately estimate the effect of <strong>OLV impressions</strong> on <strong>sales</strong>. Although seasonality is unobserved, we can reasonably approximate it using a periodic function (e.g., sine or cosine terms) to capture seasonal fluctuations over time. Let’s consider the following model were we adjust for <strong>seasonality</strong> (using fourier terms), <strong>price</strong>, <strong>olv impressions</strong>, and <strong>Video Platform Sentiment</strong> (<code>olv_sentiment</code> in the models). Note that <strong>Video Platform Sentiment</strong> is not a confounder, typically we would not adjust for it, but we include it here to illustrate the point that adjusting for variables that are not confounders can needlessly increase VIFs.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="OLV">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Over Adjusted Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Correctly Adjusted Model</a></li></ul>
+<div class="tab-content" data-group="OLV">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell fig-cap-location-bottom" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-olv-on-sales-adjusted" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-olv-on-sales-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<svg width="672" height="480" viewbox="0.00 0.00 609.88 548.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>Paid Media on Sales</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-544 605.88,-544 605.88,4 -4,4"></polygon>
+<!-- OLV Impression -->
+<g id="node1" class="node">
+<title>OLV Impression</title>
+<ellipse fill="#82b9a0" stroke="#7da54b" cx="155.88" cy="-450" rx="76.42" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-445.8" font-family="Times,serif" font-size="14.00">OLV Impression</text>
+</g>
+<!-- Demand -->
+<g id="node11" class="node">
+<title>Demand</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="155.88" cy="-378" rx="43.5" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-373.8" font-family="Times,serif" font-size="14.00">Demand</text>
+</g>
+<!-- OLV Impression&#45;&gt;Demand -->
+<g id="edge3" class="edge">
+<title>OLV Impression-&gt;Demand</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M155.88,-431.7C155.88,-423.98 155.88,-414.71 155.88,-406.11"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="159.38,-406.1 155.88,-396.1 152.38,-406.1 159.38,-406.1"></polygon>
+</g>
+<!-- Sales -->
+<g id="node2" class="node">
+<title>Sales</title>
+<ellipse fill="#0069aa" stroke="black" cx="242.88" cy="-18" rx="31.34" ry="18"></ellipse>
+<text text-anchor="middle" x="242.88" y="-13.8" font-family="Times,serif" font-size="14.00" fill="white">Sales</text>
+</g>
+<!-- Price -->
+<g id="node3" class="node">
+<title>Price</title>
+<ellipse fill="#afb3b7" stroke="black" cx="30.88" cy="-450" rx="30.76" ry="18"></ellipse>
+<text text-anchor="middle" x="30.88" y="-445.8" font-family="Times,serif" font-size="14.00">Price</text>
+</g>
+<!-- Price&#45;&gt;Sales -->
+<g id="edge20" class="edge">
+<title>Price-&gt;Sales</title>
+<path fill="none" stroke="black" d="M33.45,-432C37.24,-405.4 43.88,-352.3 43.88,-307 43.88,-307 43.88,-307 43.88,-161 43.88,-83.13 146.11,-43.93 204.02,-27.98"></path>
+<polygon fill="black" stroke="black" points="205.17,-31.3 213.94,-25.36 203.38,-24.53 205.17,-31.3"></polygon>
+</g>
+<!-- Price&#45;&gt;Demand -->
+<g id="edge19" class="edge">
+<title>Price-&gt;Demand</title>
+<path fill="none" stroke="black" d="M52.37,-436.97C71.51,-426.25 99.84,-410.38 122.02,-397.96"></path>
+<polygon fill="black" stroke="black" points="123.79,-400.98 130.8,-393.04 120.37,-394.87 123.79,-400.98"></polygon>
+</g>
+<!-- Video Platform Sentiment -->
+<g id="node4" class="node">
+<title>Video Platform Sentiment</title>
+<ellipse fill="#afb3b7" stroke="black" cx="155.88" cy="-522" rx="112.34" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-517.8" font-family="Times,serif" font-size="14.00">Video Platform Sentiment</text>
+</g>
+<!-- Video Platform Sentiment&#45;&gt;OLV Impression -->
+<g id="edge2" class="edge">
+<title>Video Platform Sentiment-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M155.88,-503.7C155.88,-495.98 155.88,-486.71 155.88,-478.11"></path>
+<polygon fill="black" stroke="black" points="159.38,-478.1 155.88,-468.1 152.38,-478.1 159.38,-478.1"></polygon>
+</g>
+<!-- Seasonality -->
+<g id="node5" class="node">
+<title>Seasonality</title>
+<ellipse fill="#afb3b7" stroke="black" stroke-dasharray="5,2" cx="368.88" cy="-522" rx="55.62" ry="18"></ellipse>
+<text text-anchor="middle" x="368.88" y="-517.8" font-family="Times,serif" font-size="14.00">Seasonality</text>
+</g>
+<!-- Seasonality&#45;&gt;OLV Impression -->
+<g id="edge1" class="edge">
+<title>Seasonality-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M331.29,-508.65C297.19,-497.44 246.58,-480.81 208.48,-468.29"></path>
+<polygon fill="black" stroke="black" points="209.17,-464.83 198.58,-465.03 206.99,-471.48 209.17,-464.83"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Sales -->
+<g id="edge21" class="edge">
+<title>Seasonality-&gt;Sales</title>
+<path fill="none" stroke="black" d="M418.01,-513.49C486.37,-499.93 601.88,-464.39 601.88,-379 601.88,-379 601.88,-379 601.88,-161 601.88,-94.6 542.28,-99.57 481.88,-72 416.5,-42.16 333.22,-28.62 284.21,-22.86"></path>
+<polygon fill="black" stroke="black" points="284.32,-19.35 273.99,-21.72 283.54,-26.31 284.32,-19.35"></polygon>
+</g>
+<!-- Search Query -->
+<g id="node6" class="node">
+<title>Search Query</title>
+<ellipse fill="none" stroke="#afb3b7" cx="428.88" cy="-306" rx="63.72" ry="18"></ellipse>
+<text text-anchor="middle" x="428.88" y="-301.8" font-family="Times,serif" font-size="14.00">Search Query</text>
+</g>
+<!-- Seasonality&#45;&gt;Search Query -->
+<g id="edge11" class="edge">
+<title>Seasonality-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M407.09,-508.83C426.26,-500.57 447.72,-487.52 458.88,-468 483.28,-425.31 461.02,-366.83 444.01,-333.37"></path>
+<polygon fill="black" stroke="black" points="446.95,-331.44 439.18,-324.23 440.76,-334.71 446.95,-331.44"></polygon>
+</g>
+<!-- Social Impression -->
+<g id="node8" class="node">
+<title>Social Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="368.88" cy="-450" rx="80.5" ry="18"></ellipse>
+<text text-anchor="middle" x="368.88" y="-445.8" font-family="Times,serif" font-size="14.00">Social Impression</text>
+</g>
+<!-- Seasonality&#45;&gt;Social Impression -->
+<g id="edge5" class="edge">
+<title>Seasonality-&gt;Social Impression</title>
+<path fill="none" stroke="black" d="M368.88,-503.7C368.88,-495.98 368.88,-486.71 368.88,-478.11"></path>
+<polygon fill="black" stroke="black" points="372.38,-478.1 368.88,-468.1 365.38,-478.1 372.38,-478.1"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Demand -->
+<g id="edge4" class="edge">
+<title>Seasonality-&gt;Demand</title>
+<path fill="none" stroke="black" d="M340.27,-506.32C322.04,-496.45 298.29,-482.61 278.88,-468 260.29,-454.01 259.29,-446.23 240.88,-432 224.89,-419.64 205.9,-407.58 189.94,-398.1"></path>
+<polygon fill="black" stroke="black" points="191.33,-394.86 180.93,-392.83 187.79,-400.9 191.33,-394.86"></polygon>
+</g>
+<!-- Paid Search Impression -->
+<g id="node7" class="node">
+<title>Paid Search Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="433.88" cy="-162" rx="102.44" ry="18"></ellipse>
+<text text-anchor="middle" x="433.88" y="-157.8" font-family="Times,serif" font-size="14.00">Paid Search Impression</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Impression -->
+<g id="edge8" class="edge">
+<title>Search Query-&gt;Paid Search Impression</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M422.23,-287.63C418.68,-277.42 414.68,-264.17 412.88,-252 410.54,-236.17 409.88,-231.72 412.88,-216 414.59,-207.06 417.78,-197.7 421.17,-189.37"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="424.39,-190.73 425.16,-180.17 417.97,-187.95 424.39,-190.73"></polygon>
+</g>
+<!-- Paid Search Click -->
+<g id="node9" class="node">
+<title>Paid Search Click</title>
+<ellipse fill="none" stroke="#afb3b7" cx="392.88" cy="-90" rx="80.46" ry="18"></ellipse>
+<text text-anchor="middle" x="392.88" y="-85.8" font-family="Times,serif" font-size="14.00">Paid Search Click</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Click -->
+<g id="edge14" class="edge">
+<title>Search Query-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M462.63,-290.45C480.14,-281.49 500.76,-268.54 514.88,-252 547.22,-214.11 573.73,-184.61 544.88,-144 528.59,-121.07 501.62,-107.98 474.88,-100.53"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="475.61,-97.11 465.06,-98.04 473.89,-103.89 475.61,-97.11"></polygon>
+</g>
+<!-- Organic Search -->
+<g id="node10" class="node">
+<title>Organic Search</title>
+<ellipse fill="none" stroke="#afb3b7" cx="242.88" cy="-162" rx="70.65" ry="18"></ellipse>
+<text text-anchor="middle" x="242.88" y="-157.8" font-family="Times,serif" font-size="14.00">Organic Search</text>
+</g>
+<!-- Search Query&#45;&gt;Organic Search -->
+<g id="edge15" class="edge">
+<title>Search Query-&gt;Organic Search</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M407.9,-288.99C374.78,-263.7 310.25,-214.44 272.44,-185.57"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="274.42,-182.68 264.35,-179.39 270.17,-188.24 274.42,-182.68"></polygon>
+</g>
+<!-- Auction -->
+<g id="node12" class="node">
+<title>Auction</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="463.88" cy="-234" rx="42.3" ry="18"></ellipse>
+<text text-anchor="middle" x="463.88" y="-229.8" font-family="Times,serif" font-size="14.00">Auction</text>
+</g>
+<!-- Search Query&#45;&gt;Auction -->
+<g id="edge7" class="edge">
+<title>Search Query-&gt;Auction</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M437.35,-288.05C441.44,-279.89 446.42,-269.91 450.97,-260.82"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="454.14,-262.3 455.48,-251.79 447.88,-259.17 454.14,-262.3"></polygon>
+</g>
+<!-- Paid Search Impression&#45;&gt;Paid Search Click -->
+<g id="edge12" class="edge">
+<title>Paid Search Impression-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M423.95,-144.05C419.19,-135.92 413.38,-126 408.07,-116.94"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="411.07,-115.14 403,-108.28 405.03,-118.67 411.07,-115.14"></polygon>
+</g>
+<!-- Social Impression&#45;&gt;Demand -->
+<g id="edge6" class="edge">
+<title>Social Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M325.52,-434.75C288.61,-422.62 235.85,-405.28 199.01,-393.17"></path>
+<polygon fill="black" stroke="black" points="199.66,-389.7 189.06,-389.91 197.47,-396.35 199.66,-389.7"></polygon>
+</g>
+<!-- Paid Search Click&#45;&gt;Sales -->
+<g id="edge18" class="edge">
+<title>Paid Search Click-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M359.59,-73.46C334.75,-61.87 300.96,-46.1 276.13,-34.52"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="277.3,-31.2 266.76,-30.14 274.34,-37.54 277.3,-31.2"></polygon>
+</g>
+<!-- Organic Search&#45;&gt;Sales -->
+<g id="edge16" class="edge">
+<title>Organic Search-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M242.88,-143.87C242.88,-119.67 242.88,-75.21 242.88,-46.39"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="246.38,-46.19 242.88,-36.19 239.38,-46.19 246.38,-46.19"></polygon>
+</g>
+<!-- Demand&#45;&gt;Sales -->
+<g id="edge17" class="edge">
+<title>Demand-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M145.76,-360.19C131.15,-334.27 105.88,-282.57 105.88,-235 105.88,-235 105.88,-235 105.88,-161 105.88,-101.09 169.81,-56.77 210.33,-34.69"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="212.12,-37.71 219.33,-29.94 208.85,-31.52 212.12,-37.71"></polygon>
+</g>
+<!-- Demand&#45;&gt;Search Query -->
+<g id="edge10" class="edge">
+<title>Demand-&gt;Search Query</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M192.13,-367.7C238.56,-355.8 319.46,-335.06 373.59,-321.18"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="374.55,-324.54 383.37,-318.67 372.82,-317.76 374.55,-324.54"></polygon>
+</g>
+<!-- Demand&#45;&gt;Paid Search Click -->
+<g id="edge13" class="edge">
+<title>Demand-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M150.15,-359.96C137.16,-317.88 110.51,-207.82 162.88,-144 181.68,-121.09 252.65,-107.15 310.84,-99.36"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="311.33,-102.82 320.8,-98.07 310.43,-95.88 311.33,-102.82"></polygon>
+</g>
+<!-- Auction&#45;&gt;Paid Search Impression -->
+<g id="edge9" class="edge">
+<title>Auction-&gt;Paid Search Impression</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M456.62,-216.05C453.2,-208.09 449.05,-198.41 445.24,-189.51"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="448.44,-188.09 441.28,-180.28 442,-190.85 448.44,-188.09"></polygon>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-olv-on-sales-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: The causal graph for the relationship between <strong>OLV Impressions</strong> and <strong>Sales</strong>. Adjusting for <strong>Seasonality</strong> and <strong>Price</strong> closes all biasing paths, allowing for an unbiased estimate of the effect of <strong>OLV Impressions</strong> on <strong>Sales</strong>. Including <strong>Video Platform Sentement</strong> does nothing to reduce bias and only adds variance of our estimate.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell fig-cap-location-bottom" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-olv-on-sales-adjusted" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-olv-on-sales-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<svg width="672" height="480" viewbox="0.00 0.00 609.88 548.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>Paid Media on Sales</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-544 605.88,-544 605.88,4 -4,4"></polygon>
+<!-- OLV Impression -->
+<g id="node1" class="node">
+<title>OLV Impression</title>
+<ellipse fill="#82b9a0" stroke="#7da54b" cx="155.88" cy="-450" rx="76.42" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-445.8" font-family="Times,serif" font-size="14.00">OLV Impression</text>
+</g>
+<!-- Demand -->
+<g id="node11" class="node">
+<title>Demand</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="155.88" cy="-378" rx="43.5" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-373.8" font-family="Times,serif" font-size="14.00">Demand</text>
+</g>
+<!-- OLV Impression&#45;&gt;Demand -->
+<g id="edge3" class="edge">
+<title>OLV Impression-&gt;Demand</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M155.88,-431.7C155.88,-423.98 155.88,-414.71 155.88,-406.11"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="159.38,-406.1 155.88,-396.1 152.38,-406.1 159.38,-406.1"></polygon>
+</g>
+<!-- Sales -->
+<g id="node2" class="node">
+<title>Sales</title>
+<ellipse fill="#0069aa" stroke="black" cx="242.88" cy="-18" rx="31.34" ry="18"></ellipse>
+<text text-anchor="middle" x="242.88" y="-13.8" font-family="Times,serif" font-size="14.00" fill="white">Sales</text>
+</g>
+<!-- Price -->
+<g id="node3" class="node">
+<title>Price</title>
+<ellipse fill="#afb3b7" stroke="black" cx="30.88" cy="-450" rx="30.76" ry="18"></ellipse>
+<text text-anchor="middle" x="30.88" y="-445.8" font-family="Times,serif" font-size="14.00">Price</text>
+</g>
+<!-- Price&#45;&gt;Sales -->
+<g id="edge20" class="edge">
+<title>Price-&gt;Sales</title>
+<path fill="none" stroke="black" d="M33.45,-432C37.24,-405.4 43.88,-352.3 43.88,-307 43.88,-307 43.88,-307 43.88,-161 43.88,-83.13 146.11,-43.93 204.02,-27.98"></path>
+<polygon fill="black" stroke="black" points="205.17,-31.3 213.94,-25.36 203.38,-24.53 205.17,-31.3"></polygon>
+</g>
+<!-- Price&#45;&gt;Demand -->
+<g id="edge19" class="edge">
+<title>Price-&gt;Demand</title>
+<path fill="none" stroke="black" d="M52.37,-436.97C71.51,-426.25 99.84,-410.38 122.02,-397.96"></path>
+<polygon fill="black" stroke="black" points="123.79,-400.98 130.8,-393.04 120.37,-394.87 123.79,-400.98"></polygon>
+</g>
+<!-- Seasonality -->
+<g id="node4" class="node">
+<title>Seasonality</title>
+<ellipse fill="#afb3b7" stroke="black" stroke-dasharray="5,2" cx="368.88" cy="-522" rx="55.62" ry="18"></ellipse>
+<text text-anchor="middle" x="368.88" y="-517.8" font-family="Times,serif" font-size="14.00">Seasonality</text>
+</g>
+<!-- Seasonality&#45;&gt;OLV Impression -->
+<g id="edge1" class="edge">
+<title>Seasonality-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M331.29,-508.65C297.19,-497.44 246.58,-480.81 208.48,-468.29"></path>
+<polygon fill="black" stroke="black" points="209.17,-464.83 198.58,-465.03 206.99,-471.48 209.17,-464.83"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Sales -->
+<g id="edge21" class="edge">
+<title>Seasonality-&gt;Sales</title>
+<path fill="none" stroke="black" d="M418.01,-513.49C486.37,-499.93 601.88,-464.39 601.88,-379 601.88,-379 601.88,-379 601.88,-161 601.88,-94.6 542.28,-99.57 481.88,-72 416.5,-42.16 333.22,-28.62 284.21,-22.86"></path>
+<polygon fill="black" stroke="black" points="284.32,-19.35 273.99,-21.72 283.54,-26.31 284.32,-19.35"></polygon>
+</g>
+<!-- Search Query -->
+<g id="node5" class="node">
+<title>Search Query</title>
+<ellipse fill="none" stroke="#afb3b7" cx="428.88" cy="-306" rx="63.72" ry="18"></ellipse>
+<text text-anchor="middle" x="428.88" y="-301.8" font-family="Times,serif" font-size="14.00">Search Query</text>
+</g>
+<!-- Seasonality&#45;&gt;Search Query -->
+<g id="edge11" class="edge">
+<title>Seasonality-&gt;Search Query</title>
+<path fill="none" stroke="black" d="M407.09,-508.83C426.26,-500.57 447.72,-487.52 458.88,-468 483.28,-425.31 461.02,-366.83 444.01,-333.37"></path>
+<polygon fill="black" stroke="black" points="446.95,-331.44 439.18,-324.23 440.76,-334.71 446.95,-331.44"></polygon>
+</g>
+<!-- Social Impression -->
+<g id="node7" class="node">
+<title>Social Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="368.88" cy="-450" rx="80.5" ry="18"></ellipse>
+<text text-anchor="middle" x="368.88" y="-445.8" font-family="Times,serif" font-size="14.00">Social Impression</text>
+</g>
+<!-- Seasonality&#45;&gt;Social Impression -->
+<g id="edge5" class="edge">
+<title>Seasonality-&gt;Social Impression</title>
+<path fill="none" stroke="black" d="M368.88,-503.7C368.88,-495.98 368.88,-486.71 368.88,-478.11"></path>
+<polygon fill="black" stroke="black" points="372.38,-478.1 368.88,-468.1 365.38,-478.1 372.38,-478.1"></polygon>
+</g>
+<!-- Seasonality&#45;&gt;Demand -->
+<g id="edge4" class="edge">
+<title>Seasonality-&gt;Demand</title>
+<path fill="none" stroke="black" d="M340.27,-506.32C322.04,-496.45 298.29,-482.61 278.88,-468 260.29,-454.01 259.29,-446.23 240.88,-432 224.89,-419.64 205.9,-407.58 189.94,-398.1"></path>
+<polygon fill="black" stroke="black" points="191.33,-394.86 180.93,-392.83 187.79,-400.9 191.33,-394.86"></polygon>
+</g>
+<!-- Paid Search Impression -->
+<g id="node6" class="node">
+<title>Paid Search Impression</title>
+<ellipse fill="none" stroke="#afb3b7" cx="433.88" cy="-162" rx="102.44" ry="18"></ellipse>
+<text text-anchor="middle" x="433.88" y="-157.8" font-family="Times,serif" font-size="14.00">Paid Search Impression</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Impression -->
+<g id="edge8" class="edge">
+<title>Search Query-&gt;Paid Search Impression</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M422.23,-287.63C418.68,-277.42 414.68,-264.17 412.88,-252 410.54,-236.17 409.88,-231.72 412.88,-216 414.59,-207.06 417.78,-197.7 421.17,-189.37"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="424.39,-190.73 425.16,-180.17 417.97,-187.95 424.39,-190.73"></polygon>
+</g>
+<!-- Paid Search Click -->
+<g id="node9" class="node">
+<title>Paid Search Click</title>
+<ellipse fill="none" stroke="#afb3b7" cx="392.88" cy="-90" rx="80.46" ry="18"></ellipse>
+<text text-anchor="middle" x="392.88" y="-85.8" font-family="Times,serif" font-size="14.00">Paid Search Click</text>
+</g>
+<!-- Search Query&#45;&gt;Paid Search Click -->
+<g id="edge14" class="edge">
+<title>Search Query-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M462.63,-290.45C480.14,-281.49 500.76,-268.54 514.88,-252 547.22,-214.11 573.73,-184.61 544.88,-144 528.59,-121.07 501.62,-107.98 474.88,-100.53"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="475.61,-97.11 465.06,-98.04 473.89,-103.89 475.61,-97.11"></polygon>
+</g>
+<!-- Organic Search -->
+<g id="node10" class="node">
+<title>Organic Search</title>
+<ellipse fill="none" stroke="#afb3b7" cx="242.88" cy="-162" rx="70.65" ry="18"></ellipse>
+<text text-anchor="middle" x="242.88" y="-157.8" font-family="Times,serif" font-size="14.00">Organic Search</text>
+</g>
+<!-- Search Query&#45;&gt;Organic Search -->
+<g id="edge15" class="edge">
+<title>Search Query-&gt;Organic Search</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M407.9,-288.99C374.78,-263.7 310.25,-214.44 272.44,-185.57"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="274.42,-182.68 264.35,-179.39 270.17,-188.24 274.42,-182.68"></polygon>
+</g>
+<!-- Auction -->
+<g id="node12" class="node">
+<title>Auction</title>
+<ellipse fill="none" stroke="#afb3b7" stroke-dasharray="5,2" cx="463.88" cy="-234" rx="42.3" ry="18"></ellipse>
+<text text-anchor="middle" x="463.88" y="-229.8" font-family="Times,serif" font-size="14.00">Auction</text>
+</g>
+<!-- Search Query&#45;&gt;Auction -->
+<g id="edge7" class="edge">
+<title>Search Query-&gt;Auction</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M437.35,-288.05C441.44,-279.89 446.42,-269.91 450.97,-260.82"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="454.14,-262.3 455.48,-251.79 447.88,-259.17 454.14,-262.3"></polygon>
+</g>
+<!-- Paid Search Impression&#45;&gt;Paid Search Click -->
+<g id="edge12" class="edge">
+<title>Paid Search Impression-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M423.95,-144.05C419.19,-135.92 413.38,-126 408.07,-116.94"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="411.07,-115.14 403,-108.28 405.03,-118.67 411.07,-115.14"></polygon>
+</g>
+<!-- Social Impression&#45;&gt;Demand -->
+<g id="edge6" class="edge">
+<title>Social Impression-&gt;Demand</title>
+<path fill="none" stroke="black" d="M325.52,-434.75C288.61,-422.62 235.85,-405.28 199.01,-393.17"></path>
+<polygon fill="black" stroke="black" points="199.66,-389.7 189.06,-389.91 197.47,-396.35 199.66,-389.7"></polygon>
+</g>
+<!-- Video Platform Sentiment -->
+<g id="node8" class="node">
+<title>Video Platform Sentiment</title>
+<ellipse fill="none" stroke="#afb3b7" cx="155.88" cy="-522" rx="112.34" ry="18"></ellipse>
+<text text-anchor="middle" x="155.88" y="-517.8" font-family="Times,serif" font-size="14.00">Video Platform Sentiment</text>
+</g>
+<!-- Video Platform Sentiment&#45;&gt;OLV Impression -->
+<g id="edge2" class="edge">
+<title>Video Platform Sentiment-&gt;OLV Impression</title>
+<path fill="none" stroke="black" d="M155.88,-503.7C155.88,-495.98 155.88,-486.71 155.88,-478.11"></path>
+<polygon fill="black" stroke="black" points="159.38,-478.1 155.88,-468.1 152.38,-478.1 159.38,-478.1"></polygon>
+</g>
+<!-- Paid Search Click&#45;&gt;Sales -->
+<g id="edge18" class="edge">
+<title>Paid Search Click-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M359.59,-73.46C334.75,-61.87 300.96,-46.1 276.13,-34.52"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="277.3,-31.2 266.76,-30.14 274.34,-37.54 277.3,-31.2"></polygon>
+</g>
+<!-- Organic Search&#45;&gt;Sales -->
+<g id="edge16" class="edge">
+<title>Organic Search-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M242.88,-143.87C242.88,-119.67 242.88,-75.21 242.88,-46.39"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="246.38,-46.19 242.88,-36.19 239.38,-46.19 246.38,-46.19"></polygon>
+</g>
+<!-- Demand&#45;&gt;Sales -->
+<g id="edge17" class="edge">
+<title>Demand-&gt;Sales</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M145.76,-360.19C131.15,-334.27 105.88,-282.57 105.88,-235 105.88,-235 105.88,-235 105.88,-161 105.88,-101.09 169.81,-56.77 210.33,-34.69"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="212.12,-37.71 219.33,-29.94 208.85,-31.52 212.12,-37.71"></polygon>
+</g>
+<!-- Demand&#45;&gt;Search Query -->
+<g id="edge10" class="edge">
+<title>Demand-&gt;Search Query</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M192.13,-367.7C238.56,-355.8 319.46,-335.06 373.59,-321.18"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="374.55,-324.54 383.37,-318.67 372.82,-317.76 374.55,-324.54"></polygon>
+</g>
+<!-- Demand&#45;&gt;Paid Search Click -->
+<g id="edge13" class="edge">
+<title>Demand-&gt;Paid Search Click</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M150.15,-359.96C137.16,-317.88 110.51,-207.82 162.88,-144 181.68,-121.09 252.65,-107.15 310.84,-99.36"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="311.33,-102.82 320.8,-98.07 310.43,-95.88 311.33,-102.82"></polygon>
+</g>
+<!-- Auction&#45;&gt;Paid Search Impression -->
+<g id="edge9" class="edge">
+<title>Auction-&gt;Paid Search Impression</title>
+<path fill="none" stroke="#326e1e" stroke-width="2" d="M456.62,-216.05C453.2,-208.09 449.05,-198.41 445.24,-189.51"></path>
+<polygon fill="#326e1e" stroke="#326e1e" stroke-width="2" points="448.44,-188.09 441.28,-180.28 442,-190.85 448.44,-188.09"></polygon>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-olv-on-sales-adjusted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Adjusting for <strong>Seasonality</strong> and <strong>Price</strong> closes all biasing paths, allowing for an unbiased estimate of the effect of <strong>OLV Impressions</strong> on <strong>Sales</strong>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="note-fourier-components" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Fourier Seasonality
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To capture the seasonal fluctuations in the data, we can use Fourier terms to approximate the unobserved <strong>seasonality</strong> variable. These terms are periodic functions that can model the cyclical patterns in the data, allowing us to adjust for the influence of <strong>seasonality</strong> on <strong>sales</strong> and <strong>OLV impressions</strong>. By including these terms in the regression model, we can effectively control for the confounding effect of <strong>seasonality</strong> and obtain an unbiased estimate of the effect of <strong>OLV impressions</strong> on <strong>sales</strong>.</p>
+<p>I will use a <a href="./model_helpers/fourier_components.html">model helper</a> to generated the fourier</p>
+<div id="cell-fig-fourier-season-samples" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-fourier-season-samples" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fourier-season-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_multicollinearity_files/figure-html/fig-fourier-season-samples-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fourier-season-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Fourier seasonality
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="OLV">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Over Adjusted Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Correctly Adjusted Model</a></li></ul>
+<div class="tab-content" data-group="OLV">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div id="tbl-vifs-fourier" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vifs-fourier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: VIF for the regression model with Fourier components with the addition of OLV sentiment
+</figcaption>
+<div aria-describedby="tbl-vifs-fourier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-stdout">
+<pre><code>               VIF
+hill_olv     : 70.91
+log_price    : 57.59
+olv_sentiment: 4.43
+fourier_sin_0: 1.01
+fourier_sin_1: 1.01
+fourier_sin_2: 1.0
+fourier_cos_0: 1.42
+fourier_cos_1: 1.01
+fourier_cos_2: 1.01</code></pre>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div id="tbl-vifs-fourier-correct" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vifs-fourier-correct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: VIF for the regression model with Fourier components without the addition of OLV sentiment
+</figcaption>
+<div aria-describedby="tbl-vifs-fourier-correct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-stdout">
+<pre><code>               VIF
+hill_olv     : 18.98
+log_price    : 18.84
+fourier_sin_0: 1.01
+fourier_sin_1: 1.0
+fourier_sin_2: 1.0
+fourier_cos_0: 1.14
+fourier_cos_1: 1.0
+fourier_cos_2: 1.0</code></pre>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vectors Spaces and Basis Vectors
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Fourier components provide an orthogonal basis for the space of periodic functions with a given period <span class="math inline">\(L\)</span> . This orthogonality helps to address multicollinearity, which is why the VIFs in <a href="#tbl-vifs-fourier-correct" class="quarto-xref">Table&nbsp;5</a> and <a href="#tbl-vifs-fourier" class="quarto-xref">Table&nbsp;4</a> are all near 1 for the fourier components!</p>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="OLV">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Over Adjusted Model</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Correctly Adjusted Model</a></li></ul>
+<div class="tab-content" data-group="OLV">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div id="tbl-vifs-fourier-olv" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vifs-fourier-olv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: The over adjusted regression model with Fourier components with the addition of OLV sentiment
+</figcaption>
+<div aria-describedby="tbl-vifs-fourier-olv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.888</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.881</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>128.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 19 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>9.51e-65</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>19:17:22</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>3.4816</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>13.04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>146</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>43.54</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>9</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>10.7020</td>
+<td>0.324</td>
+<td>32.982</td>
+<td>0.000</td>
+<td>10.061</td>
+<td>11.343</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">hill_olv</td>
+<td>0.7217</td>
+<td>0.433</td>
+<td>1.665</td>
+<td>0.098</td>
+<td>-0.135</td>
+<td>1.578</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">log_price</td>
+<td>-1.0720</td>
+<td>0.127</td>
+<td>-8.433</td>
+<td>0.000</td>
+<td>-1.323</td>
+<td>-0.821</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">olv_sentiment</td>
+<td>0.0183</td>
+<td>0.161</td>
+<td>0.114</td>
+<td>0.909</td>
+<td>-0.299</td>
+<td>0.336</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_sin_0</td>
+<td>0.0449</td>
+<td>0.028</td>
+<td>1.591</td>
+<td>0.114</td>
+<td>-0.011</td>
+<td>0.101</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_sin_1</td>
+<td>0.0214</td>
+<td>0.028</td>
+<td>0.768</td>
+<td>0.444</td>
+<td>-0.034</td>
+<td>0.077</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_sin_2</td>
+<td>0.0166</td>
+<td>0.028</td>
+<td>0.596</td>
+<td>0.552</td>
+<td>-0.038</td>
+<td>0.072</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_cos_0</td>
+<td>-0.8321</td>
+<td>0.041</td>
+<td>-20.141</td>
+<td>0.000</td>
+<td>-0.914</td>
+<td>-0.750</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_1</td>
+<td>0.1959</td>
+<td>0.028</td>
+<td>6.963</td>
+<td>0.000</td>
+<td>0.140</td>
+<td>0.251</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_cos_2</td>
+<td>0.0084</td>
+<td>0.028</td>
+<td>0.303</td>
+<td>0.763</td>
+<td>-0.046</td>
+<td>0.063</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>0.997</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.689</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.607</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>0.912</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.186</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.634</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>2.964</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>53.9</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div id="tbl-vifs-fourier-olv-no-sentiment" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vifs-fourier-olv-no-sentiment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7: The correctly adjusted regression model with Fourier components and no OLV sentiment
+</figcaption>
+<div aria-describedby="tbl-vifs-fourier-olv-no-sentiment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.888</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.882</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>145.4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 19 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>7.68e-66</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>19:18:03</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>3.4747</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>11.05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>147</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>38.50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>8</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>10.6756</td>
+<td>0.226</td>
+<td>47.201</td>
+<td>0.000</td>
+<td>10.229</td>
+<td>11.123</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">hill_olv</td>
+<td>0.7678</td>
+<td>0.157</td>
+<td>4.898</td>
+<td>0.000</td>
+<td>0.458</td>
+<td>1.078</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">log_price</td>
+<td>-1.0712</td>
+<td>0.126</td>
+<td>-8.468</td>
+<td>0.000</td>
+<td>-1.321</td>
+<td>-0.821</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_sin_0</td>
+<td>0.0444</td>
+<td>0.028</td>
+<td>1.597</td>
+<td>0.112</td>
+<td>-0.011</td>
+<td>0.099</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_sin_1</td>
+<td>0.0215</td>
+<td>0.028</td>
+<td>0.773</td>
+<td>0.441</td>
+<td>-0.033</td>
+<td>0.076</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_sin_2</td>
+<td>0.0167</td>
+<td>0.028</td>
+<td>0.603</td>
+<td>0.548</td>
+<td>-0.038</td>
+<td>0.071</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_0</td>
+<td>-0.8289</td>
+<td>0.030</td>
+<td>-27.407</td>
+<td>0.000</td>
+<td>-0.889</td>
+<td>-0.769</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">fourier_cos_1</td>
+<td>0.1953</td>
+<td>0.028</td>
+<td>7.081</td>
+<td>0.000</td>
+<td>0.141</td>
+<td>0.250</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">fourier_cos_2</td>
+<td>0.0086</td>
+<td>0.028</td>
+<td>0.313</td>
+<td>0.755</td>
+<td>-0.046</td>
+<td>0.063</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>1.098</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.688</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.577</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>0.987</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-0.195</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.610</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>2.979</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>26.6</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div id="tbl-vifs-fourier-olv-iv" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vifs-fourier-olv-iv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8: The correctly adjusted regression model with Fourier components and no OLV sentiment
+</figcaption>
+<div aria-describedby="tbl-vifs-fourier-olv-iv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>sales</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.063</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.051</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>5.166</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Tue, 19 Nov 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>0.00674</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>19:27:23</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-162.03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>156</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>330.1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>153</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>339.2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>2</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>10.1355</td>
+<td>0.637</td>
+<td>15.919</td>
+<td>0.000</td>
+<td>8.878</td>
+<td>11.393</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">log_price</td>
+<td>-0.8167</td>
+<td>0.355</td>
+<td>-2.299</td>
+<td>0.023</td>
+<td>-1.519</td>
+<td>-0.115</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">hill_olv_predicted</td>
+<td>0.9943</td>
+<td>0.463</td>
+<td>2.148</td>
+<td>0.033</td>
+<td>0.080</td>
+<td>1.909</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>23.961</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>0.227</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.000</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>11.734</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>0.487</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.00283</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>2.075</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>26.5</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Here, we observe that although the VIF values are considerably lower than those reported in <a href="#tbl-vifs" class="quarto-xref">Table&nbsp;1</a> in the previous example (<a href="#sec-paid-search-solution" class="quarto-xref">1.1.1</a>), the impact on our ability to accurately measure the effect of <strong>OLV impressions</strong> on <strong>sales</strong> is significantly more detrimental.</p>
+<p>Comparing <a href="#tbl-vifs-fourier-olv-no-sentiment" class="quarto-xref">Table&nbsp;7</a> to <a href="#tbl-vifs-fourier-olv" class="quarto-xref">Table&nbsp;6</a> we see that the inclusion of <strong>Video Platform Sentiment</strong> (represented as <code>olv_sentement</code> in the model), did not bias the estimate of the total effect of <strong>OLV impressions</strong> on <strong>sales</strong>. However, it did lead to an increase in p-values, pushing them above our significance threshold of 0.05.</p>
+</section>
+</section>
+<section id="appendix-a---paid-search-data" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-a---paid-search-data">Appendix A - Paid Search Data</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Sales</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">Paid Search Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false">Search Query Volume</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-4" role="tab" aria-controls="tabset-7-4" aria-selected="false">Price</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div id="cell-40" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div id="cell-42" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div id="cell-44" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-4-tab">
+<div id="cell-46" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="appendix-b---olv-data" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-b---olv-data">Appendix B - OLV Data</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Sales</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">OLV Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false">Video Platform Sentiment</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-4" role="tab" aria-controls="tabset-8-4" aria-selected="false">Price</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div id="cell-50" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div id="cell-52" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div id="cell-54" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-8-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-4-tab">
+<div id="cell-56" class="cell">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_multicollinearity_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{reda,
+  author = {Reda, Matthew},
+  title = {When Is {Multicollinearity} an {Issue?}},
+  url = {https://redam94.github.io/common_regression_issues/multicollinearity.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-reda" class="csl-entry quarto-appendix-citeas" role="listitem">
+Reda, Matthew. n.d. <span>“When Is Multicollinearity an Issue?”</span>
+<a href="https://redam94.github.io/common_regression_issues/multicollinearity.html">https://redam94.github.io/common_regression_issues/multicollinearity.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/redam94\.github\.io\/common_regression_issues");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/redam94/common_regression_issues/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
